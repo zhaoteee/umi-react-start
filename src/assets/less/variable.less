@@ -1,0 +1,113 @@
+@size: 100px;
+@space: @size / 10;
+@fontSizeBase: 10px;
+
+@borderColor: #eee;
+@errorColor: #f5222d;
+@mainColor: #FF0036;
+.center() {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.border(@color: @borderColor) {
+  border: 1px solid @color;
+}
+
+.borderTop(@color: @borderColor) {
+  border-top: 1px solid @color;
+}
+
+.borderRight(@color: @borderColor) {
+  border-right: 1px solid @color;
+}
+
+.borderBottom(@color: @borderColor) {
+  border-bottom: 1px solid @color;
+}
+
+.borderLeft(@color: @borderColor) {
+  border-left: 1px solid @color;
+}
+
+.f1() {
+  flex: 1;
+}
+
+.flexColumn() {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.flexCenter() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flexTop() {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.flexBottom() {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.flexLeft() {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.flexRight() {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.flexBetween() {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.e(@count: 2) {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: @count;
+  -webkit-box-orient: vertical;
+}
+
+.e1 {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.e2 {
+  .e(2);
+}
+
+.radius(@s: 50%) {
+  border-radius: @s;
+}
+
+.break() {
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.textShadow(@color: #fff) {
+  -webkit-text-shadow: @color 1px 0 0, @color 0 1px 0, @color -1px 0 0, @color 0 -1px 0;
+  -moz-text-shadow: @color 1px 0 0, @color 0 1px 0, @color -1px 0 0, @color 0 -1px 0;
+  text-shadow: @color 1px 0 0, @color 0 1px 0, @color -1px 0 0, @color 0 -1px 0;
+}

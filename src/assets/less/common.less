@@ -1,0 +1,84 @@
+@import './variable.less';
+
+.pointer {
+  cursor: pointer;
+}
+
+
+// 字体
+.small {
+  font-size: @fontSizeBase * 1.2;
+}
+.normal {
+  font-size: @fontSizeBase * 1.4;
+}
+.big {
+  font-size: @fontSizeBase * 1.6;
+}
+.x-big {
+  font-size: @fontSizeBase * 1.8;
+}
+.font-red {
+  color: @errorColor;
+}
+
+// 文本
+.tc {
+  text-align: center;
+}
+.tr {
+  text-align: right;
+}
+.tl {
+  text-align: left !important;
+}
+
+// 边框
+.border {
+  .border();
+}
+
+.borderT {
+  .borderTop();
+}
+
+.borderR {
+  .borderRight();
+}
+
+.borderB {
+  .borderBottom();
+}
+
+.borderL {
+  .borderLeft();
+}
+
+// 布局
+.between {
+  .flexBetween();
+}
+
+.fleft {
+  .flexLeft();
+}
+
+.center {
+  .center();
+}
+
+.ml {
+  margin-left: @space;
+}
+
+.mr {
+  margin-right: @space;
+}
+
+.mt {
+  margin-top: @space !important;
+}
+
+.mb {
+  margin-bottom: @space;
+}
