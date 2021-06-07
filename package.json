@@ -22,6 +22,7 @@
     ]
   },
   "dependencies": {
+    "@ant-design/icons": "^4.6.2",
     "@umijs/preset-react": "1.x",
     "cross-env": "^7.0.3",
     "umi": "^3.4.24",

@@ -1,5 +1,9 @@
+@import '../../assets/less/variable.less';
 .title {
   background: rgb(121, 242, 157);
+}
+.goodsListPage {
+  padding-bottom: @size/2;
 }
 .goodsList {
   display: flex;
@@ -9,5 +13,21 @@
     width: 220px;
     margin-right: 12px;
     margin-bottom: 20px;
+    box-sizing: border-box;
+    border: 2px solid #fff;
+    transition: all .1s ease-in-out;
+    padding: 4px;
+    .imgWrap {
+      display: flex;
+      max-height: 210px;
+      overflow: hidden;
+      .productImg {
+        width: 100%;
+        display: block;
+      }
+    }
+    &:hover {
+      border-color: @mainColor;
+    }
   }
 }
