@@ -1,15 +1,22 @@
 // import styles from './index.less';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'umi';
+import type { Location } from 'umi';
 import { Pagination } from 'antd';
 
 import goodsList from './testList';
 
 import styles from './index.less';
 
-
+const getData = (v: any) => {
+  console.log(v)
+}
 export default function IndexPage() {
   const [isLoading, setIsLoading] = useState(false)
-  console.log(goodsList)
+  const loaction: Location = useLocation();
+  useEffect(() => {
+    getData(loaction.query)
+  }, [loaction.query]);
   return (
     <div className={styles.goodsListPage}>
       <p>商品列表</p>
