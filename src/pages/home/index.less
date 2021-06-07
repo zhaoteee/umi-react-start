@@ -8,10 +8,10 @@
 .goodsList {
   display: flex;
   flex-wrap: wrap;
-  flex: 0 0 220px;
+  width: @mainWidth + 38px;
   .product {
-    width: 220px;
-    margin-right: 12px;
+    width: 233px;
+    margin-right: 19px;
     margin-bottom: 20px;
     box-sizing: border-box;
     border: 1px solid #e5e5e5;
@@ -29,5 +29,14 @@
     &:hover {
       border-color: @mainColor;
     }
+  }
+}
+
+@media (min-width: 1210px) {
+  .goodsList {
+      width: @mainBigWidth + 25px !important;
+      .product {
+        width: 223px;
+      }
   }
 }

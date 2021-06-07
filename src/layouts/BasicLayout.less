@@ -1,6 +1,8 @@
+@import '../assets/less/variable.less';
+
 .layoutWrap {
     margin: auto;
-    width: 990px;
+    width: @mainWidth;
     border-bottom: 1px solid #e5e5e5;
 }
 .layoutHeader {
@@ -14,6 +16,6 @@
 }
 @media (min-width: 1210px) {
     .layoutWrap {
-        width: 1190px!important;
+        width: @mainBigWidth !important;
     }
 }

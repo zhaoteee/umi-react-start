@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'umi';
 import type { Location } from 'umi';
-import { Pagination } from 'antd';
+import { Pagination, PageHeader } from 'antd';
+import Search from './components/search';
 
 import goodsList from './testList';
 
@@ -19,7 +20,12 @@ export default function IndexPage() {
   }, [loaction.query]);
   return (
     <div className={styles.goodsListPage}>
-      <p>商品列表</p>
+      <PageHeader
+        className="site-page-header"
+        backIcon={false}
+        title="商品列表"
+      />
+      <Search />
       <div className={styles.goodsList}>
         { goodsList.map((item, idx) => {
           return <div key={idx} className={styles.product}>
