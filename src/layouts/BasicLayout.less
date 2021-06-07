@@ -4,18 +4,26 @@
     margin: auto;
     width: @mainWidth;
     border-bottom: 1px solid #e5e5e5;
+    position: relative;
 }
 .layoutHeader {
     background-color: #fff;
     padding-left: 0;
     padding-right: 0;
+    position: fixed;
+    width: @mainWidth;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1;
 }
 
 .layoutContent {
     background-color: #fff;
+    position: relative;
+    top: 60px;
 }
 @media (min-width: 1210px) {
-    .layoutWrap {
+    .layoutWrap, .layoutHeader {
         width: @mainBigWidth !important;
     }
 }
