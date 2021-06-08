@@ -1,8 +1,8 @@
 import React from 'react';
-import { Input, Button } from 'antd'
+import { Input } from 'antd'
 import type { ConnectState, CartModelState } from '@/models/connect';
 
-import { connect, Link, useLocation, history } from 'umi';
+import { connect, Link, history } from 'umi';
 
 import styles from './index.less';
 const { Search } = Input
@@ -11,11 +11,12 @@ export type MallHeaderType = {
 }
 
 const MallHeader: React.FC<MallHeaderType> = (props) => {
-  const location = useLocation();
   const onSearch = (v: string) => {
-    if (v) {
-      history.push(`/mall?keyword=${decodeURIComponent(v)}`)
-    }
+      if (v) {
+        history.replace(`/mall?keyword=${decodeURIComponent(v)}`)
+      } else {
+        history.push(`/mall`)
+      }
   }
   const { cart } = props
   return (
