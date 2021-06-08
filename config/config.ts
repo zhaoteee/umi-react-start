@@ -53,8 +53,14 @@ export default defineConfig({
           name: 'mallOrder',
           component: './order',
           title: "订单"
+        },
+        {
+          component: '404',
         }
       ]
+    },
+    {
+      component: '404',
     }
   ],
   title: '采购商城',

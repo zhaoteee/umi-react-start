@@ -21,7 +21,8 @@ const IndexPage: React.FC<{}> = (props) => {
     }, 1000)
   }
   const onConfirmSelect = (name: string, value: string, selectedOptions: OptionsItemType[]) => {
-    getData(name)
+    let params = { name, value, selectedOptions }
+    getData(params)
   }
   useEffect(() => {
     getData(loaction.query)
