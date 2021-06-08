@@ -1,59 +1,49 @@
 // import styles from './index.less';
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import SearchItem from './searchItem';
+import type { OptionsItemType } from './searchItem';
 
 import styles from './search.less';
 
 export default function Search() {
+  const serachList = [
+    {
+      name: '品牌方',
+      value: 'supplierId',
+      options: [
+        { name: 'ZARA', id: 1 },{ name: 'PCR商城', id: 2 },{ name: '车空间配件商城', id: 3 },{ name: 'CARTELO/卡帝乐鳄鱼', id: 4 },
+        { name: 'Skechers/斯凯奇', id: 5 },{ name: 'Cardanro/卡丹路', id: 6 },{ name: 'Skechers/斯凯奇', id: 7 },{ name: 'Skechers/斯凯奇', id: 8 },
+        { name: 'ZARA', id: 9 },{ name: 'ZARA', id: 10 },{ name: 'ZARA', id: 11 },{ name: 'ZARA', id: 12 },
+      ]
+    },
+    {
+      name: '品牌',
+      value: 'brandId',
+      options: [
+        { name: '朝阳CHAOYANG', id: 1 },{ name: '好运', id: 2 },{ name: '嘉实多', id: 3 },{ name: '威狮', id: 4 },
+        { name: '壳牌', id: 5 },{ name: '钢盾', id: 6 },
+      ]
+    },
+    {
+      name: '分类',
+      value: 'categoryId',
+      options: [
+        { name: '机油', id: 1 },{ name: '刹车油', id: 2 }
+      ]
+    },
+  ]
+  const onSelect = (name: string, value: string, selectedOptions: OptionsItemType[]) => {
+    console.log(name, value, selectedOptions)
+  }
   return (
     <div className={styles.searchArea}>
-      <div className={styles.attr}>
-          <div className={styles.attrKey}>品牌方</div>
-          <div className={styles.attrValues}>
-              <ul className={styles.collapse}>
-                  <li>ZARA</li>
-                  <li>PCR商城</li>
-                  <li>车空间配件商城</li>
-                  <li>CARTELO/卡帝乐鳄鱼</li>
-                  <li>Cardanro/卡丹路</li>
-                  <li>Skechers/斯凯奇</li>
-                  <li>PLAYBOY/花花公子</li>
-              </ul>
-              <div className={styles.options}>
-                  <a>多选</a>
-                  <a>更多</a>
-              </div>
-          </div>
-      </div>
-      <div className={styles.attr}>
-          <div className={styles.attrKey}>品牌</div>
-          <div className={styles.attrValues}>
-              <ul className={styles.collapse}>
-                  <li>朝阳CHAOYANG</li>
-                  <li>嘉实多</li>
-                  <li>好运</li>
-                  <li>威狮</li>
-                  <li>壳牌</li>
-                  <li>钢盾</li>
-              </ul>
-              <div className={styles.options}>
-                  <a>多选</a>
-                  <a>更多</a>
-              </div>
-          </div>
-      </div>
-      <div className={styles.attr}>
-          <div className={styles.attrKey}>分类</div>
-          <div className={styles.attrValues}>
-              <ul className={styles.collapse}>
-                  <li>机油</li>
-                  <li>刹车油</li>
-              </ul>
-              <div className={styles.options}>
-                  <a>多选</a>
-                  <a>更多</a>
-              </div>
-          </div>
-      </div>
+      { serachList.map(item => <SearchItem
+          key={item.value}
+          name={item.name}
+          value={item.value}
+          options={item.options}
+          onSelect={onSelect}
+          />) }
     </div>
   );
 }
