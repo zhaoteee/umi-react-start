@@ -10,8 +10,7 @@ import goodsList from './testList';
 
 import styles from './index.less';
 
-
-export default function IndexPage() {
+const IndexPage: React.FC<{}> = (props) => {
   const [isLoading, setIsLoading] = useState(false)
   const loaction: Location = useLocation();
   const getData = (v: any) => {
@@ -60,3 +59,5 @@ export default function IndexPage() {
     </Spin>
   );
 }
+
+export default IndexPage
