@@ -33,6 +33,7 @@ const Search: React.FC<SearchItemProps> = (props) => {
     setSelectMore(true)
   }
   const cancelSelectMore = () => {
+    // 取消多选状态 所有选项selected置为false 触发搜索
     let list = cloneDeep(optionList)
     setOptionList(list.map(i => {
       i.selected = false
@@ -43,27 +44,29 @@ const Search: React.FC<SearchItemProps> = (props) => {
   }
   const clickItem = (item: OptionsItemType) => {
     let list = cloneDeep(optionList)
-    if (item.selected) {
+    if (item.selected) { // 点击已选择的取消选中状态
       let current = list.find(i => i.id === item.id)
       current ? current.selected = false : ''
     } else {
+      // 单选状态
       if (!selectMore) {
           list.map(i => {
             i.selected = i.id === item.id
             return i
           })
-        } else {
+        } else { // 多选状态 selected直接置为true
           let current = list.find(i => i.id === item.id)
           current ? current.selected = true : ''
         }
     }
-    // 单选时触发搜索
+    // 单选时直接触发搜索
     if (!selectMore) {
       onSelect(name, value, optionList.filter(item => item.selected))
     }
     setOptionList(list)
   }
   const onConfirm = () => {
+    // 如果无选中 点击确定不触发搜索
     if (!optionList.find(i => i.selected)) return
     onSelect(name, value, optionList.filter(item => item.selected))
   }
