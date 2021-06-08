@@ -39,6 +39,7 @@ const Search: React.FC<SearchItemProps> = (props) => {
       return i
     }))
     setSelectMore(false)
+    onSelect(name, value, optionList.filter(item => item.selected))
   }
   const clickItem = (item: OptionsItemType) => {
     let list = cloneDeep(optionList)
@@ -55,6 +56,10 @@ const Search: React.FC<SearchItemProps> = (props) => {
           let current = list.find(i => i.id === item.id)
           current ? current.selected = true : ''
         }
+    }
+    // 单选时触发搜索
+    if (!selectMore) {
+      onSelect(name, value, optionList.filter(item => item.selected))
     }
     setOptionList(list)
   }
@@ -83,7 +88,7 @@ const Search: React.FC<SearchItemProps> = (props) => {
           <a onClick={cancelSelectMore}>取消</a>
         </div> : null
         }
-        <div className={styles.options}>
+        <div className={`${styles.options} ${selectMore ? styles.selectedMoreOptions : ''}`}>
           {
             !selectMore ? <span><a onClick={selectPlus}><PlusOutlined />多选</a>
               <a onClick={showMore}>

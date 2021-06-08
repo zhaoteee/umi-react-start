@@ -5,7 +5,12 @@ import type { OptionsItemType } from './searchItem';
 
 import styles from './search.less';
 
-export default function Search() {
+type SearchProps = {
+  onConfirmSelect: (name: string, value: string, selectedOptions: OptionsItemType[]) => void
+}
+
+const Search: React.FC<SearchProps> = (props) => {
+  const { onConfirmSelect } = props
   const serachList = [
     {
       name: '品牌方',
@@ -34,6 +39,7 @@ export default function Search() {
   ]
   const onSelect = (name: string, value: string, selectedOptions: OptionsItemType[]) => {
     console.log(name, value, selectedOptions)
+    onConfirmSelect(name, value, selectedOptions)
   }
   return (
     <div className={styles.searchArea}>
@@ -47,3 +53,5 @@ export default function Search() {
     </div>
   );
 }
+
+export default Search
