@@ -64,6 +64,7 @@ const Search: React.FC<SearchItemProps> = (props) => {
     setOptionList(list)
   }
   const onConfirm = () => {
+    if (!optionList.find(i => i.selected)) return
     onSelect(name, value, optionList.filter(item => item.selected))
   }
   return (
