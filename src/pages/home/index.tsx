@@ -14,6 +14,7 @@ const IndexPage: React.FC<{}> = (props) => {
   const [isLoading, setIsLoading] = useState(false)
   const loaction: Location = useLocation();
   const getData = (v: any) => {
+    console.log(v)
     setIsLoading(true)
     setTimeout(() => {
       setIsLoading(false)
