@@ -65,19 +65,16 @@ const Search: React.FC<SearchItemProps> = (props) => {
       // 点击已选择的取消选中状态
       const current = list.find((i) => i.id === item.id);
       if (current) current.selected = false;
-    } else {
+    } else if (!selectMore) {
       // 单选状态
-      if (!selectMore) {
-        list.map((i) => {
-          i.selected = i.id === item.id;
-          return i;
-        });
-      }
-      if (selectMore) {
-        // 多选状态 selected直接置为true
-        const current = list.find((i) => i.id === item.id);
-        if (current) current.selected = true;
-      }
+      list.map((i) => {
+        i.selected = i.id === item.id;
+        return i;
+      });
+    } else {
+      // 多选状态 selected直接置为true
+      const current = list.find((i) => i.id === item.id);
+      if (current) current.selected = true;
     }
     // 单选时直接触发搜索
     if (!selectMore) {
