@@ -72,18 +72,19 @@ const Search: React.FC<SearchItemProps> = (props) => {
           i.selected = i.id === item.id;
           return i;
         });
-        return;
       }
-      // 多选状态 selected直接置为true
-      const current = list.find((i) => i.id === item.id);
-      if (current) current.selected = true;
+      if (selectMore) {
+        // 多选状态 selected直接置为true
+        const current = list.find((i) => i.id === item.id);
+        if (current) current.selected = true;
+      }
     }
     // 单选时直接触发搜索
     if (!selectMore) {
       onSelect(
         name,
         value,
-        optionList.filter((op) => op.selected),
+        list.filter((op) => op.selected),
       );
     }
     setOptionList(list);

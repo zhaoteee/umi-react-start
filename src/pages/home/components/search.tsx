@@ -60,7 +60,6 @@ const Search: React.FC<SearchProps> = (props) => {
     value: string,
     selectedOptions: OptionsItemType[],
   ) => {
-    console.log(name, value, selectedOptions);
     onConfirmSelect(name, value, selectedOptions);
   };
   return (
