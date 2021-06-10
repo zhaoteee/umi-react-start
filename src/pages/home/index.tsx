@@ -20,7 +20,11 @@ const IndexPage: React.FC = () => {
       setIsLoading(false);
     }, 1000);
   };
-  const onConfirmSelect = (name: string, value: string, selectedOptions: OptionsItemType[]) => {
+  const onConfirmSelect = (
+    name: string,
+    value: string,
+    selectedOptions: OptionsItemType[],
+  ) => {
     const params = { name, value, selectedOptions };
     getData(params);
   };
@@ -30,14 +34,22 @@ const IndexPage: React.FC = () => {
   return (
     <Spin spinning={isLoading} tip="加载中...">
       <div className={styles.goodsListPage}>
-        <PageHeader className="site-page-header" backIcon={false} title="商品列表" />
+        <PageHeader
+          className="site-page-header"
+          backIcon={false}
+          title="商品列表"
+        />
         <Search onConfirmSelect={onConfirmSelect} />
         <div className={styles.goodsList}>
-          {goodsList.map((item, idx) => {
+          {goodsList.map((item) => {
             return (
-              <div key={idx} className={styles.product}>
+              <div key={item.id} className={styles.product}>
                 <div className={styles.imgWrap}>
-                  <img className={styles.productImg} src={item.listPicUrl} alt="" />
+                  <img
+                    className={styles.productImg}
+                    src={item.listPicUrl}
+                    alt=""
+                  />
                 </div>
                 <p className="e1">{item.name}</p>
                 <div className="between">

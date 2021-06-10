@@ -1,7 +1,7 @@
 import type { Reducer, Effect } from 'umi';
 
 export type CartModelState = {
-  total: number; //商品总数
+  total: number; // 商品总数
   list: []; // 商品列表
 };
 
@@ -22,17 +22,17 @@ const CartModel: CartModelType = {
 
   state: {
     total: 22,
-    list: []
+    list: [],
   },
 
   effects: {
     *addGoodsToCart(_, { put, call }) {
-      const addCartRequest = null
+      const addCartRequest = null;
       // 触发添加到购物车
-      yield call(addCartRequest)
+      yield call(addCartRequest);
       // 更新购物车数据
       yield put({
-        type: 'fetchCartInfo'
+        type: 'fetchCartInfo',
       });
     },
     *fetchCartInfo(_, { put }) {
