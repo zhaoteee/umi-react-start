@@ -45,8 +45,6 @@
     "@typescript-eslint/parser": "^4.26.1",
     "@umijs/test": "^3.4.24",
     "eslint": "^7.28.0",
-    "eslint-config-prettier": "^6.15.0",
-    "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
     "lint-staged": "^10.0.7",
     "prettier": "^2.2.0",

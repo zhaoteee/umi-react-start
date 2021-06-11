@@ -18,5 +18,6 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error', // 检查 Hook 的规则
     'no-param-reassign': 0,
     'prefer-promise-reject-errors': 0,
+    'no-return-assign': 0,
   },
 };
