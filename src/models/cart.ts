@@ -138,7 +138,7 @@ const CartModel: CartModelType = {
           if (item.storeId === storeId) {
             const newStoreItem = cloneDeep(item);
             if (id !== undefined) {
-              // id存在 更新的是商品 selected
+              // id 存在 更新的是商品 selected
               newStoreItem.selected = newStoreItem.goodsList
                 .map((good) => {
                   if (good.id === id) good.selected = !good.selected;
@@ -146,7 +146,7 @@ const CartModel: CartModelType = {
                 })
                 .every((good) => good.selected);
             } else {
-              // id不存在 更新的店铺 selected
+              // id 不存在 更新的店铺 selected
               newStoreItem.selected = !newStoreItem.selected;
               newStoreItem.goodsList.forEach((good) => {
                 good.selected = newStoreItem.selected;

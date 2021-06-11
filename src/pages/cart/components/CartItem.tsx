@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { Row, Col, Checkbox, InputNumber, Button } from 'antd';
 import { toDecimal } from '@/utils/util';
 import type { CartItemInfo } from '@/models/cart';
@@ -79,4 +79,4 @@ const CartItem: React.FC<CartItemprops> = (props) => {
 CartItem.defaultProps = {
   col: [12, 3, 3, 3, 3],
 };
-export default CartItem;
+export default memo(CartItem);
