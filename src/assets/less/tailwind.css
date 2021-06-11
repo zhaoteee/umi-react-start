@@ -1,0 +1,10 @@
+@import "~tailwindcss/components.css";
+@import "~tailwindcss/utilities.css";
+
+*,
+::before,
+::after {
+  border-width: 0;
+  border-style: solid;
+  border-color: #eeeeee;
+}

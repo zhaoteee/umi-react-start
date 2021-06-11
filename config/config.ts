@@ -6,7 +6,10 @@ const productionPublicPath = '//misc.hzzcckj.cn/skin/cg/1.0.0/';
 
 export default defineConfig({
   base: REACT_APP_ENV === 'test' ? '/' : '/',
-  publicPath: REACT_APP_ENV === 'dev' || REACT_APP_ENV === 'test' ? '/' : productionPublicPath,
+  publicPath:
+    REACT_APP_ENV === 'dev' || REACT_APP_ENV === 'test'
+      ? '/'
+      : productionPublicPath,
   hash: true,
   antd: {},
   // publicPath: process.env.NODE_ENV === 'production' ? '/1.0.0/' : '/',
@@ -20,8 +23,8 @@ export default defineConfig({
     // default true, when it is true, will use `navigator.language` overwrite default
     baseNavigator: true,
   },
-  "theme": {
-    "primary-color": "#FF0036",
+  theme: {
+    'primary-color': '#FF0036',
   },
   targets: {
     ie: 11,
@@ -40,30 +43,34 @@ export default defineConfig({
           path: '/mall',
           name: 'mall',
           component: './home',
-          title: '首页'
+          title: '首页',
         },
         {
           path: '/mall/cart',
           name: 'mallCart',
           component: './cart',
-          title: "购物车"
+          title: '购物车',
         },
         {
           path: '/mall/order',
           name: 'mallOrder',
           component: './order',
-          title: "订单"
+          title: '订单',
         },
         {
           component: '404',
-        }
-      ]
+        },
+      ],
     },
     {
       component: '404',
-    }
+    },
   ],
   title: '采购商城',
   ignoreMomentLocale: true,
   proxy: proxy[REACT_APP_ENV || 'dev'],
+  tailwindcss: {
+    tailwindCssFilePath: '@/assets/less/tailwind.css',
+    tailwindConfigFilePath: 'tailwind.config.js', // 默认取值 tailwindConfigFilePath || join(process.env.APP_ROOT || api.cwd, 'tailwind.config.js'),
+  },
 });
