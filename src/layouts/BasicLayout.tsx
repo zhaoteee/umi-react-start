@@ -5,18 +5,14 @@ import styles from './BasicLayout.less';
 
 const { Header, Content } = Layout;
 
-const BasicLayout: React.FC<{}> = (props) => {
-  const {
-    children,
-  } = props;
+const BasicLayout: React.FC = (props) => {
+  const { children } = props;
   return (
     <Layout className={styles.layoutWrap}>
       <Header className={styles.layoutHeader}>
         <MallHeader />
       </Header>
-      <Content className={styles.layoutContent}>
-        {children}
-      </Content>
+      <Content className={styles.layoutContent}>{children}</Content>
     </Layout>
   );
 };

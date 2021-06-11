@@ -10,24 +10,29 @@ import goodsList from './testList';
 
 import styles from './index.less';
 
-const IndexPage: React.FC<{}> = (props) => {
-  const [isLoading, setIsLoading] = useState(false)
+const IndexPage: React.FC = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const loaction: Location = useLocation();
-  const getData = (v: any) => {
-    setIsLoading(true)
+  const getData = (v: unknown) => {
+    console.log(v);
+    setIsLoading(true);
     setTimeout(() => {
-      setIsLoading(false)
-    }, 1000)
-  }
-  const onConfirmSelect = (name: string, value: string, selectedOptions: OptionsItemType[]) => {
-    let params = { name, value, selectedOptions }
-    getData(params)
-  }
+      setIsLoading(false);
+    }, 1000);
+  };
+  const onConfirmSelect = (
+    name: string,
+    value: string,
+    selectedOptions: OptionsItemType[],
+  ) => {
+    const params = { name, value, selectedOptions };
+    getData(params);
+  };
   useEffect(() => {
-    getData(loaction.query)
+    getData(loaction.query);
   }, [loaction.query]);
   return (
-    <Spin spinning={isLoading} tip='加载中...'>
+    <Spin spinning={isLoading} tip="加载中...">
       <div className={styles.goodsListPage}>
         <PageHeader
           className="site-page-header"
@@ -36,28 +41,32 @@ const IndexPage: React.FC<{}> = (props) => {
         />
         <Search onConfirmSelect={onConfirmSelect} />
         <div className={styles.goodsList}>
-          { goodsList.map((item, idx) => {
-            return <div key={idx} className={styles.product}>
-              <div className={styles.imgWrap}>
-                <img
-                  className={styles.productImg}
-                  src={item.listPicUrl} alt="" />
+          {goodsList.map((item) => {
+            return (
+              <div key={item.id} className={styles.product}>
+                <div className={styles.imgWrap}>
+                  <img
+                    className={styles.productImg}
+                    src={item.listPicUrl}
+                    alt=""
+                  />
+                </div>
+                <p className="e1">{item.name}</p>
+                <div className="between">
+                  <span>￥{item.retailPrice}/单位</span>
+                  <a>加入购物车</a>
+                </div>
+                <p>网易严选</p>
               </div>
-              <p className='e1'>{item.name}</p>
-              <div className='between'>
-                <span>￥{item.retailPrice}/单位</span>
-                <a>加入购物车</a>
-              </div>
-              <p>网易严选</p>
-            </div>
-          }) }
+            );
+          })}
         </div>
-        <div style={{textAlign: 'right'}}>
+        <div style={{ textAlign: 'right' }}>
           <Pagination defaultCurrent={6} total={500} />
         </div>
       </div>
     </Spin>
   );
-}
+};
 
-export default IndexPage
+export default IndexPage;
