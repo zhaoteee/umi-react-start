@@ -1,8 +1,8 @@
 import React from 'react';
 import { Row, Col, Checkbox, InputNumber, Button } from 'antd';
 import { toDecimal } from '@/utils/util';
-import { CartItemInfo } from '@/models/cart';
-import { CheckboxChangeEvent } from 'antd/lib/checkbox';
+import type { CartItemInfo } from '@/models/cart';
+import type { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { useDispatch } from '@@/plugin-dva/exports';
 
 type CartItemprops = {
@@ -18,10 +18,7 @@ const CartItem: React.FC<CartItemprops> = (props) => {
     storeId: number;
     id?: number;
   };
-  const handleStoreCheckChange = (
-    e: CheckboxChangeEvent,
-    data: checkObj,
-  ): void => {
+  const handleStoreCheckChange = (e: CheckboxChangeEvent, data: checkObj): void => {
     dispatch({
       type: 'cart/updateCartInfo',
       payload: data,
@@ -38,10 +35,7 @@ const CartItem: React.FC<CartItemprops> = (props) => {
   return (
     <div className="mb-4">
       <div className="p-2.5">
-        <Checkbox
-          checked={info.selected}
-          onChange={(e) => handleStoreCheckChange(e, { storeId: info.storeId })}
-        />
+        <Checkbox checked={info.selected} onChange={(e) => handleStoreCheckChange(e, { storeId: info.storeId })} />
         <span className="ml-4">店铺: {info.storeName}</span>
       </div>
       <div className="border border-solid border-gray-400 divide-y divide-gray-300">
@@ -58,26 +52,16 @@ const CartItem: React.FC<CartItemprops> = (props) => {
                     })
                   }
                 />
-                <img
-                  className="w-25 h-25 mx-2.5 object-contain flex-shrink-0"
-                  src={item.img}
-                  alt=""
-                />
+                <img className="w-25 h-25 mx-2.5 object-contain flex-shrink-0" src={item.img} alt="" />
                 <div className="text-gray-500">{item.name}</div>
               </Col>
-              <Col
-                className="text-center font-bold text-gray-700"
-                span={col![1]}
-              >
+              <Col className="text-center font-bold text-gray-700" span={col![1]}>
                 {`￥${toDecimal(item.price)}`}
               </Col>
               <Col className="text-center" span={col![2]}>
                 <InputNumber min={1} defaultValue={item.count} />
               </Col>
-              <Col
-                className="text-center font-bold text-red-500"
-                span={col![3]}
-              >
+              <Col className="text-center font-bold text-red-500" span={col![3]}>
                 {`￥${toDecimal(item.totalPrice)}`}
               </Col>
               <Col className="text-center" span={col![4]}>

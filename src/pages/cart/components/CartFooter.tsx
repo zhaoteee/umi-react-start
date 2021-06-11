@@ -3,7 +3,7 @@ import { Checkbox, Button } from 'antd';
 import '../index.less';
 import { toDecimal } from '@/utils/util';
 import { connect } from '@@/plugin-dva/exports';
-import { CartModelState } from '@/models/cart';
+import type { CartModelState } from '@/models/cart';
 
 type CartFooterProps = {
   allSelected: boolean;
@@ -21,9 +21,7 @@ const CartFooter: React.FC<CartFooterProps> = (props) => {
         </div>
         <div className="leading-5">
           <span>合计:</span>
-          <span className="ml-2.5 text-red-500 text-lg font-bold">
-            {`￥${toDecimal(8000)}`}
-          </span>
+          <span className="ml-2.5 text-red-500 text-lg font-bold">{`￥${toDecimal(8000)}`}</span>
         </div>
       </div>
       <div className="btn-settlement bg-yellow-500">结算</div>

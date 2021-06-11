@@ -31,7 +31,7 @@ export type CartModelType = {
 };
 
 export type CartModelState = {
-  total: number; //商品总数
+  total: number; // 商品总数
   allSelected: boolean;
   list: CartItemInfo[]; // 商品列表
 };
@@ -128,7 +128,7 @@ const CartModel: CartModelType = {
       if (storeId === undefined && id === undefined) {
         // 更新全选
         newList = cloneDeep(state.list);
-        let allSelected = !state.allSelected;
+        const allSelected = !state.allSelected;
         newList.forEach((item) => {
           item.selected = allSelected;
           item.goodsList.forEach((good) => (good.selected = allSelected));
@@ -138,17 +138,17 @@ const CartModel: CartModelType = {
           if (item.storeId === storeId) {
             const newStoreItem = cloneDeep(item);
             if (id !== undefined) {
-              //id存在 更新的是商品 selected
+              // id存在 更新的是商品 selected
               newStoreItem.selected = newStoreItem.goodsList
                 .map((good) => {
                   if (good.id === id) good.selected = !good.selected;
                   return good;
                 })
-                .every((item) => item.selected);
+                .every((good) => good.selected);
             } else {
-              //id不存在 更新的店铺 selected
+              // id不存在 更新的店铺 selected
               newStoreItem.selected = !newStoreItem.selected;
-              newStoreItem.goodsList.map((good) => {
+              newStoreItem.goodsList.forEach((good) => {
                 good.selected = newStoreItem.selected;
               });
             }

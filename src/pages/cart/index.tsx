@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'umi';
 import type { Dispatch } from 'umi';
-import { CartModelState } from '@/models/cart';
+import type { CartModelState } from '@/models/cart';
 import { Spin } from 'antd';
 import CartItem from '@/pages/cart/components/CartItem';
 import CartFooter from '@/pages/cart/components/CartFooter';
@@ -21,9 +21,10 @@ const Cart: React.FC<CartProps> = (props) => {
     dispatch({
       type: 'cart/fetchCartInfo',
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   return (
     <Spin spinning={loading}>
       <div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Checkbox, Col, Row } from 'antd';
 import { connect, useDispatch } from '@@/plugin-dva/exports';
-import { CartModelState } from '@/models/cart';
+import type { CartModelState } from '@/models/cart';
 
 type CartHeaderProps = {
   col?: [number, number, number, number, number];
