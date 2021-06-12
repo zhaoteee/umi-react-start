@@ -2,7 +2,7 @@ import React from 'react';
 import { Checkbox, Button } from 'antd';
 import '../index.less';
 import { toDecimal } from '@/utils/util';
-import { connect } from '@@/plugin-dva/exports';
+import { connect, useDispatch } from '@@/plugin-dva/exports';
 import type { CartModelState } from '@/models/cart';
 
 type CartFooterProps = {
@@ -10,12 +10,34 @@ type CartFooterProps = {
 };
 
 const CartFooter: React.FC<CartFooterProps> = (props) => {
+  console.log('footer渲染了');
+  const dispatch = useDispatch();
+  const handleDeleteSelectedItem = () => {
+    dispatch({
+      type: 'cart/updateCartInfo',
+      payload: {
+        type: 'delete',
+      },
+    });
+  };
+  // console.log(props);
+  const handleAllSelected = () => {
+    dispatch({
+      type: 'cart/updateCartInfo',
+      payload: {
+        type: 'update',
+      },
+    });
+  };
+
   return (
     <div className="flex justify-between items-center bg-gray-100">
       <div className="px-5 flex-1 flex justify-between items-center">
         <div>
-          <Checkbox checked={props.allSelected}>全选</Checkbox>
-          <Button danger type="link">
+          <Checkbox checked={props.allSelected} onChange={handleAllSelected}>
+            全选
+          </Checkbox>
+          <Button danger type="link" onClick={handleDeleteSelectedItem}>
             删除
           </Button>
         </div>
@@ -29,8 +51,10 @@ const CartFooter: React.FC<CartFooterProps> = (props) => {
   );
 };
 
-export default connect(({ cart }: { cart: CartModelState }) => {
+const mapStateToProps = ({ cart }: { cart: CartModelState }) => {
   return {
     allSelected: cart.allSelected,
   };
-})(CartFooter);
+};
+
+export default connect(mapStateToProps)(CartFooter);

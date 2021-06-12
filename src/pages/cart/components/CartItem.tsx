@@ -2,56 +2,63 @@ import React, { memo } from 'react';
 import { Row, Col, Checkbox, InputNumber, Button } from 'antd';
 import { toDecimal } from '@/utils/util';
 import type { CartItemInfo } from '@/models/cart';
-import type { CheckboxChangeEvent } from 'antd/lib/checkbox';
 import { useDispatch } from '@@/plugin-dva/exports';
 
 type CartItemprops = {
   col?: [number, number, number, number, number];
   info: CartItemInfo;
+  storeIndex: number;
 };
 
 const CartItem: React.FC<CartItemprops> = (props) => {
-  const { info, col } = props;
+  const { info, col, storeIndex } = props;
   const dispatch = useDispatch();
-  console.log('更新了', info);
-  type checkObj = {
-    storeId: number;
-    id?: number;
-  };
-  const handleStoreCheckChange = (e: CheckboxChangeEvent, data: checkObj): void => {
+  console.log('cartItem更新了', info);
+
+  const handleStoreCheckChange = () => {
     dispatch({
       type: 'cart/updateCartInfo',
-      payload: data,
+      payload: {
+        storeIndex,
+        type: 'update',
+      },
     });
   };
 
-  const handleGoodsCheckChange = (e: CheckboxChangeEvent, data: checkObj) => {
+  const handleGoodsCheckChange = (index: number) => {
     dispatch({
       type: 'cart/updateCartInfo',
-      payload: data,
+      payload: {
+        storeIndex,
+        goodIndex: index,
+        type: 'update',
+      },
+    });
+  };
+
+  const handleDeleteGoodsItem = (index: number) => {
+    dispatch({
+      type: 'cart/updateCartInfo',
+      payload: {
+        storeIndex,
+        goodIndex: index,
+        type: 'delete',
+      },
     });
   };
 
   return (
     <div className="mb-4">
       <div className="p-2.5">
-        <Checkbox checked={info.selected} onChange={(e) => handleStoreCheckChange(e, { storeId: info.storeId })} />
+        <Checkbox checked={info.selected} onChange={handleStoreCheckChange} />
         <span className="ml-4">店铺: {info.storeName}</span>
       </div>
       <div className="border border-solid border-gray-400 divide-y divide-gray-300">
-        {info.goodsList.map((item) => {
+        {info.goodsList.map((item, index) => {
           return (
             <Row className="p-5" key={item.id}>
               <Col span={col![0]} className="flex">
-                <Checkbox
-                  checked={item.selected}
-                  onChange={(e) =>
-                    handleGoodsCheckChange(e, {
-                      id: item.id,
-                      storeId: info.storeId,
-                    })
-                  }
-                />
+                <Checkbox checked={item.selected} onChange={() => handleGoodsCheckChange(index)} />
                 <img className="w-25 h-25 mx-2.5 object-contain flex-shrink-0" src={item.img} alt="" />
                 <div className="text-gray-500">{item.name}</div>
               </Col>
@@ -65,7 +72,7 @@ const CartItem: React.FC<CartItemprops> = (props) => {
                 {`￥${toDecimal(item.totalPrice)}`}
               </Col>
               <Col className="text-center" span={col![4]}>
-                <Button type="link" danger>
+                <Button type="link" danger onClick={() => handleDeleteGoodsItem(index)}>
                   删除
                 </Button>
               </Col>

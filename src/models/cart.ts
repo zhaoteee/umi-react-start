@@ -61,7 +61,17 @@ const testData = [
       {
         id: 1,
         img: 'http://zc-peppa-dev.oss-cn-hangzhou.aliyuncs.com/upload/image/20210512/NpHm3P4UU.png',
-        name: '商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称',
+        name: '商品名称商品名称商品名称商品名称商品名称',
+        price: 200,
+        unit: '台',
+        count: 3,
+        totalPrice: 600,
+        selected: true,
+      },
+      {
+        id: 2,
+        img: 'http://zc-peppa-dev.oss-cn-hangzhou.aliyuncs.com/upload/image/20210512/NpHm3P4UU.png',
+        name: '商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称',
         price: 200,
         unit: '台',
         count: 3,
@@ -72,7 +82,7 @@ const testData = [
   },
   {
     storeId: 1,
-    storeName: '小胎品牌方',
+    storeName: '大胎品牌方',
     selected: true,
     goodsList: [
       {
@@ -89,10 +99,38 @@ const testData = [
   },
 ];
 
+function handleUpdateCartInfo(list: CartItemInfo[], storeIndex: number, goodIndex: number) {
+  return list.map((item, itemIndex) => {
+    if (itemIndex === storeIndex) {
+      const goodsList = item.goodsList.map((good, index) => {
+        if (goodIndex !== undefined) {
+          // 更新商品信息
+          if (goodIndex === index) {
+            return {
+              ...good,
+              selected: !good.selected,
+            };
+          }
+          return good;
+        }
+        return {
+          ...good,
+          selected: !item.selected ? !item.selected : !good.selected,
+        };
+      });
+      return {
+        ...item,
+        selected: goodsList.every((good) => good.selected),
+        goodsList,
+      };
+    }
+    return item;
+  });
+}
 const CartModel: CartModelType = {
   namespace: 'cart',
   state: {
-    total: 22,
+    total: 0,
     allSelected: false,
     list: [],
   },
@@ -117,49 +155,73 @@ const CartModel: CartModelType = {
   reducers: {
     saveCartInfo(state, { payload }): CartModelState {
       return {
-        total: 3,
+        total: payload.reduce((acc: number, cur: CartItemInfo) => acc + cur.goodsList.length, 0),
         list: payload,
         allSelected: true,
       };
     },
     updateCartInfo(state = initialState, { payload = {} }) {
-      let newList: CartItemInfo[];
-      const { storeId, id } = payload;
-      if (storeId === undefined && id === undefined) {
+      console.log(payload);
+      const { storeIndex, goodIndex, type } = payload;
+      let newList: CartItemInfo[] = [];
+      const oldAllSelected = state.allSelected;
+      if (storeIndex === undefined && goodIndex === undefined) {
         // 更新全选
         newList = cloneDeep(state.list);
-        const allSelected = !state.allSelected;
-        newList.forEach((item) => {
-          item.selected = allSelected;
-          item.goodsList.forEach((good) => (good.selected = allSelected));
-        });
-      } else {
-        newList = state.list.map((item) => {
-          if (item.storeId === storeId) {
-            const newStoreItem = cloneDeep(item);
-            if (id !== undefined) {
-              // id 存在 更新的是商品 selected
-              newStoreItem.selected = newStoreItem.goodsList
-                .map((good) => {
-                  if (good.id === id) good.selected = !good.selected;
-                  return good;
-                })
-                .every((good) => good.selected);
-            } else {
-              // id 不存在 更新的店铺 selected
-              newStoreItem.selected = !newStoreItem.selected;
-              newStoreItem.goodsList.forEach((good) => {
-                good.selected = newStoreItem.selected;
+        switch (type) {
+          case 'update':
+            newList.forEach((item) => {
+              item.selected = !oldAllSelected;
+              item.goodsList.forEach((good) => {
+                good.selected = !oldAllSelected;
               });
+            });
+            break;
+          case 'delete':
+            for (let i = newList.length - 1; i >= 0; i--) {
+              if (newList[i].selected) {
+                newList.splice(i, 1);
+              } else {
+                for (let j = newList[i].goodsList.length - 1; j >= 0; j--) {
+                  if (newList[i].goodsList[j].selected) {
+                    newList[i].goodsList.splice(j, 1);
+                  }
+                }
+              }
             }
-            return newStoreItem;
-          }
-          return item;
-        });
+            break;
+          default:
+            break;
+        }
+      } else {
+        let updateGoodsListLength: number | null = null; // 当前正在更新的goodslist长度
+        switch (type) {
+          case 'update':
+            newList = handleUpdateCartInfo(state.list, storeIndex, goodIndex);
+            break;
+          case 'delete':
+            newList = state.list.map((item, itemIndex) => {
+              if (storeIndex === itemIndex) {
+                item.goodsList.splice(goodIndex, 1);
+                updateGoodsListLength = item.goodsList.length;
+                return {
+                  ...item,
+                  goodsList: item.goodsList,
+                };
+              }
+              return item;
+            });
+            if (updateGoodsListLength === 0) {
+              newList.splice(storeIndex, 1);
+            }
+            break;
+          default:
+            break;
+        }
       }
       return {
         ...state,
-        total: 3,
+        total: newList.reduce((acc, cur) => acc + cur.goodsList.length, 0),
         list: newList,
         allSelected: newList.every((item) => item.selected),
       };

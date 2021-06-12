@@ -1,22 +1,18 @@
-// import styles from './index.less';
 import React, { useEffect, useState } from 'react';
-import { connect } from 'umi';
-import type { Dispatch } from 'umi';
-import type { CartModelState } from '@/models/cart';
 import { Spin } from 'antd';
-import CartItem from '@/pages/cart/components/CartItem';
 import CartFooter from '@/pages/cart/components/CartFooter';
 import CartHeader from '@/pages/cart/components/CartHeader';
+import { connect, useDispatch } from '@@/plugin-dva/exports';
+import CartList, { mapStateToProps } from './components/CartList';
+import type { CartItemInfo } from '@/models/cart';
+import { Result, Button } from 'antd';
+import { ShoppingCartOutlined } from '@ant-design/icons';
 
 type CartProps = {
-  dispatch: Dispatch;
-} & CartModelState;
-
+  list: CartItemInfo[];
+};
 const Cart: React.FC<CartProps> = (props) => {
-  const { list, dispatch } = props;
-
-  console.log(list);
-
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch({
       type: 'cart/fetchCartInfo',
@@ -29,20 +25,18 @@ const Cart: React.FC<CartProps> = (props) => {
     <Spin spinning={loading}>
       <div>
         <h2 className="p-2.5 border-b-2 border-red-500">购物车</h2>
-        <CartHeader />
-        {list.map((item) => {
-          return <CartItem key={item.storeId} info={item} />;
-        })}
-        <CartFooter />
+        {props.list.length ? (
+          <>
+            <CartHeader />
+            <CartList />
+            <CartFooter />
+          </>
+        ) : (
+          <Result icon={<ShoppingCartOutlined className="text-gray-200" />} subTitle="购物车空空如也" extra={<Button type="primary">去购物</Button>} />
+        )}
       </div>
     </Spin>
   );
 };
 
-export default connect(({ cart }: { cart: CartModelState }) => {
-  const { list, total } = cart;
-  return {
-    list,
-    total,
-  };
-})(Cart);
+export default connect(mapStateToProps)(Cart);

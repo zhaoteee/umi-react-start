@@ -10,11 +10,14 @@ type CartHeaderProps = {
 
 const CartHeader: React.FC<CartHeaderProps> = (props) => {
   const col = props.col as number[];
-  const disptch = useDispatch();
+  const dispatch = useDispatch();
   // console.log(props);
   const handleAllSelected = () => {
-    disptch({
+    dispatch({
       type: 'cart/updateCartInfo',
+      payload: {
+        type: 'update',
+      },
     });
   };
   return (
