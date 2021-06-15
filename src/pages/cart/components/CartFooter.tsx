@@ -4,6 +4,7 @@ import '../index.less';
 import { toDecimal } from '@/utils/util';
 import { connect, useDispatch } from '@@/plugin-dva/exports';
 import type { CartModelState } from '@/models/cart';
+import { history } from 'umi';
 
 type CartFooterProps = {
   allSelected: boolean;
@@ -46,7 +47,9 @@ const CartFooter: React.FC<CartFooterProps> = (props) => {
           <span className="ml-2.5 text-red-500 text-lg font-bold">{`￥${toDecimal(8000)}`}</span>
         </div>
       </div>
-      <div className="btn-settlement bg-yellow-500">结算</div>
+      <div className="btn-settlement bg-yellow-500" onClick={() => history.push('/mall/cart/confirm')}>
+        结算
+      </div>
     </div>
   );
 };

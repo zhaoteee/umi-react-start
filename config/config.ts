@@ -6,10 +6,7 @@ const productionPublicPath = '//misc.hzzcckj.cn/skin/cg/1.0.0/';
 
 export default defineConfig({
   base: REACT_APP_ENV === 'test' ? '/' : '/',
-  publicPath:
-    REACT_APP_ENV === 'dev' || REACT_APP_ENV === 'test'
-      ? '/'
-      : productionPublicPath,
+  publicPath: REACT_APP_ENV === 'dev' || REACT_APP_ENV === 'test' ? '/' : productionPublicPath,
   hash: true,
   antd: {},
   // publicPath: process.env.NODE_ENV === 'production' ? '/1.0.0/' : '/',
@@ -52,10 +49,28 @@ export default defineConfig({
           title: '购物车',
         },
         {
+          path: '/mall/cart/confirm',
+          name: 'confirmOrder',
+          component: './cart/ConfirmOrder',
+          title: '确认订单',
+        },
+        {
+          path: '/mall/cart/pay',
+          name: 'payOrder',
+          component: './cart/PayOrder',
+          title: '订单支付',
+        },
+        {
           path: '/mall/order',
           name: 'mallOrder',
           component: './order',
           title: '订单',
+        },
+        {
+          path: '/mall/address',
+          name: 'mallAddress',
+          component: './address',
+          title: '收货地址管理',
         },
         {
           component: '404',

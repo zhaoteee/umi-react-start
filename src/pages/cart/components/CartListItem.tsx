@@ -10,7 +10,7 @@ type CartItemprops = {
   storeIndex: number;
 };
 
-const CartItem: React.FC<CartItemprops> = (props) => {
+const CartListItem: React.FC<CartItemprops> = (props) => {
   const { info, col, storeIndex } = props;
   const dispatch = useDispatch();
   console.log('cartItem更新了', info);
@@ -83,7 +83,7 @@ const CartItem: React.FC<CartItemprops> = (props) => {
     </div>
   );
 };
-CartItem.defaultProps = {
+CartListItem.defaultProps = {
   col: [12, 3, 3, 3, 3],
 };
-export default memo(CartItem);
+export default memo(CartListItem);
