@@ -44,7 +44,7 @@ const AddressCard: React.FC = () => {
           管理收货地址
         </span>
       </div>
-      <div className="flex items-center overflow-x-auto p-2.5">
+      <div className="flex items-center overflow-x-auto p-2.5 bg-gray-100 border rounded">
         {testAddressInfo.map((item) => {
           return <AddressCardItem item={item} key={item.id} />;
         })}

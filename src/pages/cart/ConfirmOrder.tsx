@@ -6,27 +6,47 @@ import AddressCard from '@/pages/cart/components/AddressCard';
 import { useDispatch } from '@@/plugin-dva/exports';
 import { toDecimal } from '@/utils/util';
 import { history } from 'umi';
+import EditAddress from '@/pages/address/components/EditAddress';
+
+export type IStore = {
+  handleEditAddress: () => void;
+};
+export const Store = React.createContext<IStore | null>(null);
 
 const ConfirmOrder: React.FC = () => {
   const { TextArea } = Input;
   const [loading] = useState(false);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const openModal = () => {
+    setIsModalVisible(true);
+  };
+  const handleEditAddress = () => {
+    openModal();
+  };
+  const closeModal = () => {
+    setIsModalVisible(false);
+  };
   const dispatch = useDispatch();
+
   useEffect(() => {
     dispatch({
       type: 'cart/fetchCartInfo',
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   return (
     <Spin spinning={loading}>
       <div>
         <h2 className="p-2.5 border-b-2 border-red-500">确认订单</h2>
-        <AddressCard />
+        <Store.Provider value={{ handleEditAddress }}>
+          <AddressCard />
+        </Store.Provider>
         <div className="p-2.5 font-bold">确认订单信息</div>
         <CartHeader />
         <CartList />
         <div className="flex">
-          <div className="flex-shrink-0 w-16">订单备注: </div>
+          <div className="flex-shrink-0 w-16">订单备注:</div>
           <TextArea />
         </div>
         <div className="flex flex-col items-end px-2.5">
@@ -38,6 +58,7 @@ const ConfirmOrder: React.FC = () => {
             提交订单
           </div>
         </div>
+        <EditAddress isModalVisible={isModalVisible} onCancel={closeModal} />
       </div>
     </Spin>
   );

@@ -53,7 +53,7 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
         <Checkbox checked={info.selected} onChange={handleStoreCheckChange} />
         <span className="ml-4">店铺: {info.storeName}</span>
       </div>
-      <div className="border border-solid border-gray-400 divide-y divide-gray-300">
+      <div className="mx-2.5 border border-solid border-gray-400 divide-y divide-gray-300">
         {info.goodsList.map((item, index) => {
           return (
             <Row className="p-5" key={item.id}>

@@ -25,7 +25,7 @@ const CartHeader: React.FC<CartHeaderProps> = (props) => {
     });
   };
   return (
-    <Row className="p-2.5 mr-2.5">
+    <Row className="p-2.5 mr-5">
       {headerColumns.map((item, index) => {
         return (
           <Col className={`${index === 0 ? 'text-left flex' : 'text-center'}`} key={item.text} span={item.col}>
@@ -48,7 +48,7 @@ const CartHeader: React.FC<CartHeaderProps> = (props) => {
 
 CartHeader.defaultProps = {
   headerColumns: [
-    { text: '商品名称', col: 12 },
+    { text: '商品信息', col: 12 },
     { text: '单价', col: 3 },
     { text: '数量', col: 3 },
     { text: '金额', col: 3 },

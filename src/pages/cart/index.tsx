@@ -7,6 +7,7 @@ import CartList, { mapStateToProps } from './components/CartList';
 import type { CartItemInfo } from '@/models/cart';
 import { Result, Button } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
+import { history } from 'umi';
 
 type CartProps = {
   list: CartItemInfo[];
@@ -32,7 +33,15 @@ const Cart: React.FC<CartProps> = (props) => {
             <CartFooter />
           </>
         ) : (
-          <Result icon={<ShoppingCartOutlined className="text-gray-200" />} subTitle="购物车空空如也" extra={<Button type="primary">去购物</Button>} />
+          <Result
+            icon={<ShoppingCartOutlined className="text-gray-200" />}
+            subTitle="购物车空空如也"
+            extra={
+              <Button type="primary" onClick={() => history.push('/')}>
+                去购物
+              </Button>
+            }
+          />
         )}
       </div>
     </Spin>

@@ -9,7 +9,7 @@ const SuccessPayOrder: React.FC = () => {
         <Result status="success" title="订单提交成功" />
       </Card>
       <div className="flex">
-        <Card title="订单信息" className="w-1/2">
+        <Card title="订单信息" className="w-1/2 mr-2.5">
           <Descriptions column={1}>
             <Descriptions.Item label="下单店铺">XXXX品牌方</Descriptions.Item>
             <Descriptions.Item label="订单号">5646464654</Descriptions.Item>

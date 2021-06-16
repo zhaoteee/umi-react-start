@@ -1,5 +1,5 @@
 import React from 'react';
-import { Checkbox, Button } from 'antd';
+import { Checkbox, Button, Modal } from 'antd';
 import '../index.less';
 import { toDecimal } from '@/utils/util';
 import { connect, useDispatch } from '@@/plugin-dva/exports';
@@ -14,10 +14,13 @@ const CartFooter: React.FC<CartFooterProps> = (props) => {
   console.log('footer渲染了');
   const dispatch = useDispatch();
   const handleDeleteSelectedItem = () => {
-    dispatch({
-      type: 'cart/updateCartInfo',
-      payload: {
-        type: 'delete',
+    Modal.confirm({
+      content: '确认删除这些商品吗?',
+      onOk() {
+        dispatch({
+          type: 'cart/updateCartInfo',
+          payload: { type: 'delete' },
+        });
       },
     });
   };
@@ -47,7 +50,7 @@ const CartFooter: React.FC<CartFooterProps> = (props) => {
           <span className="ml-2.5 text-red-500 text-lg font-bold">{`￥${toDecimal(8000)}`}</span>
         </div>
       </div>
-      <div className="btn-settlement bg-yellow-500" onClick={() => history.push('/mall/cart/confirm')}>
+      <div className="btn-settlement bg-red-500" onClick={() => history.push('/mall/cart/confirm')}>
         结算
       </div>
     </div>
