@@ -1,29 +1,30 @@
 @import '../assets/less/variable.less';
 
 .layoutWrap {
-    margin: auto;
-    width: @mainWidth;
-    border-bottom: 1px solid #e5e5e5;
-    position: relative;
+  position: relative;
+  width: @mainWidth;
+  margin: auto;
+  border-bottom: 1px solid #e5e5e5;
 }
 .layoutHeader {
-    background-color: #fff;
-    padding-left: 0;
-    padding-right: 0;
-    position: fixed;
-    width: @mainWidth;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 1;
+  position: fixed;
+  left: 50%;
+  z-index: 1;
+  width: @mainWidth;
+  padding-right: 0;
+  padding-left: 0;
+  background-color: #fff;
+  transform: translateX(-50%);
 }
 
 .layoutContent {
-    background-color: #fff;
-    position: relative;
-    top: 60px;
+  position: relative;
+  top: 60px;
+  background-color: #fff;
 }
 @media (min-width: 1210px) {
-    .layoutWrap, .layoutHeader {
-        width: @mainBigWidth !important;
-    }
+  .layoutWrap,
+  .layoutHeader {
+    width: @mainBigWidth !important;
+  }
 }

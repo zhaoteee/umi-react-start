@@ -67,6 +67,12 @@ export default defineConfig({
           title: '订单',
         },
         {
+          path: '/mall/order/detail',
+          name: 'mallOrderDetail',
+          component: './order/detail',
+          title: '订单详情',
+        },
+        {
           path: '/mall/address',
           name: 'mallAddress',
           component: './address',
