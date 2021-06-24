@@ -9,7 +9,6 @@ type CartListProps = {
 };
 
 const CartList: React.FC<CartListProps> = ({ list }) => {
-  console.log(list);
   return (
     <div>
       {list.map((item, index) => {
