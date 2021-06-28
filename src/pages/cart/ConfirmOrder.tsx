@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import CartHeader from '@/pages/cart/components/CartHeader';
 import CartList from '@/pages/cart/components/CartList';
-import { Spin, Input } from 'antd';
+import { Spin, Input, PageHeader } from 'antd';
 import AddressCard from '@/pages/cart/components/AddressCard';
 import { useDispatch } from '@@/plugin-dva/exports';
 import { toDecimal } from '@/utils/util';
@@ -38,7 +38,7 @@ const ConfirmOrder: React.FC = () => {
   return (
     <Spin spinning={loading}>
       <div>
-        <h2 className="p-2.5 border-b-2 border-red-500">确认订单</h2>
+        <PageHeader className="p-2.5 border-b-2 border-red-500" title="确认订单" onBack={() => history.goBack()} />
         <Store.Provider value={{ handleEditAddress }}>
           <AddressCard />
         </Store.Provider>

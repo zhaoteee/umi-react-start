@@ -81,7 +81,7 @@ request.interceptors.request.use((url, options) => {
     ...options.headers,
     Authorization:
       localStorage.getItem('token') ||
-      'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMzA0ODg3Mjg1MSIsInRpbWUiOjE2MjQ4NjA1MDQ1MDEsImlzcyI6InNlY3VyaXR5IiwiaWF0IjoxNjI0ODYwNTA0LCJleHAiOjE2MjQ5ODA1MDR9.g4Fn4MTbGaEG4R0mn3PLwcfSwD5TNukxuF7ix_4NoU7DlsWroo7PrKIa0RXmGaLpu38QaSf7HP4ITFKSIUntlg',
+      'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMzA0ODg3Mjg1MSIsInRpbWUiOjE2MjQ4NTk2NTMzOTAsImlzcyI6InNlY3VyaXR5IiwiaWF0IjoxNjI0ODU5NjUzLCJleHAiOjE2MjQ5Nzk2NTN9.zzkd8ri2lzJ4IC3B7ESeqCmyOfsljSy53jHjNHIEs0fGH6zoMHFWsD3mMfkf6NsrkfFpaVQhk6d4xfocxEltLQ',
   };
   return {
     url,

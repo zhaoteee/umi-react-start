@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Spin } from 'antd';
+import { PageHeader, Spin } from 'antd';
 import CartFooter from '@/pages/cart/components/CartFooter';
 import CartHeader from '@/pages/cart/components/CartHeader';
 import { connect, useDispatch } from '@@/plugin-dva/exports';
@@ -8,12 +8,14 @@ import type { CartItemInfo } from '@/models/cart';
 import { Result, Button } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { history } from 'umi';
+import type { Dispatch } from '@@/plugin-dva/connect';
+import type { CartModelType } from '@/models/cart';
 
 type CartProps = {
   list: CartItemInfo[];
 };
 const Cart: React.FC<CartProps> = (props) => {
-  const dispatch = useDispatch();
+  const dispatch: Dispatch<CartModelType> = useDispatch();
   useEffect(() => {
     dispatch({
       type: 'cart/fetchCartInfo',
@@ -25,7 +27,7 @@ const Cart: React.FC<CartProps> = (props) => {
   return (
     <Spin spinning={loading}>
       <div>
-        <h2 className="p-2.5 border-b-2 border-red-500">购物车</h2>
+        <PageHeader className="p-2.5 border-b-2 border-red-500" title="购物车" />
         {props.list.length ? (
           <>
             <CartHeader />
