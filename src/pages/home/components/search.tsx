@@ -6,11 +6,7 @@ import type { OptionsItemType } from './searchItem';
 import styles from './search.less';
 
 type SearchProps = {
-  onConfirmSelect: (
-    name: string,
-    value: string,
-    selectedOptions: OptionsItemType[],
-  ) => void;
+  onConfirmSelect: (name: string, value: string, selectedOptions: OptionsItemType[]) => void;
 };
 
 const Search: React.FC<SearchProps> = (props) => {
@@ -55,23 +51,13 @@ const Search: React.FC<SearchProps> = (props) => {
       ],
     },
   ];
-  const onSelect = (
-    name: string,
-    value: string,
-    selectedOptions: OptionsItemType[],
-  ) => {
+  const onSelect = (name: string, value: string, selectedOptions: OptionsItemType[]) => {
     onConfirmSelect(name, value, selectedOptions);
   };
   return (
     <div className={styles.searchArea}>
       {serachList.map((item) => (
-        <SearchItem
-          key={item.value}
-          name={item.name}
-          value={item.value}
-          options={item.options}
-          onSelect={onSelect}
-        />
+        <SearchItem key={item.value} name={item.name} value={item.value} options={item.options} onSelect={onSelect} />
       ))}
     </div>
   );
