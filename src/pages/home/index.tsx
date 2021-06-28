@@ -1,14 +1,21 @@
 // import styles from './index.less';
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'umi';
-import type { Location } from 'umi';
 import { Pagination, PageHeader, Spin } from 'antd';
 import Search from './components/search';
+import GoodsItem from './components/goodsItem';
+
+import type { Location } from 'umi';
 import type { OptionsItemType } from './components/searchItem';
-
 import goodsList from './testList';
-
 import styles from './index.less';
+
+export type GoodsItemType = {
+  id: string;
+  listPicUrl: string;
+  name: string;
+  retailPrice: string;
+};
 
 const IndexPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,11 +27,7 @@ const IndexPage: React.FC = () => {
       setIsLoading(false);
     }, 1000);
   };
-  const onConfirmSelect = (
-    name: string,
-    value: string,
-    selectedOptions: OptionsItemType[],
-  ) => {
+  const onConfirmSelect = (name: string, value: string, selectedOptions: OptionsItemType[]) => {
     const params = { name, value, selectedOptions };
     getData(params);
   };
@@ -34,31 +37,11 @@ const IndexPage: React.FC = () => {
   return (
     <Spin spinning={isLoading} tip="加载中...">
       <div className={styles.goodsListPage}>
-        <PageHeader
-          className="site-page-header"
-          backIcon={false}
-          title="商品列表"
-        />
+        <PageHeader className="site-page-header" backIcon={false} title="商品列表" />
         <Search onConfirmSelect={onConfirmSelect} />
         <div className={styles.goodsList}>
-          {goodsList.map((item) => {
-            return (
-              <div key={item.id} className={styles.product}>
-                <div className={styles.imgWrap}>
-                  <img
-                    className={styles.productImg}
-                    src={item.listPicUrl}
-                    alt=""
-                  />
-                </div>
-                <p className="e1">{item.name}</p>
-                <div className="between">
-                  <span>￥{item.retailPrice}/单位</span>
-                  <a>加入购物车</a>
-                </div>
-                <p>网易严选</p>
-              </div>
-            );
+          {goodsList.map((item: GoodsItemType) => {
+            return <GoodsItem item={item}></GoodsItem>;
           })}
         </div>
         <div style={{ textAlign: 'right' }}>
