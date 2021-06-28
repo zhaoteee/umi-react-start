@@ -10,7 +10,7 @@ type CartItemprops = {
   storeIndex: number;
 };
 
-const CartItem: React.FC<CartItemprops> = (props) => {
+const CartListItem: React.FC<CartItemprops> = (props) => {
   const { info, col, storeIndex } = props;
   const dispatch = useDispatch();
   console.log('cartItem更新了', info);
@@ -53,7 +53,7 @@ const CartItem: React.FC<CartItemprops> = (props) => {
         <Checkbox checked={info.selected} onChange={handleStoreCheckChange} />
         <span className="ml-4">店铺: {info.storeName}</span>
       </div>
-      <div className="border border-solid border-gray-400 divide-y divide-gray-300">
+      <div className="mx-2.5 border border-solid border-gray-400 divide-y divide-gray-300">
         {info.goodsList.map((item, index) => {
           return (
             <Row className="p-5" key={item.id}>
@@ -83,7 +83,7 @@ const CartItem: React.FC<CartItemprops> = (props) => {
     </div>
   );
 };
-CartItem.defaultProps = {
+CartListItem.defaultProps = {
   col: [12, 3, 3, 3, 3],
 };
-export default memo(CartItem);
+export default memo(CartListItem);

@@ -27,6 +27,8 @@ export type CartModelType = {
   reducers: {
     saveCartInfo: Reducer<CartModelState>;
     updateCartInfo: Reducer<CartModelState>;
+    // update: Reducer<CartModelState>;
+    // delete: Reducer<CartModelState>;
   };
 };
 
@@ -127,6 +129,7 @@ function handleUpdateCartInfo(list: CartItemInfo[], storeIndex: number, goodInde
     return item;
   });
 }
+
 const CartModel: CartModelType = {
   namespace: 'cart',
   state: {
@@ -226,6 +229,18 @@ const CartModel: CartModelType = {
         allSelected: newList.every((item) => item.selected),
       };
     },
+    // update(state = initialState, { payload }) {
+    //   console.log(state, payload);
+    //   return {
+    //     ...state,
+    //   };
+    // },
+    // delete(state = initialState, { payload }) {
+    //   console.log(state, payload);
+    //   return {
+    //     ...state,
+    //   };
+    // },
   },
 };
 

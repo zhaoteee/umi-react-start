@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from '@@/plugin-dva/exports';
 import type { CartModelState } from '@/models/cart';
-import CartItem from './CartItem';
+import CartListItem from './CartListItem';
 import type { CartItemInfo } from '@/models/cart';
 
 type CartListProps = {
@@ -12,7 +12,7 @@ const CartList: React.FC<CartListProps> = ({ list }) => {
   return (
     <div>
       {list.map((item, index) => {
-        return <CartItem key={item.storeId} info={item} storeIndex={index} />;
+        return <CartListItem key={item.storeId} info={item} storeIndex={index} />;
       })}
     </div>
   );
