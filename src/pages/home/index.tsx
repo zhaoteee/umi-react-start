@@ -36,7 +36,7 @@ const IndexPage: React.FC = () => {
   useEffect(() => {
     const { userToken, origin } = loaction.query as HomeQuery;
     if (userToken) {
-      localStorage.setItem('userToken', userToken);
+      localStorage.setItem('token', userToken);
     }
     if (origin) {
       localStorage.setItem('origin', origin);
