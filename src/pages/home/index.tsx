@@ -7,7 +7,6 @@ import GoodsItem from './components/goodsItem';
 
 import type { Location } from 'umi';
 import type { OptionsItemType } from './components/searchItem';
-import type { ParsedQuery } from 'query-string';
 import goodsList from './testList';
 import styles from './index.less';
 
@@ -17,7 +16,7 @@ export type GoodsItemType = {
   name: string;
   retailPrice: string;
 };
-export type HomeQuery = ParsedQuery & { userToken: string; origin: string };
+export type HomeQuery = Location['query'] & { userToken: string; origin: string };
 
 const IndexPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
