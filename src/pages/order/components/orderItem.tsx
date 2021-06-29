@@ -15,7 +15,7 @@ const listItem: React.FC<OrderItemProps> = (props) => {
       <div className="flex justify-between p-2.5 bg-gray-100">
         <span>
           {info.date} 订单号：
-          <span className="text-red-500 pr-2.5 cursor-pointer" onClick={() => history.push(`/mall/order/detail?id=${info.id}`)}>
+          <span className="text-red-500 pr-2.5 cursor-pointer" onClick={() => info.hasOperate && history.push(`/mall/order/detail?id=${info.id}`)}>
             {info.sn}
           </span>
           {info.storeName}
