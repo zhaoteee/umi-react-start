@@ -1,40 +1,29 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import CartHeader from '@/pages/cart/components/CartHeader';
 import CartList from '@/pages/cart/components/CartList';
 import { Spin, Input, PageHeader } from 'antd';
 import AddressCard from '@/pages/cart/components/AddressCard';
-import { useDispatch } from '@@/plugin-dva/exports';
 import { toDecimal } from '@/utils/util';
 import { history } from 'umi';
-import EditAddress from '@/pages/address/components/EditAddress';
+import EditAddressForm from '@/pages/address/components/EditAddressForm';
+import useAddress from '@/hooks/useAddress';
+import useBoolean from '@/hooks/useBoolean';
 
 export type IStore = {
-  handleEditAddress: () => void;
+  handleEditAddress: (id: string) => void;
 };
 export const Store = React.createContext<IStore | null>(null);
 
 const ConfirmOrder: React.FC = () => {
   const { TextArea } = Input;
   const [loading] = useState(false);
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const openModal = () => {
-    setIsModalVisible(true);
-  };
-  const handleEditAddress = () => {
+  const [isVisible, { setTrue: openModal, setFalse: closeModal }] = useBoolean(false);
+  const [currentId, setCurrentId] = useState('');
+  const handleEditAddress = (id: string) => {
+    setCurrentId(id);
     openModal();
   };
-  const closeModal = () => {
-    setIsModalVisible(false);
-  };
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch({
-      type: 'cart/fetchCartInfo',
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
+  const { updateAddress } = useAddress();
   return (
     <Spin spinning={loading}>
       <div>
@@ -58,7 +47,7 @@ const ConfirmOrder: React.FC = () => {
             提交订单
           </div>
         </div>
-        <EditAddress isModalVisible={isModalVisible} onCancel={closeModal} />
+        <EditAddressForm isVisible={isVisible} id={currentId} onCancel={closeModal} updateAddress={updateAddress} />
       </div>
     </Spin>
   );
