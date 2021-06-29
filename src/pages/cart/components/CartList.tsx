@@ -1,6 +1,4 @@
 import React from 'react';
-import { connect } from '@@/plugin-dva/exports';
-import type { CartModelState } from '@/models/cart';
 import CartListItem from './CartListItem';
 import type { CartItemInfo } from '@/models/cart';
 
@@ -18,10 +16,4 @@ const CartList: React.FC<CartListProps> = ({ list }) => {
   );
 };
 
-export const mapStateToProps = ({ cart }: { cart: CartModelState }) => {
-  return {
-    list: cart.list,
-  };
-};
-
-export default connect(mapStateToProps)(CartList);
+export default CartList;

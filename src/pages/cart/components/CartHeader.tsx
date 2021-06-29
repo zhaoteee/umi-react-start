@@ -2,7 +2,7 @@ import React from 'react';
 import { Checkbox, Col, Row } from 'antd';
 import { connect, useDispatch } from '@@/plugin-dva/exports';
 import type { CartModelState } from '@/models/cart';
-import type { CartItemInfo, GoodsInfo } from '@/models/cart';
+import type { GoodsInfo } from '@/models/cart';
 
 type HeaderColumn = {
   text: string;
@@ -11,7 +11,7 @@ type HeaderColumn = {
 type CartHeaderProps = {
   headerColumns?: HeaderColumn[];
   isAllChecked: boolean;
-  list: CartItemInfo[];
+  originalList: GoodsInfo[];
 };
 
 const CartHeader: React.FC<CartHeaderProps> = (props) => {
@@ -21,10 +21,7 @@ const CartHeader: React.FC<CartHeaderProps> = (props) => {
     dispatch({
       type: 'cart/updateCartItemChecked',
       payload: {
-        items: props.list.reduce((acc: GoodsInfo[], cur) => {
-          acc.push(...cur.goodsList);
-          return acc;
-        }, []),
+        items: props.originalList,
         value,
       },
     });
@@ -65,6 +62,6 @@ CartHeader.defaultProps = {
 export default connect(({ cart }: { cart: CartModelState }) => {
   return {
     isAllChecked: cart.isAllChecked,
-    list: cart.list,
+    originalList: cart.originalList,
   };
 })(CartHeader);

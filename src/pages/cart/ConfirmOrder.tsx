@@ -8,13 +8,19 @@ import { history } from 'umi';
 import EditAddressForm from '@/pages/address/components/EditAddressForm';
 import useAddress from '@/hooks/useAddress';
 import useBoolean from '@/hooks/useBoolean';
+import type { CartModelState, GoodsInfo } from '@/models/cart';
+import { connect } from '@@/plugin-dva/exports';
+import { handleCartInfo } from '@/models/cart';
 
 export type IStore = {
   handleEditAddress: (id: string) => void;
 };
 export const Store = React.createContext<IStore | null>(null);
 
-const ConfirmOrder: React.FC = () => {
+type ConfirmOrderProps = {
+  originalList: GoodsInfo[];
+};
+const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
   const { TextArea } = Input;
   const [loading] = useState(false);
   const [isVisible, { setTrue: openModal, setFalse: closeModal }] = useBoolean(false);
@@ -33,7 +39,7 @@ const ConfirmOrder: React.FC = () => {
         </Store.Provider>
         <div className="p-2.5 font-bold">确认订单信息</div>
         <CartHeader />
-        <CartList />
+        <CartList list={handleCartInfo(props.originalList)} />
         <div className="flex">
           <div className="flex-shrink-0 w-16">订单备注:</div>
           <TextArea />
@@ -53,4 +59,10 @@ const ConfirmOrder: React.FC = () => {
   );
 };
 
-export default ConfirmOrder;
+const mapStateToProps = ({ cart }: { cart: CartModelState }) => {
+  return {
+    originalList: cart.originalList,
+  };
+};
+
+export default connect(mapStateToProps)(ConfirmOrder);
