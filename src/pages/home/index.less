@@ -19,7 +19,7 @@
     transition: all 0.1s ease-in-out;
     .imgWrap {
       display: flex;
-      max-height: 210px;
+      height: 210px;
       overflow: hidden;
       .productImg {
         display: block;
@@ -42,12 +42,12 @@
     .current {
       border-color: @mainColor;
       border-width: 2px;
-      &:before {
+      &::before {
         position: absolute;
         top: -6px;
         left: 50%;
-        width: 0px;
-        height: 0px;
+        width: 0;
+        height: 0;
         border-right: 4px solid transparent;
         border-bottom: 4px solid @mainColor;
         border-left: 4px solid transparent;

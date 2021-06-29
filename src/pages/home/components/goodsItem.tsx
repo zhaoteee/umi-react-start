@@ -9,7 +9,7 @@ type GooodsItemProps = {
   item: GoodsItemType;
 };
 
-const IndexPage: React.FC<GooodsItemProps> = (props) => {
+const GoodsItem: React.FC<GooodsItemProps> = (props) => {
   const { item } = props;
   const [productImg, setProductImg] = useState(item.listPicUrl);
   const [current, setCurrent] = useState(-1);
@@ -44,9 +44,11 @@ const IndexPage: React.FC<GooodsItemProps> = (props) => {
           </div>
         ))}
       </Slider>
-      <p className="e1">{item.name}</p>
+      <p className="e1">{item.title || '--'}</p>
       <div className="between">
-        <span>￥{item.retailPrice}/单位</span>
+        <span>
+          ￥{item.salePrice}/{item.unit}
+        </span>
         <a>加入购物车</a>
       </div>
       <p>网易严选</p>
@@ -54,4 +56,4 @@ const IndexPage: React.FC<GooodsItemProps> = (props) => {
   );
 };
 
-export default IndexPage;
+export default GoodsItem;
