@@ -1,13 +1,15 @@
 // import styles from './index.less';
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'umi';
-import { Pagination, PageHeader, Spin, Result } from 'antd';
+import { useDispatch } from '@@/plugin-dva/exports';
+import { Pagination, PageHeader, Spin, Result, message } from 'antd';
 import Search from './components/search';
 import GoodsItem from './components/goodsItem';
 import { FileSearchOutlined } from '@ant-design/icons';
 
 import type { Location } from 'umi';
 import type { OptionsItemType } from './components/searchItem';
+import type { Dispatch } from '@@/plugin-dva/connect';
 import { getProductList } from '@/services/home';
 
 // import goodsList from './testList';
@@ -49,6 +51,7 @@ type ParamsPropsType = {
 };
 
 const IndexPage: React.FC = () => {
+  const dispatch: Dispatch = useDispatch();
   const [pageInfo, setPageInfo] = useState({
     current: 1,
     size: 20,
@@ -74,6 +77,17 @@ const IndexPage: React.FC = () => {
       });
     });
   };
+  const addGoodsToCart = async (p: GoodsItemType) => {
+    const hide = message.loading('正在加入购物车');
+    await dispatch({
+      type: 'cart/addGoodsToCart',
+      payload: { productId: p.id, quantity: 1 },
+    });
+    setTimeout(() => {
+      message.success('添加成功,请前往购物车查看');
+      hide();
+    }, 500);
+  };
   const onConfirmSelect = (name: string, value: string, selectedOptions: OptionsItemType[]) => {
     const params = { name, value, selectedOptions };
     getData(params);
@@ -88,6 +102,9 @@ const IndexPage: React.FC = () => {
     }
     const p = keyword ? { title: keyword } : {};
     getData(p);
+    dispatch({
+      type: 'cart/getCartTotalCount',
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaction.query]);
   return (
@@ -99,7 +116,7 @@ const IndexPage: React.FC = () => {
           <>
             <div className={styles.goodsList}>
               {goodsList.map((item: GoodsItemType) => {
-                return <GoodsItem key={item.id} item={item}></GoodsItem>;
+                return <GoodsItem key={item.id} item={item} addToCart={addGoodsToCart}></GoodsItem>;
               })}
             </div>
             <div style={{ textAlign: 'right' }}>

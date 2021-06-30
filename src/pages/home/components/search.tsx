@@ -15,6 +15,7 @@ type SearchListType = {
   options: OptionsItemType[];
 };
 const Search: React.FC<SearchProps> = (props) => {
+  const selectedList: SearchListType[] = [];
   const [serachList, setSearchList] = useState<SearchListType[]>([]);
   useEffect(() => {
     getProductAgg().then((res) => {
@@ -31,6 +32,13 @@ const Search: React.FC<SearchProps> = (props) => {
   const { onConfirmSelect } = props;
 
   const onSelect = (name: string, value: string, selectedOptions: OptionsItemType[]) => {
+    const idx = selectedList.findIndex((i) => i.value === value);
+    if (idx > -1) {
+      selectedList.splice(idx, 1, { name, value, options: selectedOptions });
+    } else {
+      selectedList.push({ name, value, options: selectedOptions });
+    }
+    console.log(selectedList);
     onConfirmSelect(name, value, selectedOptions);
   };
   return (

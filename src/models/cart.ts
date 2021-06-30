@@ -1,5 +1,5 @@
 import type { Reducer, Effect } from 'umi';
-import { deleteCartItem, getCartList, updateCartItemChecked, updateCartItemQuantity } from '@/services/cart';
+import { deleteCartItem, getCartList, updateCartItemChecked, updateCartItemQuantity, getCartCount, addToCart } from '@/services/cart';
 
 export type GoodsInfo = {
   id: number;
@@ -29,9 +29,11 @@ export type CartModelType = {
     deleteCartItem: Effect;
     updateCartItemQuantity: Effect;
     updateCartItemChecked: Effect;
+    getCartTotalCount: Effect;
   };
   reducers: {
     saveCartInfo: Reducer<CartModelState>;
+    updateCartTotal: Reducer<CartModelState>;
   };
 };
 
@@ -84,13 +86,21 @@ const CartModel: CartModelType = {
   state: initialState,
 
   effects: {
-    *addGoodsToCart(_, { put, call }) {
-      const addCartRequest = null;
+    *addGoodsToCart({ payload }, { put, call }) {
+      console.log(payload);
       // 触发添加到购物车
-      yield call(addCartRequest);
+      yield call(addToCart, payload);
       // 更新购物车数据
       yield put({
         type: 'fetchCartInfo',
+      });
+    },
+    *getCartTotalCount(_, { put, call }) {
+      const res = yield call(getCartCount);
+      console.log(res);
+      yield put({
+        type: 'updateCartTotal',
+        payload: res?.data,
       });
     },
     *fetchCartInfo(_, { put, call }) {
@@ -143,6 +153,12 @@ const CartModel: CartModelType = {
         isAllChecked: payload.every((item: GoodsInfo) => item.isChecked),
         list: handleCartInfo(payload),
         originalList: payload,
+      };
+    },
+    updateCartTotal(state = initialState, { payload }): CartModelState {
+      return {
+        ...state,
+        total: payload,
       };
     },
   },

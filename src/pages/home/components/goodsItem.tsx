@@ -8,10 +8,11 @@ import type { GoodsItemType } from '../index';
 
 type GooodsItemProps = {
   item: GoodsItemType;
+  addToCart: (p: GoodsItemType) => void;
 };
 
 const GoodsItem: React.FC<GooodsItemProps> = (props) => {
-  const { item } = props;
+  const { item, addToCart } = props;
   const productImage = item.productInfoExtDTO.productImageDTOList.map((p) => {
     if (p.resource && p.resource.indexOf('http') < 0) {
       p.resource = preFixPath + p.resource;
@@ -52,7 +53,7 @@ const GoodsItem: React.FC<GooodsItemProps> = (props) => {
         <span>
           ￥{item.salePrice}/{item.unit}
         </span>
-        <a>加入购物车</a>
+        <a onClick={() => addToCart(item)}>加入购物车</a>
       </div>
       <p>{item.supplierShopName}</p>
     </div>
