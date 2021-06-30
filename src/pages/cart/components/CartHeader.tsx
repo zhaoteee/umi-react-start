@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Checkbox, Col, Row } from 'antd';
-import { useDispatch } from '@@/plugin-dva/exports';
-import type { GoodsInfo } from '@/models/cart';
+import { connect, useDispatch } from '@@/plugin-dva/exports';
+import type { CartModelState, GoodsInfo } from '@/models/cart';
 
 type HeaderColumn = {
   text: string;
@@ -9,24 +9,20 @@ type HeaderColumn = {
 };
 type CartHeaderProps = {
   headerColumns?: HeaderColumn[];
-  list?: GoodsInfo[];
+  originalList: GoodsInfo[];
+  isAllChecked: boolean;
   hasAllChecked?: boolean;
 };
 
 const CartHeader: React.FC<CartHeaderProps> = (props) => {
+  const { originalList, isAllChecked, hasAllChecked } = props;
   const headerColumns = props.headerColumns as HeaderColumn[];
-  const [isAllChecked, setIsAllChecked] = useState(true);
-  useEffect(() => {
-    if (props.list) {
-      setIsAllChecked(props.list.every((item) => item.isChecked));
-    }
-  }, [props.list]);
   const dispatch = useDispatch();
   const updateAllChecked = (value: boolean) => {
     dispatch({
       type: 'cart/updateCartItemChecked',
       payload: {
-        items: props.list,
+        items: originalList,
         value,
       },
     });
@@ -39,7 +35,7 @@ const CartHeader: React.FC<CartHeaderProps> = (props) => {
           <Col className={`${index === 0 ? 'text-left flex' : 'text-center'}`} key={item.text} span={item.col}>
             {index === 0 ? (
               <>
-                {props.hasAllChecked && (
+                {hasAllChecked && (
                   <Checkbox checked={isAllChecked} onChange={(e) => updateAllChecked(e.target.checked)}>
                     全选
                   </Checkbox>
@@ -67,4 +63,11 @@ CartHeader.defaultProps = {
   hasAllChecked: true,
 };
 
-export default CartHeader;
+const mapStateToProps = ({ cart }: { cart: CartModelState }) => {
+  return {
+    originalList: cart.originalList,
+    isAllChecked: cart.isAllChecked,
+  };
+};
+
+export default connect(mapStateToProps)(CartHeader);
