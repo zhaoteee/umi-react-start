@@ -125,7 +125,6 @@ const IndexPage: React.FC = () => {
                 pageSize={pageInfo.size}
                 total={pageInfo.total}
                 onChange={(page: number, pageSize?: number) => {
-                  console.log(page, pageSize);
                   getData({ current: page, size: pageSize });
                 }}
               />

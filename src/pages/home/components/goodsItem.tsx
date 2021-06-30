@@ -48,7 +48,7 @@ const GoodsItem: React.FC<GooodsItemProps> = (props) => {
           </div>
         ))}
       </Slider>
-      <p className="e2">{item.title || '--'}</p>
+      <p className="e1">{item.title || '--'}</p>
       <div className="between">
         <span>
           ￥{item.salePrice}/{item.unit}
