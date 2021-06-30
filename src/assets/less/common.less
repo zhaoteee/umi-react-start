@@ -84,3 +84,34 @@
 .mb {
   margin-bottom: @space;
 }
+
+// 自定义slick-slider轮播样式
+.slick-slider {
+  display: flex;
+  align-items: center;
+  .slick-prev,
+  .slick-arrow {
+    position: relative;
+    top: 4px;
+    color: #806f66;
+    &:hover {
+      color: @mainColor;
+    }
+  }
+  .slick-prev {
+    left: -2px;
+  }
+  .slick-arrow {
+    right: -2px;
+  }
+  .slick-slide {
+    margin-right: 2px;
+  }
+  .slick-list {
+    padding-top: 10px;
+    overflow: hidden;
+    .slick-track {
+      display: flex;
+    }
+  }
+}

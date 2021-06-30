@@ -1,20 +1,23 @@
 import type { Reducer, Effect } from 'umi';
-import { cloneDeep } from 'lodash';
+import { deleteCartItem, getCartList, updateCartItemChecked, updateCartItemQuantity, getCartCount, addToCart } from '@/services/cart';
 
 export type GoodsInfo = {
   id: number;
-  img: string;
-  name: string;
-  price: number;
+  distributorId: number;
+  productId: string;
+  image: string;
+  invoicePrice: number;
+  title: string;
+  isChecked: boolean;
+  quantity: number;
+  supplierId: number;
+  supplierName: string;
   unit: string;
-  count: number;
-  totalPrice: number;
-  selected: boolean;
 };
 export type CartItemInfo = {
-  storeId: number;
-  storeName: string;
-  selected: boolean;
+  supplierId: number;
+  supplierName: string;
+  isChecked: boolean;
   goodsList: GoodsInfo[];
 };
 export type CartModelType = {
@@ -23,224 +26,139 @@ export type CartModelType = {
   effects: {
     fetchCartInfo: Effect;
     addGoodsToCart: Effect;
+    deleteCartItem: Effect;
+    updateCartItemQuantity: Effect;
+    updateCartItemChecked: Effect;
+    getCartTotalCount: Effect;
   };
   reducers: {
     saveCartInfo: Reducer<CartModelState>;
-    updateCartInfo: Reducer<CartModelState>;
-    // update: Reducer<CartModelState>;
-    // delete: Reducer<CartModelState>;
+    updateCartTotal: Reducer<CartModelState>;
   };
 };
 
 export type CartModelState = {
   total: number; // 商品总数
-  allSelected: boolean;
+  totalPrice: number;
+  isAllChecked: boolean;
   list: CartItemInfo[]; // 商品列表
+  originalList: GoodsInfo[];
 };
+
+export function handleCartInfo(list: GoodsInfo[]) {
+  return list.reduce((acc: CartItemInfo[], cur) => {
+    let isExisted = false;
+    acc.forEach((item) => {
+      if (item.supplierId === cur.supplierId) {
+        isExisted = true;
+        item.isChecked = item.isChecked && cur.isChecked;
+        item.goodsList.push({
+          ...cur,
+        });
+      }
+    });
+    if (!isExisted) {
+      acc.push({
+        supplierId: cur.supplierId,
+        supplierName: cur.supplierName,
+        isChecked: cur.isChecked,
+        goodsList: [
+          {
+            ...cur,
+          },
+        ],
+      });
+    }
+    return acc;
+  }, []);
+}
 
 const initialState = {
   total: 0,
-  allSelected: false,
+  totalPrice: 0,
+  isAllChecked: false,
   list: [],
+  originalList: [],
 };
-
-const testData = [
-  {
-    storeId: 0,
-    storeName: '小胎品牌方',
-    selected: true,
-    goodsList: [
-      {
-        id: 0,
-        img: 'http://zc-peppa-dev.oss-cn-hangzhou.aliyuncs.com/upload/image/20210512/NpHm3P4UU.png',
-        name: '商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称',
-        price: 200,
-        unit: '台',
-        count: 3,
-        totalPrice: 600,
-        selected: true,
-      },
-      {
-        id: 1,
-        img: 'http://zc-peppa-dev.oss-cn-hangzhou.aliyuncs.com/upload/image/20210512/NpHm3P4UU.png',
-        name: '商品名称商品名称商品名称商品名称商品名称',
-        price: 200,
-        unit: '台',
-        count: 3,
-        totalPrice: 600,
-        selected: true,
-      },
-      {
-        id: 2,
-        img: 'http://zc-peppa-dev.oss-cn-hangzhou.aliyuncs.com/upload/image/20210512/NpHm3P4UU.png',
-        name: '商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称',
-        price: 200,
-        unit: '台',
-        count: 3,
-        totalPrice: 600,
-        selected: true,
-      },
-    ],
-  },
-  {
-    storeId: 1,
-    storeName: '大胎品牌方',
-    selected: true,
-    goodsList: [
-      {
-        id: 0,
-        img: 'http://zc-peppa-dev.oss-cn-hangzhou.aliyuncs.com/upload/image/20210512/NpHm3P4UU.png',
-        name: '商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称商品名称',
-        price: 200,
-        unit: '台',
-        count: 3,
-        totalPrice: 600,
-        selected: true,
-      },
-    ],
-  },
-];
-
-function handleUpdateCartInfo(list: CartItemInfo[], storeIndex: number, goodIndex: number) {
-  return list.map((item, itemIndex) => {
-    if (itemIndex === storeIndex) {
-      const goodsList = item.goodsList.map((good, index) => {
-        if (goodIndex !== undefined) {
-          // 更新商品信息
-          if (goodIndex === index) {
-            return {
-              ...good,
-              selected: !good.selected,
-            };
-          }
-          return good;
-        }
-        return {
-          ...good,
-          selected: !item.selected ? !item.selected : !good.selected,
-        };
-      });
-      return {
-        ...item,
-        selected: goodsList.every((good) => good.selected),
-        goodsList,
-      };
-    }
-    return item;
-  });
-}
 
 const CartModel: CartModelType = {
   namespace: 'cart',
-  state: {
-    total: 0,
-    allSelected: false,
-    list: [],
-  },
+  state: initialState,
 
   effects: {
-    *addGoodsToCart(_, { put, call }) {
-      const addCartRequest = null;
+    *addGoodsToCart({ payload }, { put, call }) {
       // 触发添加到购物车
-      yield call(addCartRequest);
+      yield call(addToCart, payload);
       // 更新购物车数据
       yield put({
         type: 'fetchCartInfo',
       });
     },
-    *fetchCartInfo(_, { put }) {
+    *getCartTotalCount(_, { put, call }) {
+      const res = yield call(getCartCount);
       yield put({
-        type: 'saveCartInfo',
-        payload: testData,
+        type: 'updateCartTotal',
+        payload: res?.data,
       });
+    },
+    *fetchCartInfo(_, { put, call }) {
+      try {
+        const res = yield call(getCartList);
+        yield put({
+          type: 'saveCartInfo',
+          payload: res?.data ?? [],
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    *updateCartItemChecked({ payload: { items, value } }, { call, put }) {
+      try {
+        const params = {
+          cartIds: items.map((item: GoodsInfo) => item.id),
+          isChecked: value ? 1 : 0,
+        };
+        const res = yield call(updateCartItemChecked, params);
+        if (res.success) yield put({ type: 'fetchCartInfo' });
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    *updateCartItemQuantity({ payload: { item, quantity } }, { call, put }) {
+      try {
+        const res = yield call(updateCartItemQuantity, { ...item, quantity });
+        if (res.success) yield put({ type: 'fetchCartInfo' });
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    *deleteCartItem({ payload: { items } }, { call, put }) {
+      try {
+        const ids = items.map((item: GoodsInfo) => item.id);
+        const res = yield call(deleteCartItem, { ids });
+        if (res.success) yield put({ type: 'fetchCartInfo' });
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
   reducers: {
-    saveCartInfo(state, { payload }): CartModelState {
-      return {
-        total: payload.reduce((acc: number, cur: CartItemInfo) => acc + cur.goodsList.length, 0),
-        list: payload,
-        allSelected: true,
-      };
-    },
-    updateCartInfo(state = initialState, { payload = {} }) {
-      console.log(payload);
-      const { storeIndex, goodIndex, type } = payload;
-      let newList: CartItemInfo[] = [];
-      const oldAllSelected = state.allSelected;
-      if (storeIndex === undefined && goodIndex === undefined) {
-        // 更新全选
-        newList = cloneDeep(state.list);
-        switch (type) {
-          case 'update':
-            newList.forEach((item) => {
-              item.selected = !oldAllSelected;
-              item.goodsList.forEach((good) => {
-                good.selected = !oldAllSelected;
-              });
-            });
-            break;
-          case 'delete':
-            for (let i = newList.length - 1; i >= 0; i--) {
-              if (newList[i].selected) {
-                newList.splice(i, 1);
-              } else {
-                for (let j = newList[i].goodsList.length - 1; j >= 0; j--) {
-                  if (newList[i].goodsList[j].selected) {
-                    newList[i].goodsList.splice(j, 1);
-                  }
-                }
-              }
-            }
-            break;
-          default:
-            break;
-        }
-      } else {
-        let updateGoodsListLength: number | null = null; // 当前正在更新的goodslist长度
-        switch (type) {
-          case 'update':
-            newList = handleUpdateCartInfo(state.list, storeIndex, goodIndex);
-            break;
-          case 'delete':
-            newList = state.list.map((item, itemIndex) => {
-              if (storeIndex === itemIndex) {
-                item.goodsList.splice(goodIndex, 1);
-                updateGoodsListLength = item.goodsList.length;
-                return {
-                  ...item,
-                  goodsList: item.goodsList,
-                };
-              }
-              return item;
-            });
-            if (updateGoodsListLength === 0) {
-              newList.splice(storeIndex, 1);
-            }
-            break;
-          default:
-            break;
-        }
-      }
+    saveCartInfo(state = initialState, { payload }): CartModelState {
       return {
         ...state,
-        total: newList.reduce((acc, cur) => acc + cur.goodsList.length, 0),
-        list: newList,
-        allSelected: newList.every((item) => item.selected),
+        total: payload.length,
+        totalPrice: payload.reduce((acc: number, cur: GoodsInfo) => acc + cur.invoicePrice * cur.quantity, 0),
+        isAllChecked: payload.every((item: GoodsInfo) => item.isChecked),
+        list: handleCartInfo(payload),
+        originalList: payload,
       };
     },
-    // update(state = initialState, { payload }) {
-    //   console.log(state, payload);
-    //   return {
-    //     ...state,
-    //   };
-    // },
-    // delete(state = initialState, { payload }) {
-    //   console.log(state, payload);
-    //   return {
-    //     ...state,
-    //   };
-    // },
+    updateCartTotal(state = initialState, { payload }): CartModelState {
+      return {
+        ...state,
+        total: payload,
+      };
+    },
   },
 };
 

@@ -72,12 +72,17 @@ const request = extend({
     return qs.stringify(params, { arrayFormat: 'repeat' });
   },
   getResponse: true,
-  prefix: '/api/jingtian-decoration-api',
+  prefix: '/api/integral-mall',
   // errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
 });
 request.interceptors.request.use((url, options) => {
-  options.headers = { ...options.headers, Authorization: localStorage.getItem('token') || '' };
+  options.headers = {
+    ...options.headers,
+    Authorization:
+      localStorage.getItem('token') ||
+      'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMzA0ODg3Mjg1MSIsInRpbWUiOjE2MjQ4NTk2NTMzOTAsImlzcyI6InNlY3VyaXR5IiwiaWF0IjoxNjI0ODU5NjUzLCJleHAiOjE2MjQ5Nzk2NTN9.zzkd8ri2lzJ4IC3B7ESeqCmyOfsljSy53jHjNHIEs0fGH6zoMHFWsD3mMfkf6NsrkfFpaVQhk6d4xfocxEltLQ',
+  };
   return {
     url,
     options: { ...options, interceptors: true },

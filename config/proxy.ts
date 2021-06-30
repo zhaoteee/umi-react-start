@@ -1,10 +1,9 @@
-
 export default {
   dev: {
     '/api': {
-      target: 'http://p.chaomeifan.com/api',
+      target: 'http://z.gc.chaomeifan.com/api',
       changeOrigin: true,
       pathRewrite: { '^/api': '' },
     },
-  }
+  },
 };
