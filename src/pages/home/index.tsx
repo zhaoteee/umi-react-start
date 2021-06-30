@@ -35,6 +35,7 @@ export type GoodsItemType = {
   stock: number;
   subTitle: string;
   supplierId: string;
+  supplierShopName: string;
   title: string;
   unit: string;
   productInfoExtDTO: productInfoExtType;
@@ -78,14 +79,16 @@ const IndexPage: React.FC = () => {
     getData(params);
   };
   useEffect(() => {
-    const { userToken, origin, keyword } = loaction.query as HomeQuery;
+    const { userToken, origin, keyword = '' } = loaction.query as HomeQuery;
     if (userToken) {
       localStorage.setItem('token', userToken);
     }
     if (origin) {
       localStorage.setItem('origin', origin);
     }
-    getData({ title: keyword || '' });
+    const p = keyword ? { title: keyword } : {};
+    getData(p);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [loaction.query]);
   return (
     <Spin spinning={isLoading} tip="加载中...">
