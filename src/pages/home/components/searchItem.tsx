@@ -44,11 +44,7 @@ const Search: React.FC<SearchItemProps> = (props) => {
       }),
     );
     setSelectMore(false);
-    onSelect(
-      name,
-      value,
-      optionList.filter((item) => item.selected),
-    );
+    onSelect(name, value, []);
   };
   const clickItem = (item: OptionsItemType) => {
     const list = cloneDeep(optionList);
