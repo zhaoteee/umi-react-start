@@ -147,7 +147,7 @@ const CartModel: CartModelType = {
       return {
         ...state,
         total: payload.length,
-        totalPrice: payload.reduce((acc: number, cur: GoodsInfo) => acc + cur.invoicePrice * cur.quantity, 0),
+        totalPrice: payload.filter((item: GoodsInfo) => item.isChecked).reduce((acc: number, cur: GoodsInfo) => acc + cur.invoicePrice * cur.quantity, 0),
         isAllChecked: payload.every((item: GoodsInfo) => item.isChecked),
         list: handleCartInfo(payload),
         originalList: payload,

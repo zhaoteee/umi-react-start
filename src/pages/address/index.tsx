@@ -54,7 +54,7 @@ const Address: React.FC = () => {
           );
         })}
       </Card>
-      <EditAddressForm isVisible={isVisible} id={currentId} onCancel={handleCancel} addNewAddress={addNewAddress} updateAddress={updateAddress} />
+      {isVisible && <EditAddressForm isVisible={isVisible} id={currentId} onCancel={handleCancel} addNewAddress={addNewAddress} updateAddress={updateAddress} />}
     </div>
   );
 };

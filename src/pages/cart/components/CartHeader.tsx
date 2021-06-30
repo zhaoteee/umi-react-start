@@ -1,7 +1,6 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Checkbox, Col, Row } from 'antd';
-import { connect, useDispatch } from '@@/plugin-dva/exports';
-import type { CartModelState } from '@/models/cart';
+import { useDispatch } from '@@/plugin-dva/exports';
 import type { GoodsInfo } from '@/models/cart';
 
 type HeaderColumn = {
@@ -10,18 +9,24 @@ type HeaderColumn = {
 };
 type CartHeaderProps = {
   headerColumns?: HeaderColumn[];
-  isAllChecked: boolean;
-  originalList: GoodsInfo[];
+  list?: GoodsInfo[];
+  hasAllChecked?: boolean;
 };
 
 const CartHeader: React.FC<CartHeaderProps> = (props) => {
   const headerColumns = props.headerColumns as HeaderColumn[];
+  const [isAllChecked, setIsAllChecked] = useState(true);
+  useEffect(() => {
+    if (props.list) {
+      setIsAllChecked(props.list.every((item) => item.isChecked));
+    }
+  }, [props.list]);
   const dispatch = useDispatch();
   const updateAllChecked = (value: boolean) => {
     dispatch({
       type: 'cart/updateCartItemChecked',
       payload: {
-        items: props.originalList,
+        items: props.list,
         value,
       },
     });
@@ -34,9 +39,11 @@ const CartHeader: React.FC<CartHeaderProps> = (props) => {
           <Col className={`${index === 0 ? 'text-left flex' : 'text-center'}`} key={item.text} span={item.col}>
             {index === 0 ? (
               <>
-                <Checkbox checked={props.isAllChecked} onChange={(e) => updateAllChecked(e.target.checked)}>
-                  全选
-                </Checkbox>
+                {props.hasAllChecked && (
+                  <Checkbox checked={isAllChecked} onChange={(e) => updateAllChecked(e.target.checked)}>
+                    全选
+                  </Checkbox>
+                )}
                 <span className="flex-1 text-left pl-25">{item.text}</span>
               </>
             ) : (
@@ -57,11 +64,7 @@ CartHeader.defaultProps = {
     { text: '金额', col: 3 },
     { text: '操作', col: 3 },
   ],
+  hasAllChecked: true,
 };
 
-export default connect(({ cart }: { cart: CartModelState }) => {
-  return {
-    isAllChecked: cart.isAllChecked,
-    originalList: cart.originalList,
-  };
-})(CartHeader);
+export default CartHeader;

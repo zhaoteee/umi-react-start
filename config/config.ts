@@ -79,6 +79,12 @@ export default defineConfig({
           title: '收货地址管理',
         },
         {
+          path: '/mall/goodsInfo',
+          name: 'mallGoodsInfo',
+          component: './goodsInfo',
+          title: '商品详情页',
+        },
+        {
           component: '404',
         },
       ],
