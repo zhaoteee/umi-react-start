@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Input } from 'antd';
 import type { ConnectState, CartModelState } from '@/models/connect';
-
-import { connect, Link, history } from 'umi';
+import type { HomeQueryType } from '@/pages/home/index';
+import { connect, Link, history, useLocation } from 'umi';
+import type { Location } from 'umi';
 
 import styles from './index.less';
 
@@ -12,12 +13,18 @@ export type MallHeaderType = {
 };
 
 const MallHeader: React.FC<MallHeaderType> = (props) => {
+  const loaction: Location = useLocation();
+  const { keyword = '' } = loaction.query as HomeQueryType;
+  const [val, setVal] = useState(keyword);
   const onSearch = (v: string) => {
     if (v) {
       history.replace(`/mall?keyword=${decodeURIComponent(v)}`);
     } else {
       history.push(`/mall`);
     }
+  };
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setVal(e.target.value);
   };
   const { cart } = props;
   return (
@@ -29,13 +36,7 @@ const MallHeader: React.FC<MallHeaderType> = (props) => {
           </Link>
         </div>
         <div className="fleft">
-          <Search
-            className={styles.serachInput}
-            allowClear
-            enterButton="搜索"
-            onSearch={onSearch}
-            placeholder="请输入商品名称"
-          />
+          <Search className={styles.serachInput} allowClear enterButton="搜索" value={val} onChange={onChange} onSearch={onSearch} placeholder="请输入商品名称" />
         </div>
       </div>
       <div className={styles.orderInfo}>

@@ -8,7 +8,7 @@ import GoodsItem from './components/goodsItem';
 import { FileSearchOutlined } from '@ant-design/icons';
 
 import type { Location } from 'umi';
-import type { OptionsItemType } from './components/searchItem';
+import type { SearchListType } from './components/search';
 import type { Dispatch } from '@@/plugin-dva/connect';
 import { getProductList } from '@/services/home';
 
@@ -42,7 +42,7 @@ export type GoodsItemType = {
   unit: string;
   productInfoExtDTO: productInfoExtType;
 };
-export type HomeQuery = Location['query'] & { userToken: string; origin?: string; keyword?: string };
+export type HomeQueryType = Location['query'] & { userToken?: string; origin?: string; keyword?: string };
 
 type ParamsPropsType = {
   current?: number;
@@ -88,12 +88,15 @@ const IndexPage: React.FC = () => {
       hide();
     }, 500);
   };
-  const onConfirmSelect = (name: string, value: string, selectedOptions: OptionsItemType[]) => {
-    const params = { name, value, selectedOptions };
-    getData(params);
+  const onConfirmSelect = (p: SearchListType[]) => {
+    const obj = p.reduce((a, c) => {
+      a[c.value] = c.options.map((op) => op.keyId);
+      return a;
+    }, {});
+    getData(obj);
   };
   useEffect(() => {
-    const { userToken, origin, keyword = '' } = loaction.query as HomeQuery;
+    const { userToken, origin, keyword = '' } = loaction.query as HomeQueryType;
     if (userToken) {
       localStorage.setItem('token', userToken);
     }

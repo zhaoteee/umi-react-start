@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { LeftCircleFilled, RightCircleFilled } from '@ant-design/icons';
+import { Link } from 'umi';
 import Slider from 'react-slick';
 import { preFixPath } from '@/utils/util';
 
@@ -28,9 +29,11 @@ const GoodsItem: React.FC<GooodsItemProps> = (props) => {
   };
   return (
     <div key={item.id} className={styles.product}>
-      <div className={styles.imgWrap}>
-        <img className={styles.productImg} src={productImg} />
-      </div>
+      <Link to={`/mall/goodsInfo?id=${item.id}`}>
+        <div className={styles.imgWrap}>
+          <img className={styles.productImg} src={productImg} />
+        </div>
+      </Link>
       <Slider
         className={styles.sliderIcon}
         prevArrow={<LeftCircleFilled />}
@@ -48,14 +51,16 @@ const GoodsItem: React.FC<GooodsItemProps> = (props) => {
           </div>
         ))}
       </Slider>
-      <p className="e1">{item.title || '--'}</p>
+      <Link to={`/mall/goodsInfo?id=${item.id}`} className={styles.goodsTitle}>
+        <p className="e1">{item.title || '--'}</p>
+      </Link>
       <div className="between">
         <span>
           ￥{item.salePrice}/{item.unit}
         </span>
         <a onClick={() => addToCart(item)}>加入购物车</a>
       </div>
-      <p>{item.supplierShopName}</p>
+      <p className={styles.productStore}>{item.supplierShopName}</p>
     </div>
   );
 };
