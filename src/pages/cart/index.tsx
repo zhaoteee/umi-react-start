@@ -4,7 +4,7 @@ import CartFooter from '@/pages/cart/components/CartFooter';
 import CartHeader from '@/pages/cart/components/CartHeader';
 import { connect, useDispatch } from '@@/plugin-dva/exports';
 import CartList from './components/CartList';
-import type { CartItemInfo } from '@/models/cart';
+import type { CartItemInfo, GoodsInfo } from '@/models/cart';
 import { Result, Button } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { history } from 'umi';
@@ -14,6 +14,7 @@ import type { CartModelState } from '@/models/cart';
 
 type CartProps = {
   list: CartItemInfo[];
+  originalList: GoodsInfo[];
 };
 const Cart: React.FC<CartProps> = (props) => {
   const dispatch: Dispatch<CartModelType> = useDispatch();
@@ -31,7 +32,7 @@ const Cart: React.FC<CartProps> = (props) => {
         <PageHeader className="p-2.5 border-b-2 border-red-500" title="购物车" />
         {props.list.length ? (
           <>
-            <CartHeader />
+            <CartHeader list={props.originalList} />
             <CartList list={props.list} />
             <CartFooter />
           </>
@@ -54,6 +55,7 @@ const Cart: React.FC<CartProps> = (props) => {
 const mapStateToProps = ({ cart }: { cart: CartModelState }) => {
   return {
     list: cart.list,
+    originalList: cart.originalList,
   };
 };
 

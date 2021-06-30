@@ -8,10 +8,11 @@ import type { GoodsInfo } from '@/models/cart';
 type CartItemprops = {
   col?: [number, number, number, number, number];
   info: CartItemInfo;
+  hasChecked?: boolean;
 };
 
 const CartListItem: React.FC<CartItemprops> = (props) => {
-  const { info, col } = props;
+  const { info, col, hasChecked } = props;
   const dispatch = useDispatch();
 
   const updateStoreChecked = ({ goodsList }: CartItemInfo, value: boolean) => {
@@ -61,7 +62,7 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
   return (
     <div className="mb-4">
       <div className="p-2.5">
-        <Checkbox checked={info.isChecked} onChange={(e) => updateStoreChecked(info, e.target.checked)} />
+        {hasChecked && <Checkbox checked={info.isChecked} onChange={(e) => updateStoreChecked(info, e.target.checked)} />}
         <span className="ml-4">店铺: {info.supplierName}</span>
       </div>
       <div className="mx-2.5 border border-solid border-gray-400 divide-y divide-gray-300">
@@ -69,7 +70,7 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
           return (
             <Row className="p-5" key={item.id}>
               <Col span={col![0]} className="flex">
-                <Checkbox checked={item.isChecked} onChange={(e) => updateCartItemChecked(item, e.target.checked)} />
+                {hasChecked && <Checkbox checked={item.isChecked} onChange={(e) => updateCartItemChecked(item, e.target.checked)} />}
                 <img className="w-25 h-25 mx-2.5 object-contain flex-shrink-0" src={item.image} alt={item.title} />
                 <div className="text-gray-500">{item.title}</div>
               </Col>
@@ -96,5 +97,6 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
 };
 CartListItem.defaultProps = {
   col: [12, 3, 3, 3, 3],
+  hasChecked: true,
 };
 export default memo(CartListItem);

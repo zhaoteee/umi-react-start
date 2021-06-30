@@ -79,7 +79,7 @@ const EditAddressForm: React.FC<EditAddressFormType> = (props) => {
   };
 
   return (
-    <Modal title="编辑收货地址" visible={props.isVisible} onCancel={props.onCancel} width={600} onOk={handleOk}>
+    <Modal title="编辑收货地址" visible={props.isVisible} onCancel={props.onCancel} width={600} onOk={handleOk} destroyOnClose={false} getContainer={false} forceRender>
       <Form {...layout} form={form}>
         <Form.Item label="收件人" name="contacts" rules={[{ required: true, message: '请输入收件人姓名' }]}>
           <Input placeholder="请输入收件人姓名" />
