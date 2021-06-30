@@ -4,14 +4,15 @@ import type { CartItemInfo } from '@/models/cart';
 
 type CartListProps = {
   list: CartItemInfo[];
-  hasChecked?: boolean;
+  canEdit?: boolean;
+  col?: number[];
 };
 
-const CartList: React.FC<CartListProps> = ({ list, hasChecked = true }) => {
+const CartList: React.FC<CartListProps> = ({ list, canEdit = true, col }) => {
   return (
     <div>
       {list.map((item) => {
-        return <CartListItem key={item.supplierId} info={item} hasChecked={hasChecked} />;
+        return <CartListItem key={item.supplierId} info={item} canEdit={canEdit} col={col} />;
       })}
     </div>
   );

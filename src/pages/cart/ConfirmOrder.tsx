@@ -11,16 +11,24 @@ import useBoolean from '@/hooks/useBoolean';
 import type { CartModelState, GoodsInfo } from '@/models/cart';
 import { connect, useDispatch } from '@@/plugin-dva/exports';
 import { handleCartInfo } from '@/models/cart';
+import { addOrder } from '@/services/order';
+import type { Loading } from '@@/plugin-dva/connect';
 
 type ConfirmOrderProps = {
   originalList: GoodsInfo[];
   totalPrice: number;
+  loading: boolean;
 };
+const headerColumns = [
+  { text: '商品信息', col: 12 },
+  { text: '单价', col: 4 },
+  { text: '数量', col: 4 },
+  { text: '金额', col: 4 },
+];
 const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
-  const { originalList, totalPrice } = props;
+  const { originalList, totalPrice, loading } = props;
   const dispatch = useDispatch();
   const { TextArea } = Input;
-  const [loading] = useState(false);
   const [isVisible, { setTrue: openModal, setFalse: closeModal }] = useBoolean(false);
   const [editingAddressId, setEditingAddressId] = useState('');
   const [consumerRemark, setConsumerRemark] = useState('');
@@ -48,16 +56,19 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
       consumerRemark,
     };
     console.log(params);
+    addOrder(params).then((res) => {
+      console.log(res);
+    });
     // history.push('/mall/cart/pay');
   };
   return (
     <Spin spinning={loading}>
       <div>
         <PageHeader className="p-2.5 border-b-2 border-red-500" title="确认订单" onBack={() => history.goBack()} />
-        <AddressCard addressList={addressList} updateAddressChecked={updateAddressChecked} handleEditAddress={handleEditAddress} />
+        <AddressCard addressList={addressList ?? []} updateAddressChecked={updateAddressChecked} handleEditAddress={handleEditAddress} />
         <div className="p-2.5 font-bold">确认订单信息</div>
-        <CartHeader hasAllChecked={false} />
-        <CartList list={handleCartInfo(selectedList)} hasChecked={false} />
+        <CartHeader hasAllChecked={false} headerColumns={headerColumns} />
+        <CartList list={handleCartInfo(selectedList)} canEdit={false} col={[12, 4, 4, 4]} />
         <div className="flex">
           <div className="flex-shrink-0 w-16">订单备注:</div>
           <TextArea placeholder="请输入备注" onChange={(e) => setConsumerRemark(e.target.value)} />
@@ -77,10 +88,11 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
   );
 };
 
-const mapStateToProps = ({ cart }: { cart: CartModelState }) => {
+const mapStateToProps = ({ cart, loading }: { cart: CartModelState; loading: Loading }) => {
   return {
     originalList: cart.originalList,
     totalPrice: cart.totalPrice,
+    loading: loading.effects['cart/fetchCartInfo'],
   };
 };
 
