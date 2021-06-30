@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
 import { LeftCircleFilled, RightCircleFilled } from '@ant-design/icons';
 import Slider from 'react-slick';
+import { preFixPath } from '@/utils/util';
 
 import styles from '../index.less';
 import type { GoodsItemType } from '../index';
 
 type GooodsItemProps = {
   item: GoodsItemType;
+  addToCart: (p: GoodsItemType) => void;
 };
 
 const GoodsItem: React.FC<GooodsItemProps> = (props) => {
-  const { item } = props;
-  const [productImg, setProductImg] = useState(item.listPicUrl);
+  const { item, addToCart } = props;
+  const productImage = item.productInfoExtDTO.productImageDTOList.map((p) => {
+    if (p.resource && p.resource.indexOf('http') < 0) {
+      p.resource = preFixPath + p.resource;
+    }
+    return p.resource;
+  });
+  const [productImg, setProductImg] = useState(productImage[0]);
   const [current, setCurrent] = useState(-1);
-  const imgList = [
-    'https://yanxuan-item.nosdn.127.net/a8debbec93ce14e944d87cef0f998b85.jpg',
-    'https://yanxuan-item.nosdn.127.net/479ab79d9a8ae282c6567bcf0a5de048.jpg',
-    'https://yanxuan-item.nosdn.127.net/6bed55c2cb9d38c33685048b4a54812b.jpg',
-  ];
+  const imgList = productImage;
   const changeImg = (url: string, idx: number) => {
     setProductImg(url);
     setCurrent(idx);
@@ -49,9 +53,9 @@ const GoodsItem: React.FC<GooodsItemProps> = (props) => {
         <span>
           ￥{item.salePrice}/{item.unit}
         </span>
-        <a>加入购物车</a>
+        <a onClick={() => addToCart(item)}>加入购物车</a>
       </div>
-      <p>网易严选</p>
+      <p>{item.supplierShopName}</p>
     </div>
   );
 };

@@ -28,3 +28,5 @@ export function toDecimal(val: number, pre = 2): string {
   }
   return f;
 }
+
+export const preFixPath = window.SYSTEM_CONFIG?.staticPath || 'https://dev-peppa.hzzcckj.cn';

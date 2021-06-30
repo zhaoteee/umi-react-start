@@ -6,3 +6,9 @@ export const getProductList = (params: any) => {
     data: params,
   });
 };
+
+export const getProductAgg = () => {
+  return request('/integral/product/agg', {
+    method: 'get',
+  });
+};

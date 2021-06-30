@@ -28,11 +28,10 @@ type GAFieldsObject = {
 };
 
 interface Window {
-  ga: (
-    command: 'send',
-    hitType: 'event' | 'pageview',
-    fieldsObject: GAFieldsObject | string,
-  ) => void;
+  ga: (command: 'send', hitType: 'event' | 'pageview', fieldsObject: GAFieldsObject | string) => void;
+  SYSTEM_CONFIG?: {
+    staticPath: string;
+  };
   reloadAuthorized: () => void;
   routerBase: string;
 }
