@@ -3,13 +3,14 @@ import { PageHeader, Spin } from 'antd';
 import CartFooter from '@/pages/cart/components/CartFooter';
 import CartHeader from '@/pages/cart/components/CartHeader';
 import { connect, useDispatch } from '@@/plugin-dva/exports';
-import CartList, { mapStateToProps } from './components/CartList';
+import CartList from './components/CartList';
 import type { CartItemInfo } from '@/models/cart';
 import { Result, Button } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { history } from 'umi';
 import type { Dispatch } from '@@/plugin-dva/connect';
 import type { CartModelType } from '@/models/cart';
+import type { CartModelState } from '@/models/cart';
 
 type CartProps = {
   list: CartItemInfo[];
@@ -31,7 +32,7 @@ const Cart: React.FC<CartProps> = (props) => {
         {props.list.length ? (
           <>
             <CartHeader />
-            <CartList />
+            <CartList list={props.list} />
             <CartFooter />
           </>
         ) : (
@@ -48,6 +49,12 @@ const Cart: React.FC<CartProps> = (props) => {
       </div>
     </Spin>
   );
+};
+
+const mapStateToProps = ({ cart }: { cart: CartModelState }) => {
+  return {
+    list: cart.list,
+  };
 };
 
 export default connect(mapStateToProps)(Cart);

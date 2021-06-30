@@ -40,9 +40,10 @@ export type CartModelState = {
   totalPrice: number;
   isAllChecked: boolean;
   list: CartItemInfo[]; // 商品列表
+  originalList: GoodsInfo[];
 };
 
-function handleCartInfo(list: GoodsInfo[]) {
+export function handleCartInfo(list: GoodsInfo[]) {
   return list.reduce((acc: CartItemInfo[], cur) => {
     let isExisted = false;
     acc.forEach((item) => {
@@ -75,6 +76,7 @@ const initialState = {
   totalPrice: 0,
   isAllChecked: false,
   list: [],
+  originalList: [],
 };
 
 const CartModel: CartModelType = {
@@ -103,7 +105,6 @@ const CartModel: CartModelType = {
       }
     },
     *updateCartItemChecked({ payload: { items, value } }, { call, put }) {
-      console.log(items, value);
       try {
         const params = {
           cartIds: items.map((item: GoodsInfo) => item.id),
@@ -141,6 +142,7 @@ const CartModel: CartModelType = {
         totalPrice: payload.reduce((acc: number, cur: GoodsInfo) => acc + cur.invoicePrice * cur.quantity, 0),
         isAllChecked: payload.every((item: GoodsInfo) => item.isChecked),
         list: handleCartInfo(payload),
+        originalList: payload,
       };
     },
   },

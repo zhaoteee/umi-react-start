@@ -1,50 +1,57 @@
 import React from 'react';
-import { Checkbox, Button, Modal } from 'antd';
+import { Checkbox, Button, Modal, message } from 'antd';
 import '../index.less';
 import { toDecimal } from '@/utils/util';
 import { connect, useDispatch } from '@@/plugin-dva/exports';
 import type { CartModelState } from '@/models/cart';
 import { history } from 'umi';
-import type { CartItemInfo } from '@/models/cart';
 import type { GoodsInfo } from '@/models/cart';
 
 type CartFooterProps = {
   isAllChecked: boolean;
   totalPrice: number;
-  list: CartItemInfo[];
+  originalList: GoodsInfo[];
 };
 
 const CartFooter: React.FC<CartFooterProps> = (props) => {
   const dispatch = useDispatch();
 
   const deleteAllCartItem = () => {
-    Modal.confirm({
-      content: '确认删除这些商品吗?',
-      onOk() {
-        dispatch({
-          type: 'cart/deleteCartItem',
-          payload: {
-            items: props.list.reduce((acc: GoodsInfo[], cur) => {
-              acc.push(...cur.goodsList);
-              return acc;
-            }, []),
-          },
-        });
-      },
-    });
+    const checkedCartItems = props.originalList.filter((item) => item.isChecked);
+    if (checkedCartItems.length === 0) {
+      message.warning('请至少选择一个商品');
+    } else {
+      Modal.confirm({
+        content: '确认删除这些商品吗?',
+        onOk() {
+          dispatch({
+            type: 'cart/deleteCartItem',
+            payload: {
+              items: checkedCartItems,
+            },
+          });
+        },
+      });
+    }
   };
   // console.log(props);
   const updateAllChecked = (value: boolean) => {
     dispatch({
       type: 'cart/updateCartItemChecked',
       payload: {
-        items: props.list.reduce((acc: GoodsInfo[], cur) => {
-          acc.push(...cur.goodsList);
-          return acc;
-        }, []),
+        items: props.originalList,
         value,
       },
     });
+  };
+
+  const handleSettlement = () => {
+    const hasGoodsChecked = props.originalList.some((item) => item.isChecked);
+    if (!hasGoodsChecked) {
+      message.warning('请至少选择一个商品');
+      return;
+    }
+    history.push('/mall/cart/confirm');
   };
 
   return (
@@ -63,7 +70,7 @@ const CartFooter: React.FC<CartFooterProps> = (props) => {
           <span className="ml-2.5 text-red-500 text-lg font-bold">{`￥${toDecimal(props.totalPrice)}`}</span>
         </div>
       </div>
-      <div className="btn-settlement bg-red-500" onClick={() => history.push('/mall/cart/confirm')}>
+      <div className="btn-settlement bg-red-500" onClick={handleSettlement}>
         结算
       </div>
     </div>
@@ -74,7 +81,7 @@ const mapStateToProps = ({ cart }: { cart: CartModelState }) => {
   return {
     isAllChecked: cart.isAllChecked,
     totalPrice: cart.totalPrice,
-    list: cart.list,
+    originalList: cart.originalList,
   };
 };
 
