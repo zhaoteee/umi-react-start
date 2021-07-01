@@ -59,7 +59,7 @@ const IndexPage: React.FC = () => {
   });
   const [goodsList, setGoodsList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const loaction: Location = useLocation();
+  const location: Location = useLocation();
   const getData = (p: ParamsPropsType) => {
     setIsLoading(true);
     const params = {
@@ -96,7 +96,7 @@ const IndexPage: React.FC = () => {
     getData(obj);
   };
   useEffect(() => {
-    const { userToken, origin, keyword = '' } = loaction.query as HomeQueryType;
+    const { userToken, origin, keyword = '' } = location.query as HomeQueryType;
     if (userToken) {
       localStorage.setItem('token', userToken);
     }
@@ -109,7 +109,7 @@ const IndexPage: React.FC = () => {
       type: 'cart/getCartTotalCount',
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loaction.query]);
+  }, [location.query]);
   return (
     <Spin spinning={isLoading} tip="加载中...">
       <div className={styles.goodsListPage}>
