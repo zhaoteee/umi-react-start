@@ -62,7 +62,7 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
     };
     addOrder(params).then((res: any) => {
       if (res.success) {
-        history.push(`/mall/cart/pay?orderId=${res.data}`);
+        history.push(`/mall/cart/paying?orderId=${res.data}`);
       }
     });
   };

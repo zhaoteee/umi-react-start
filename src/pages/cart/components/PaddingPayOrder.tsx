@@ -6,7 +6,7 @@ import useBoolean from '@/hooks/useBoolean';
 import UploadImage from '@/components/UploadImage';
 import type { UploadFile } from 'antd/es/upload/interface';
 import { payOrder, uploadCredential } from '@/services/order';
-import type { OrderPayStatus } from '@/pages/cart/PayOrder';
+import { history } from 'umi';
 
 export type payDetailType = {
   distributorIntegralPayEnable: boolean; // 是否开启经销商积分支付
@@ -25,32 +25,36 @@ export type payDetailType = {
 type PaddingPayOrderType = {
   orderId: string;
   detail: payDetailType;
-  setStatus: React.Dispatch<React.SetStateAction<OrderPayStatus>>;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
 type payWayType = 'INTEGRAL_PAY' | 'REBATE_PAY' | '';
-const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setStatus }) => {
+const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLoading }) => {
+  const { distributorIntegralPayEnable, distributorRebatePayEnable, rebateAmount, totalAmount, integralAmount } = detail;
   const [isVisible, { setTrue: openModal, setFalse: closeModal }] = useBoolean(false);
   const [payMethod, setPayMethod] = useState<payWayType>('');
   const [remainAmount, setRemainAmount] = useState<number>(0);
   const [imageUrl, setImageUrl] = useState('');
+
   useEffect(() => {
-    if (detail.distributorIntegralPayEnable && !detail.distributorRebatePayEnable) {
+    if (distributorIntegralPayEnable && !distributorRebatePayEnable) {
       setPayMethod('INTEGRAL_PAY');
-    }
-    if (!detail.distributorIntegralPayEnable && detail.distributorRebatePayEnable) {
+      setRemainAmount(totalAmount - integralAmount);
+    } else if (!distributorIntegralPayEnable && distributorRebatePayEnable) {
       setPayMethod('REBATE_PAY');
+      setRemainAmount(totalAmount - rebateAmount);
+    } else {
+      setRemainAmount(totalAmount);
     }
-    setRemainAmount(detail.totalAmount);
-  }, [detail.distributorIntegralPayEnable, detail.distributorRebatePayEnable, detail.totalAmount]);
+  }, [distributorIntegralPayEnable, distributorRebatePayEnable, integralAmount, rebateAmount, totalAmount]);
 
   const handlePayChange = (e: RadioChangeEvent) => {
     const { value } = e.target;
     setPayMethod(value);
     if (value === 'INTEGRAL_PAY') {
-      setRemainAmount(detail.totalAmount - detail.integralAmount);
+      setRemainAmount(totalAmount - integralAmount);
     }
     if (value === 'REBATE_PAY') {
-      setRemainAmount(detail.totalAmount - detail.rebateAmount);
+      setRemainAmount(totalAmount - rebateAmount);
     }
   };
   const onUploadImage = (imgList: UploadFile[]) => {
@@ -59,15 +63,25 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setSt
     }
   };
   const handleSubmit = () => {
+    setLoading(true);
     const params = {
       orderId,
       payMethod,
     };
-    payOrder(params).then((res: any) => {
-      if (res.success) {
-        openModal();
-      }
-    });
+    payOrder(params)
+      .then((res: any) => {
+        setLoading(false);
+        if (res.success) {
+          if (remainAmount > 0) {
+            openModal();
+          } else {
+            history.push(`/mall/cart/payed?orderId=${orderId}`);
+          }
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
   const handleOk = () => {
     const params = {
@@ -76,9 +90,13 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setSt
     };
     uploadCredential(params).then((res: any) => {
       if (res.success) {
-        setStatus('success');
+        history.push(`/mall/cart/payed?orderId=${orderId}`);
       }
     });
+  };
+  const handleCancel = () => {
+    closeModal();
+    history.push(`/mall/cart/payed?orderId=${orderId}`);
   };
   return (
     <div>
@@ -101,27 +119,29 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setSt
             {detail.distributorRebatePayEnable && <Radio value={'REBATE_PAY'}>{`返利可抵￥${toDecimal(detail.rebateAmount)} （返利余额￥${toDecimal(detail.totalRebate)}）`}</Radio>}
           </Space>
         </Radio.Group>
-        <div className="py-5">
-          <span>剩余应付: </span>
-          <span className="text-red-500 font-bold">{`￥${toDecimal(remainAmount)}`}</span>
-        </div>
         {remainAmount > 0 && (
-          <Card className="w-128" title="线下打款">
-            <Descriptions column={1}>
-              <Descriptions.Item label="开户名称">{detail.distributorRebatePayBankAccountName}</Descriptions.Item>
-              <Descriptions.Item label="开户银行">{detail.distributorRebatePayBankName}</Descriptions.Item>
-              <Descriptions.Item label="帐号">{detail.distributorRebatePayBankAccountNum}</Descriptions.Item>
-              {/* <Descriptions.Item label="说明">积分或返利支付不足时，也可点击确认支付，并将剩余金额通过其他方式汇入以上帐户。</Descriptions.Item> */}
-            </Descriptions>
-          </Card>
+          <>
+            <div className="py-5">
+              <span>剩余应付: </span>
+              <span className="text-red-500 font-bold">{`￥${toDecimal(remainAmount)}`}</span>
+            </div>
+            <Card className="w-128" title="线下打款">
+              <Descriptions column={1}>
+                <Descriptions.Item label="开户名称">{detail.distributorRebatePayBankAccountName}</Descriptions.Item>
+                <Descriptions.Item label="开户银行">{detail.distributorRebatePayBankName}</Descriptions.Item>
+                <Descriptions.Item label="帐号">{detail.distributorRebatePayBankAccountNum}</Descriptions.Item>
+                {/* <Descriptions.Item label="说明">积分或返利支付不足时，也可点击确认支付，并将剩余金额通过其他方式汇入以上帐户。</Descriptions.Item> */}
+              </Descriptions>
+            </Card>
+          </>
         )}
       </Card>
       <div className="text-right px-5">
         <div className="btn-submit inline-block" onClick={handleSubmit}>
-          确认
+          提交订单
         </div>
       </div>
-      <Modal visible={isVisible} onCancel={closeModal} onOk={handleOk} title={'上传凭证'}>
+      <Modal visible={isVisible} onCancel={handleCancel} onOk={handleOk} title={'上传凭证'}>
         <UploadImage onChange={onUploadImage} maxCount={1} />
       </Modal>
     </div>

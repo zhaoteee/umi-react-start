@@ -55,9 +55,15 @@ export default defineConfig({
           title: '确认订单',
         },
         {
-          path: '/mall/cart/pay',
+          path: '/mall/cart/paying',
           name: 'payOrder',
-          component: './cart/PayOrder',
+          component: './cart/PayingOrder',
+          title: '订单支付',
+        },
+        {
+          path: '/mall/cart/payed',
+          name: 'payOrder',
+          component: './cart/PayedOrder',
           title: '订单支付',
         },
         {
