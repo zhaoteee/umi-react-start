@@ -1,10 +1,15 @@
 import React from 'react';
 import AddressCardItem from '@/pages/cart/components/AddressCardItem';
 import { history } from 'umi';
-import useAddress from '@/hooks/useAddress';
+import type { addressItem } from '@/hooks/useAddress';
 
-const AddressCard: React.FC = () => {
-  const { addressList, updateAddressChecked } = useAddress();
+type AddressCardType = {
+  addressList: addressItem[];
+  updateAddressChecked: (item: addressItem) => void;
+  handleEditAddress: (id: string) => void;
+};
+const AddressCard: React.FC<AddressCardType> = (props) => {
+  const { addressList, updateAddressChecked, handleEditAddress } = props;
   return (
     <div>
       <div className="flex justify-between items-center p-2.5">
@@ -15,11 +20,11 @@ const AddressCard: React.FC = () => {
       </div>
       <div className="flex items-center overflow-x-auto p-2.5 bg-gray-100 border rounded">
         {addressList.map((item) => {
-          return <AddressCardItem item={item} key={item.id} updateAddressChecked={updateAddressChecked} />;
+          return <AddressCardItem item={item} key={item.id} updateAddressChecked={updateAddressChecked} handleEditAddress={handleEditAddress} />;
         })}
       </div>
     </div>
   );
 };
 
-export default AddressCard;
+export default React.memo(AddressCard);

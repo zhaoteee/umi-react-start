@@ -7,15 +7,15 @@ import type { OptionsItemType } from './searchItem';
 import styles from './search.less';
 
 type SearchProps = {
-  onConfirmSelect: (name: string, value: string, selectedOptions: OptionsItemType[]) => void;
+  onConfirmSelect: (p: SearchListType[]) => void;
 };
-type SearchListType = {
+export type SearchListType = {
   name: string;
   value: string;
   options: OptionsItemType[];
 };
+const selectedList: SearchListType[] = [];
 const Search: React.FC<SearchProps> = (props) => {
-  const selectedList: SearchListType[] = [];
   const [serachList, setSearchList] = useState<SearchListType[]>([]);
   useEffect(() => {
     getProductAgg().then((res) => {
@@ -38,8 +38,7 @@ const Search: React.FC<SearchProps> = (props) => {
     } else {
       selectedList.push({ name, value, options: selectedOptions });
     }
-    console.log(selectedList);
-    onConfirmSelect(name, value, selectedOptions);
+    onConfirmSelect(selectedList);
   };
   return (
     <div className={styles.searchArea}>

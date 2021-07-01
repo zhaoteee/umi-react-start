@@ -1,16 +1,16 @@
-import React, { useContext } from 'react';
-import { Store } from '@/pages/cart/ConfirmOrder';
-import type { IStore } from '@/pages/cart/ConfirmOrder';
+import React from 'react';
 import { Button } from 'antd';
 import type { addressItem } from '@/hooks/useAddress';
 
 type AddressCardItemProps = {
   item: addressItem;
   updateAddressChecked: (item: addressItem) => void;
+  handleEditAddress: (id: string) => void;
 };
 
 const AddressCardItem: React.FC<AddressCardItemProps> = (props) => {
-  const { handleEditAddress } = useContext(Store) as IStore;
+  const { handleEditAddress } = props;
+  console.log('addressCardItem 渲染了');
   const { item, updateAddressChecked } = props;
   return (
     <div
@@ -21,7 +21,7 @@ const AddressCardItem: React.FC<AddressCardItemProps> = (props) => {
         <span className="mr-2.5">{item.contacts}</span>
         <span>{item.mobile}</span>
       </div>
-      <div className="py-2.5 flex-1 e2">{`${item.provinceName} ${item.cityName} ${item.areaName} ${item.address}`}</div>
+      <div className="my-2.5 flex-1 e2">{`${item.provinceName} ${item.cityName} ${item.areaName} ${item.address}`}</div>
       <div className="flex justify-between items-center">
         <Button className="text-blue-500 p-0" type="link" size="small" onClick={() => handleEditAddress(item.id)}>
           编辑
@@ -32,4 +32,4 @@ const AddressCardItem: React.FC<AddressCardItemProps> = (props) => {
   );
 };
 
-export default AddressCardItem;
+export default React.memo(AddressCardItem);

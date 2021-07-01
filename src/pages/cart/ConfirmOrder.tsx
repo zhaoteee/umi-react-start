@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CartHeader from '@/pages/cart/components/CartHeader';
 import CartList from '@/pages/cart/components/CartList';
 import { Spin, Input, PageHeader } from 'antd';
@@ -9,59 +9,90 @@ import EditAddressForm from '@/pages/address/components/EditAddressForm';
 import useAddress from '@/hooks/useAddress';
 import useBoolean from '@/hooks/useBoolean';
 import type { CartModelState, GoodsInfo } from '@/models/cart';
-import { connect } from '@@/plugin-dva/exports';
+import { connect, useDispatch } from '@@/plugin-dva/exports';
 import { handleCartInfo } from '@/models/cart';
-
-export type IStore = {
-  handleEditAddress: (id: string) => void;
-};
-export const Store = React.createContext<IStore | null>(null);
+import { addOrder } from '@/services/order';
+import type { Loading } from '@@/plugin-dva/connect';
 
 type ConfirmOrderProps = {
   originalList: GoodsInfo[];
+  totalPrice: number;
+  loading: boolean;
 };
+const headerColumns = [
+  { text: '商品信息', col: 12 },
+  { text: '单价', col: 4 },
+  { text: '数量', col: 4 },
+  { text: '金额', col: 4 },
+];
 const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
+  const { originalList, totalPrice, loading } = props;
+  const dispatch = useDispatch();
   const { TextArea } = Input;
-  const [loading] = useState(false);
   const [isVisible, { setTrue: openModal, setFalse: closeModal }] = useBoolean(false);
-  const [currentId, setCurrentId] = useState('');
+  const [editingAddressId, setEditingAddressId] = useState('');
+  const [consumerRemark, setConsumerRemark] = useState('');
+  const { addressList, updateAddressChecked, updateAddress, selectedAddressId } = useAddress();
+  const [selectedList, setSelectedList] = useState<GoodsInfo[]>([]);
+
   const handleEditAddress = (id: string) => {
-    setCurrentId(id);
+    setEditingAddressId(id);
     openModal();
   };
-  const { updateAddress } = useAddress();
+  useEffect(() => {
+    setSelectedList(originalList.filter((item) => item.isChecked));
+  }, [originalList]);
+
+  useEffect(() => {
+    dispatch({
+      type: 'cart/fetchCartInfo',
+    });
+  }, [dispatch]);
+
+  const handleSubmit = () => {
+    const params = {
+      addressId: selectedAddressId,
+      cartIds: originalList.filter((item) => item.isChecked).map((item) => item.id),
+      consumerRemark,
+    };
+    console.log(params);
+    addOrder(params).then((res) => {
+      console.log(res);
+    });
+    // history.push('/mall/cart/pay');
+  };
   return (
     <Spin spinning={loading}>
       <div>
         <PageHeader className="p-2.5 border-b-2 border-red-500" title="确认订单" onBack={() => history.goBack()} />
-        <Store.Provider value={{ handleEditAddress }}>
-          <AddressCard />
-        </Store.Provider>
+        <AddressCard addressList={addressList ?? []} updateAddressChecked={updateAddressChecked} handleEditAddress={handleEditAddress} />
         <div className="p-2.5 font-bold">确认订单信息</div>
-        <CartHeader />
-        <CartList list={handleCartInfo(props.originalList)} />
+        <CartHeader hasAllChecked={false} headerColumns={headerColumns} />
+        <CartList list={handleCartInfo(selectedList)} canEdit={false} col={[12, 4, 4, 4]} />
         <div className="flex">
           <div className="flex-shrink-0 w-16">订单备注:</div>
-          <TextArea />
+          <TextArea placeholder="请输入备注" onChange={(e) => setConsumerRemark(e.target.value)} />
         </div>
         <div className="flex flex-col items-end px-2.5">
           <div className="py-4">
             <span className="font-bold mr-2.5">应付金额: </span>
-            <span className="text-3xl text-red-500 font-bold">{`￥${toDecimal(800)}`}</span>
+            <span className="text-3xl text-red-500 font-bold">{`￥${toDecimal(totalPrice)}`}</span>
           </div>
-          <div className="btn-submit" onClick={() => history.push('/mall/cart/pay')}>
+          <div className="btn-submit" onClick={handleSubmit}>
             提交订单
           </div>
         </div>
-        <EditAddressForm isVisible={isVisible} id={currentId} onCancel={closeModal} updateAddress={updateAddress} />
+        <EditAddressForm isVisible={isVisible} id={editingAddressId} onCancel={closeModal} updateAddress={updateAddress} />
       </div>
     </Spin>
   );
 };
 
-const mapStateToProps = ({ cart }: { cart: CartModelState }) => {
+const mapStateToProps = ({ cart, loading }: { cart: CartModelState; loading: Loading }) => {
   return {
     originalList: cart.originalList,
+    totalPrice: cart.totalPrice,
+    loading: loading.effects['cart/fetchCartInfo'],
   };
 };
 

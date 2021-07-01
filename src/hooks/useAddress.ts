@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { addNewAddress as addAddress, deleteAddress as deleteAdd, getAddressList as getList, setDefaultAddress as setDefault, updateAddress as update } from '@/services/address';
 import { Modal } from 'antd';
 
@@ -19,13 +19,19 @@ export type addressItem = {
 export type addressParams = Omit<addressItem, 'id' | 'isChecked' | 'isDefault'> & { id?: string; isDefault: 0 | 1 };
 const useAddress = () => {
   const [addressList, setAddressList] = useState<addressItem[]>([]);
-
+  // 提交订单页面当前选择的地址 id
+  const [selectedAddressId, setSelectedAddressId] = useState('');
   const getAddressList = () => {
     getList().then((res) => {
-      const result = res.data.map((item: addressItem) => ({
-        ...item,
-        isChecked: item.isDefault,
-      }));
+      const result = res.data.map((item: addressItem) => {
+        if (item.isDefault) {
+          setSelectedAddressId(item.id);
+        }
+        return {
+          ...item,
+          isChecked: item.isDefault,
+        };
+      });
       setAddressList(result);
     });
   };
@@ -76,26 +82,30 @@ const useAddress = () => {
     });
   };
 
-  const updateAddressChecked = (item: addressItem) => {
-    if (item.isChecked) return;
-    setAddressList((state) => {
-      return state.map((address) => {
-        if (address.isChecked) {
-          return {
-            ...address,
-            isChecked: false,
-          };
-        }
-        if (address.id === item.id) {
-          return {
-            ...address,
-            isChecked: true,
-          };
-        }
-        return address;
+  const updateAddressChecked = useMemo(
+    () => (item: addressItem) => {
+      if (item.isChecked) return;
+      setAddressList((state) => {
+        return state.map((address) => {
+          if (address.isChecked) {
+            return {
+              ...address,
+              isChecked: false,
+            };
+          }
+          if (address.id === item.id) {
+            setSelectedAddressId(address.id);
+            return {
+              ...address,
+              isChecked: true,
+            };
+          }
+          return address;
+        });
       });
-    });
-  };
+    },
+    [],
+  );
 
   return {
     addressList,
@@ -105,6 +115,7 @@ const useAddress = () => {
     updateAddress,
     setDefaultAddress,
     updateAddressChecked,
+    selectedAddressId,
   };
 };
 

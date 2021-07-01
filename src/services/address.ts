@@ -1,7 +1,7 @@
 import request from '@/utils/request';
 
 export const getRegionData = () => {
-  return request('/area/find_tree');
+  return request('/common/area/find_tree');
 };
 
 export const getAddressList = () => {

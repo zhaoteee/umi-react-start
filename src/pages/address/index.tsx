@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { Card, Descriptions, Button, PageHeader } from 'antd';
+import { Card, Descriptions, Button, PageHeader, Spin } from 'antd';
 import EditAddressForm from '@/pages/address/components/EditAddressForm';
 import { CloseOutlined } from '@ant-design/icons';
 import useAddress from '@/hooks/useAddress';
 import useBoolean from '@/hooks/useBoolean';
+import { history } from '@@/core/history';
 
 const Address: React.FC = () => {
   const [isVisible, { setTrue: openModal, setFalse: closeModal }] = useBoolean(false);
-  const { addressList, setDefaultAddress, deleteAddress, addNewAddress, updateAddress } = useAddress();
+  const { addressList, loading, setDefaultAddress, deleteAddress, addNewAddress, updateAddress } = useAddress();
   const [currentId, setCurrentId] = useState('');
   const handleEditAddress = (id: string) => {
     setCurrentId(id);
@@ -18,15 +19,15 @@ const Address: React.FC = () => {
     closeModal();
   };
   return (
-    <div>
-      <PageHeader className="p-2.5 border-b-2 border-red-500" title="收货地址管理" />
+    <Spin spinning={loading}>
+      <PageHeader className="p-2.5 border-b-2 border-red-500" title="收货地址管理" onBack={() => history.goBack()} />
       <div className="px-6 mt-2.5 text-right">
         <Button type="primary" onClick={() => openModal()}>
           新增地址
         </Button>
       </div>
       <Card bordered={false}>
-        {addressList.map((item) => {
+        {(addressList ?? []).map((item) => {
           return (
             <Card key={item.id} className={`mb-2.5 ${item.isDefault ? 'border-red-500' : ''}`}>
               <Descriptions column={1}>
@@ -55,7 +56,7 @@ const Address: React.FC = () => {
         })}
       </Card>
       <EditAddressForm isVisible={isVisible} id={currentId} onCancel={handleCancel} addNewAddress={addNewAddress} updateAddress={updateAddress} />
-    </div>
+    </Spin>
   );
 };
 
