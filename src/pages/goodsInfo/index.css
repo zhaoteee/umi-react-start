@@ -14,18 +14,67 @@
   display: flex;
 }
 .content .top .top_left {
-  color: #000;
+  width: 250px;
+}
+.content .top .top_left .top_img {
+  border: 1px solid #eee;
+}
+.content .top .top_left .top_img img {
+  width: 250px;
+  height: 240px;
+}
+.content .top .top_left .sliderIcon {
+  padding: 0 0 10px;
+}
+.content .top .top_left .sliderImgItemWrap {
+  position: relative;
+  padding: 1px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+.content .top .top_left .sliderImgItemWrap img {
+  width: 100%;
+  height: 100%;
+}
+.content .top .top_left .current {
+  border-color: #FF0036;
+  border-width: 2px;
+}
+.content .top .top_left .current::before {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid #FF0036;
+  border-left: 4px solid transparent;
+  transform: translateX(-50%);
+  content: '';
+}
+.content .top .top_right {
+  margin-left: 100px / 10 * 4;
 }
 .content .top .top_right .right_title {
+  margin-bottom: 10px;
   color: #333;
   font-weight: bold;
   font-size: 15px;
-  margin-bottom: 10px;
 }
 .content .top .top_right .rigth_brandName {
-  margin-bottom: 30px;
+  margin-bottom: 100px / 10 * 3;
 }
-.content .top .top_right .icon {
+.content .top .top_right .right_icon {
   color: red;
-  margin-bottom: 10px;
+}
+.content .top .top_right .right_symbol {
+  font-size: 14px;
+  margin-top: 10px;
+  margin-bottom: 100px / 10 * 2;
+}
+.content .top .top_right button {
+  margin-right: 100px / 10;
+  border-radius: 5px;
+  border: none;
+  background-color: #f59a23;
 }
