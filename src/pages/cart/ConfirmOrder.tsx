@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import CartHeader from '@/pages/cart/components/CartHeader';
 import CartList from '@/pages/cart/components/CartList';
 import { Spin, Input, PageHeader } from 'antd';
@@ -8,7 +8,7 @@ import { history } from 'umi';
 import EditAddressForm from '@/pages/address/components/EditAddressForm';
 import useAddress from '@/hooks/useAddress';
 import useBoolean from '@/hooks/useBoolean';
-import type { CartModelState, GoodsInfo } from '@/models/cart';
+import type { CartModelState, GoodsInfo, CartItemInfo } from '@/models/cart';
 import { connect, useDispatch } from '@@/plugin-dva/exports';
 import { handleCartInfo } from '@/models/cart';
 import { addOrder } from '@/services/order';
@@ -25,6 +25,7 @@ const headerColumns = [
   { text: '数量', col: 4 },
   { text: '金额', col: 4 },
 ];
+const col = [12, 4, 4, 4];
 const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
   const { originalList, totalPrice, loading } = props;
   const dispatch = useDispatch();
@@ -33,14 +34,18 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
   const [editingAddressId, setEditingAddressId] = useState('');
   const [consumerRemark, setConsumerRemark] = useState('');
   const { addressList, updateAddressChecked, updateAddress, selectedAddressId } = useAddress();
-  const [selectedList, setSelectedList] = useState<GoodsInfo[]>([]);
+  const [selectedList, setSelectedList] = useState<CartItemInfo[]>([]);
 
-  const handleEditAddress = (id: string) => {
-    setEditingAddressId(id);
-    openModal();
-  };
+  const handleEditAddress = useCallback(
+    (id: string) => {
+      setEditingAddressId(id);
+      openModal();
+    },
+    [openModal],
+  );
+
   useEffect(() => {
-    setSelectedList(originalList.filter((item) => item.isChecked));
+    setSelectedList(handleCartInfo(originalList.filter((item) => item.isChecked)));
   }, [originalList]);
 
   useEffect(() => {
@@ -55,20 +60,20 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
       cartIds: originalList.filter((item) => item.isChecked).map((item) => item.id),
       consumerRemark,
     };
-    console.log(params);
-    addOrder(params).then((res) => {
-      console.log(res);
+    addOrder(params).then((res: any) => {
+      if (res.success) {
+        history.push(`/mall/cart/pay?orderId=${res.data}`);
+      }
     });
-    // history.push('/mall/cart/pay');
   };
   return (
     <Spin spinning={loading}>
       <div>
         <PageHeader className="p-2.5 border-b-2 border-red-500" title="确认订单" onBack={() => history.goBack()} />
-        <AddressCard addressList={addressList ?? []} updateAddressChecked={updateAddressChecked} handleEditAddress={handleEditAddress} />
+        <AddressCard addressList={addressList} updateAddressChecked={updateAddressChecked} handleEditAddress={handleEditAddress} />
         <div className="p-2.5 font-bold">确认订单信息</div>
         <CartHeader hasAllChecked={false} headerColumns={headerColumns} />
-        <CartList list={handleCartInfo(selectedList)} canEdit={false} col={[12, 4, 4, 4]} />
+        <CartList list={selectedList} canEdit={false} col={col} />
         <div className="flex">
           <div className="flex-shrink-0 w-16">订单备注:</div>
           <TextArea placeholder="请输入备注" onChange={(e) => setConsumerRemark(e.target.value)} />
