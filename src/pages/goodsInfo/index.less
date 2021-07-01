@@ -3,9 +3,46 @@
   .top {
     display: flex;
     .top_left {
-      color: #000;
+      width: 250px;
+      .top_img {
+        .border();
+        img {
+          width: 250px;
+          height: 240px;
+        }
+      }
+      .sliderIcon {
+        padding: 0 0 10px;
+      }
+      .sliderImgItemWrap {
+        position: relative;
+        padding: 1px;
+        border: 1px solid #ccc;
+        cursor: pointer;
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .current {
+        border-color: @mainColor;
+        border-width: 2px;
+        &::before {
+          position: absolute;
+          top: -6px;
+          left: 50%;
+          width: 0;
+          height: 0;
+          border-right: 4px solid transparent;
+          border-bottom: 4px solid @mainColor;
+          border-left: 4px solid transparent;
+          transform: translateX(-50%);
+          content: '';
+        }
+      }
     }
     .top_right {
+      margin-left: @space * 4;
       .right_title {
         margin-bottom: 10px;
         color: #333;
@@ -13,11 +50,21 @@
         font-size: 15px;
       }
       .rigth_brandName {
-        margin-bottom: 30px;
+        margin-bottom: @space * 3;
       }
-      .icon {
-        margin-bottom: 10px;
+      .right_icon {
         color: red;
+      }
+      .right_symbol {
+        margin-top: 10px;
+        margin-bottom: @space * 2;
+        font-size: 14px;
+      }
+      button {
+        margin-right: @space;
+        background-color: rgba(245, 154, 35, 1);
+        border: none;
+        border-radius: 5px;
       }
     }
   }
