@@ -6,6 +6,9 @@ export const addOrder = (params: { addressId: string; cartIds: number[]; consume
     data: params,
   });
 };
+export const getOrderDetail = (id: string) => {
+  return request(`/integral/order/detail/${id}`);
+};
 
 export const getPayDetail = (orderId: string) => {
   return request(`/integral/order/pay/method/${orderId}`);
@@ -18,7 +21,7 @@ export const uploadCredential = (params: { image: string; orderId: string }) => 
   });
 };
 
-export const payOrder = (params: { orderId: string; credentialImage: string; payMethod: 1 | 2 }) => {
+export const payOrder = (params: { orderId: string; credentialImage?: string; payMethod: string }) => {
   return request('/integral/order/pay', {
     method: 'POST',
     data: params,

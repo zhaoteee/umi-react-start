@@ -35,7 +35,7 @@ const PayOrder: React.FC = () => {
   return (
     <div>
       <PageHeader className="p-2.5 border-b-2 border-red-500" title="订单支付" onBack={() => history.goBack()} />
-      {status === 'padding' ? <PaddingPayOrder detail={payDetail} setStatus={setStatus} /> : <SuccessPayOrder />}
+      {status === 'padding' ? <PaddingPayOrder detail={payDetail} setStatus={setStatus} orderId={location.query.orderId} /> : <SuccessPayOrder orderId={location.query.orderId} />}
     </div>
   );
 };

@@ -5,7 +5,7 @@ import { toDecimal } from '@/utils/util';
 import useBoolean from '@/hooks/useBoolean';
 import UploadImage from '@/components/UploadImage';
 import type { UploadFile } from 'antd/es/upload/interface';
-import { uploadCredential } from '@/services/order';
+import { payOrder, uploadCredential } from '@/services/order';
 import type { OrderPayStatus } from '@/pages/cart/PayOrder';
 
 export type payDetailType = {
@@ -14,7 +14,6 @@ export type payDetailType = {
   distributorRebatePayBankAccountName: string; // 经销商返利支付开户名称
   distributorRebatePayBankAccountNum: string; // 经销商返利支付开户账号
   distributorRebatePayBankName: string; // 经销商返利支付开户行名称
-  orderId?: string;
   integral: number; // 积分
   integralAmount: number; // 积分抵扣金额
   rebateAmount: number; // 返利抵扣金额
@@ -24,28 +23,29 @@ export type payDetailType = {
   totalRebate: number; // 剩余返利
 };
 type PaddingPayOrderType = {
+  orderId: string;
   detail: payDetailType;
   setStatus: React.Dispatch<React.SetStateAction<OrderPayStatus>>;
 };
-type payWayType = 'INTEGRAL_PAY' | 'REBATE_PAY' | null;
-const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail }) => {
+type payWayType = 'INTEGRAL_PAY' | 'REBATE_PAY' | '';
+const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setStatus }) => {
   const [isVisible, { setTrue: openModal, setFalse: closeModal }] = useBoolean(false);
-  const [payWay, setPayWay] = useState<payWayType>(null);
+  const [payMethod, setPayMethod] = useState<payWayType>('');
   const [remainAmount, setRemainAmount] = useState<number>(0);
   const [imageUrl, setImageUrl] = useState('');
   useEffect(() => {
     if (detail.distributorIntegralPayEnable && !detail.distributorRebatePayEnable) {
-      setPayWay('INTEGRAL_PAY');
+      setPayMethod('INTEGRAL_PAY');
     }
     if (!detail.distributorIntegralPayEnable && detail.distributorRebatePayEnable) {
-      setPayWay('REBATE_PAY');
+      setPayMethod('REBATE_PAY');
     }
     setRemainAmount(detail.totalAmount);
   }, [detail.distributorIntegralPayEnable, detail.distributorRebatePayEnable, detail.totalAmount]);
 
   const handlePayChange = (e: RadioChangeEvent) => {
     const { value } = e.target;
-    setPayWay(value);
+    setPayMethod(value);
     if (value === 'INTEGRAL_PAY') {
       setRemainAmount(detail.totalAmount - detail.integralAmount);
     }
@@ -58,13 +58,26 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail }) => {
       setImageUrl(imgList[0].url as string);
     }
   };
+  const handleSubmit = () => {
+    const params = {
+      orderId,
+      payMethod,
+    };
+    payOrder(params).then((res: any) => {
+      if (res.success) {
+        openModal();
+      }
+    });
+  };
   const handleOk = () => {
     const params = {
       image: imageUrl,
-      orderId: '5852293575352101480', // detail.orderId as string,
+      orderId,
     };
-    uploadCredential(params).then((res) => {
-      console.log(res);
+    uploadCredential(params).then((res: any) => {
+      if (res.success) {
+        setStatus('success');
+      }
     });
   };
   return (
@@ -82,7 +95,7 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail }) => {
         </div>
       </Card>
       <Card bordered={false}>
-        <Radio.Group value={payWay} onChange={handlePayChange}>
+        <Radio.Group value={payMethod} onChange={handlePayChange}>
           <Space direction="vertical">
             {detail.distributorIntegralPayEnable && <Radio value={'INTEGRAL_PAY'}>{`可用${detail.integral}积分抵扣￥${toDecimal(detail.integralAmount)}（积分余额${detail.totalIntegral}）`}</Radio>}
             {detail.distributorRebatePayEnable && <Radio value={'REBATE_PAY'}>{`返利可抵￥${toDecimal(detail.rebateAmount)} （返利余额￥${toDecimal(detail.totalRebate)}）`}</Radio>}
@@ -93,7 +106,7 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail }) => {
           <span className="text-red-500 font-bold">{`￥${toDecimal(remainAmount)}`}</span>
         </div>
         {remainAmount > 0 && (
-          <Card className="w-128">
+          <Card className="w-128" title="线下打款">
             <Descriptions column={1}>
               <Descriptions.Item label="开户名称">{detail.distributorRebatePayBankAccountName}</Descriptions.Item>
               <Descriptions.Item label="开户银行">{detail.distributorRebatePayBankName}</Descriptions.Item>
@@ -104,7 +117,7 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail }) => {
         )}
       </Card>
       <div className="text-right px-5">
-        <div className="btn-submit inline-block" onClick={openModal}>
+        <div className="btn-submit inline-block" onClick={handleSubmit}>
           确认
         </div>
       </div>
