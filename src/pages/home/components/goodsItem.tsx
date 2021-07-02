@@ -47,7 +47,7 @@ const GoodsItem: React.FC<GooodsItemProps> = (props) => {
       >
         {imgList.map((url, idx) => (
           <div onClick={() => changeImg(url, idx)} key={url} style={{ width: 35 }} className={`${current === idx ? styles.current : ''} ${styles.sliderImgItemWrap}`}>
-            <img src={url} />
+            <img src={`${url}_100w`} />
           </div>
         ))}
       </Slider>

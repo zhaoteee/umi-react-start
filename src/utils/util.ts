@@ -1,3 +1,5 @@
+import type { RcFile } from 'antd/es/upload/interface';
+
 export function formatNum(num: number): string {
   let prefix: string = '';
   if (num < 0) {
@@ -29,4 +31,14 @@ export function toDecimal(val: number, pre = 2): string {
   return f;
 }
 
+export const getBase64 = (file: RcFile): Promise<string | ArrayBuffer | null> => {
+  return new Promise((resolve, reject) => {
+    const reader: FileReader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
+};
+
 export const preFixPath = window.SYSTEM_CONFIG?.staticPath || 'https://dev-peppa.hzzcckj.cn';
+export const uploadImageUrl = '/api/integral-mall/common/upload/IMAGE';

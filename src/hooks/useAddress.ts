@@ -19,21 +19,28 @@ export type addressItem = {
 export type addressParams = Omit<addressItem, 'id' | 'isChecked' | 'isDefault'> & { id?: string; isDefault: 0 | 1 };
 const useAddress = () => {
   const [addressList, setAddressList] = useState<addressItem[]>([]);
+  const [loading, setLoading] = useState(false);
   // 提交订单页面当前选择的地址 id
   const [selectedAddressId, setSelectedAddressId] = useState('');
   const getAddressList = () => {
-    getList().then((res) => {
-      const result = res.data.map((item: addressItem) => {
-        if (item.isDefault) {
-          setSelectedAddressId(item.id);
-        }
-        return {
-          ...item,
-          isChecked: item.isDefault,
-        };
+    setLoading(true);
+    getList()
+      .then((res) => {
+        const result = res.data.map((item: addressItem) => {
+          setLoading(false);
+          if (item.isDefault) {
+            setSelectedAddressId(item.id);
+          }
+          return {
+            ...item,
+            isChecked: item.isDefault,
+          };
+        });
+        setAddressList(result);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-      setAddressList(result);
-    });
   };
 
   useEffect(() => {
@@ -109,6 +116,7 @@ const useAddress = () => {
 
   return {
     addressList,
+    loading,
     setAddressList,
     addNewAddress,
     deleteAddress,

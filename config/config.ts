@@ -5,8 +5,8 @@ const { REACT_APP_ENV } = process.env;
 const productionPublicPath = '//misc.hzzcckj.cn/skin/cg/1.0.0/';
 
 export default defineConfig({
-  base: REACT_APP_ENV === 'test' ? '/' : '/',
-  publicPath: REACT_APP_ENV === 'dev' || REACT_APP_ENV === 'test' ? '/' : productionPublicPath,
+  base: REACT_APP_ENV === 'test' ? '/integral/' : '/',
+  publicPath: REACT_APP_ENV === 'dev' || REACT_APP_ENV === 'test' ? '/integral/' : productionPublicPath,
   hash: true,
   antd: {},
   // publicPath: process.env.NODE_ENV === 'production' ? '/1.0.0/' : '/',
@@ -19,6 +19,9 @@ export default defineConfig({
     antd: true,
     // default true, when it is true, will use `navigator.language` overwrite default
     baseNavigator: true,
+  },
+  dynamicImport: {
+    loading: '@/components/PageLoading/index',
   },
   theme: {
     'primary-color': '#FF0036',
@@ -55,9 +58,15 @@ export default defineConfig({
           title: '确认订单',
         },
         {
-          path: '/mall/cart/pay',
+          path: '/mall/cart/paying',
           name: 'payOrder',
-          component: './cart/PayOrder',
+          component: './cart/PayingOrder',
+          title: '订单支付',
+        },
+        {
+          path: '/mall/cart/payed',
+          name: 'payOrder',
+          component: './cart/PayedOrder',
           title: '订单支付',
         },
         {

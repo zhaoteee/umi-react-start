@@ -19,7 +19,7 @@ const Search: React.FC<SearchProps> = (props) => {
   const [serachList, setSearchList] = useState<SearchListType[]>([]);
   useEffect(() => {
     getProductAgg().then((res) => {
-      const { aggSupplier, aggBrand, aggCategory } = res.data;
+      const { aggSupplier = [], aggBrand = [], aggCategory = [] } = res.data || {};
       const list = [
         { name: '品牌方', value: 'supplierIds', options: aggSupplier },
         { name: '品牌', value: 'brandIds', options: aggBrand },
