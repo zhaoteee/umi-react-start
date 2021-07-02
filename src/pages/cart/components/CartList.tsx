@@ -9,6 +9,7 @@ type CartListProps = {
 };
 
 const CartList: React.FC<CartListProps> = ({ list, canEdit = true, col }) => {
+  console.log('CartList渲染了');
   return (
     <div>
       {list.map((item) => {
@@ -18,4 +19,4 @@ const CartList: React.FC<CartListProps> = ({ list, canEdit = true, col }) => {
   );
 };
 
-export default CartList;
+export default React.memo(CartList);

@@ -10,7 +10,6 @@ type AddressCardItemProps = {
 
 const AddressCardItem: React.FC<AddressCardItemProps> = (props) => {
   const { handleEditAddress } = props;
-  console.log('addressCardItem 渲染了');
   const { item, updateAddressChecked } = props;
   return (
     <div
