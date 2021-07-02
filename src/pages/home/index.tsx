@@ -97,13 +97,7 @@ const IndexPage: React.FC = () => {
     getData(obj);
   };
   useEffect(() => {
-    const { userToken, origin, keyword = '' } = location.query as HomeQueryType;
-    if (userToken) {
-      localStorage.setItem('token', userToken);
-    }
-    if (origin) {
-      localStorage.setItem('origin', origin);
-    }
+    const { keyword = '' } = location.query as HomeQueryType;
     const p = keyword ? { title: keyword } : {};
     getData(p);
     dispatch({

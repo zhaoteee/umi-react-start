@@ -1,7 +1,6 @@
 /** Request 网络请求工具 更详细的 api 文档: https://github.com/umijs/umi-request */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
-import { history } from 'umi';
 import qs from 'qs';
 
 type errorType = Response & { code: number; message: string };
@@ -91,9 +90,9 @@ request.interceptors.response.use(async (response, options) => {
       // 身份认证失败需重新登录
       reject({ response: res });
       errorHandler({ response: res });
-      history.push('/login');
+      window.location.href = '/login';
     } else if (res.code >= -200020 && res.code <= -200000) {
-      history.push('/login');
+      window.location.href = '/login';
       errorHandler({ response: res });
     } else if (res.code !== 200) {
       errorHandler({ response: res });
