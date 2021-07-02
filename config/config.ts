@@ -20,7 +20,9 @@ export default defineConfig({
     // default true, when it is true, will use `navigator.language` overwrite default
     baseNavigator: true,
   },
-  dynamicImport: {},
+  dynamicImport: {
+    loading: '@/components/PageLoading/index',
+  },
   theme: {
     'primary-color': '#FF0036',
   },
