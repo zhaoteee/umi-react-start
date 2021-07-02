@@ -22,24 +22,9 @@ const codeMessage: Record<number, string> = {
   502: '网关错误。',
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
-
-  100000: '系统繁忙，请稍后再试',
-  110004: '权限不足',
-  110000: '认证异常',
-  110001: 'Token已过期',
-  110002: 'Token不存在或已失效',
-  110005: '未登录或者登录已失效',
-  110009: '会话无效',
-  110010: '凭证错误',
-  110013: '凭证过期',
-  155446: '账号已经在其他设备登录，需重新登录',
 };
-/**  110004: '权限不足'（某个接口出现暂时不跳转登录页面）
-      110000: '认证异常', 110001: 'Token已过期', 110002: 'Token不存在或已失效',
-      , 110005: '未登录或者登录已失效', 110009: '会话无效',
-      110010: '凭证错误', 110013: '凭证过期', 155446: '账号已经在其他设备登录，需重新登录'
-    */
-export const tokenValidCodeList = [110000, 110001, 110002, 110005, 110009, 110010, 110013, 155446];
+
+export const tokenValidCodeList = [100009, 520001, 520005, 520006, 520009, 100001];
 /** 异常处理程序 */
 export const errorHandler = (error: { response: errorType }): errorType => {
   const { response } = error;
@@ -106,7 +91,10 @@ request.interceptors.response.use(async (response, options) => {
       // 身份认证失败需重新登录
       reject({ response: res });
       errorHandler({ response: res });
-      history.push('/user/login');
+      history.push('/login');
+    } else if (res.code >= -200020 && res.code <= -200000) {
+      history.push('/login');
+      errorHandler({ response: res });
     } else if (res.code !== 200) {
       errorHandler({ response: res });
       reject({ response: res });

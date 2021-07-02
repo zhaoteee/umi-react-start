@@ -68,12 +68,13 @@ const IndexPage: React.FC = () => {
       ...p,
     };
     getProductList(params).then((res) => {
-      setGoodsList(res.data.records);
+      const data = res.data || { records: [], current: 1, size: 20, total: 0 };
+      setGoodsList(data.records);
       setIsLoading(false);
       setPageInfo({
-        current: Number(res.data.current),
-        size: Number(res.data.size),
-        total: Number(res.data.total),
+        current: Number(data.current),
+        size: Number(data.size),
+        total: Number(data.total),
       });
     });
   };
