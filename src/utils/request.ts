@@ -1,7 +1,6 @@
 /** Request 网络请求工具 更详细的 api 文档: https://github.com/umijs/umi-request */
 import { extend } from 'umi-request';
 import { notification } from 'antd';
-import { history } from 'umi';
 import qs from 'qs';
 
 type errorType = Response & { code: number; message: string };
@@ -22,24 +21,9 @@ const codeMessage: Record<number, string> = {
   502: '网关错误。',
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
-
-  100000: '系统繁忙，请稍后再试',
-  110004: '权限不足',
-  110000: '认证异常',
-  110001: 'Token已过期',
-  110002: 'Token不存在或已失效',
-  110005: '未登录或者登录已失效',
-  110009: '会话无效',
-  110010: '凭证错误',
-  110013: '凭证过期',
-  155446: '账号已经在其他设备登录，需重新登录',
 };
-/**  110004: '权限不足'（某个接口出现暂时不跳转登录页面）
-      110000: '认证异常', 110001: 'Token已过期', 110002: 'Token不存在或已失效',
-      , 110005: '未登录或者登录已失效', 110009: '会话无效',
-      110010: '凭证错误', 110013: '凭证过期', 155446: '账号已经在其他设备登录，需重新登录'
-    */
-export const tokenValidCodeList = [110000, 110001, 110002, 110005, 110009, 110010, 110013, 155446];
+
+export const tokenValidCodeList = [100009, 520001, 520005, 520006, 520009, 100001];
 /** 异常处理程序 */
 export const errorHandler = (error: { response: errorType }): errorType => {
   const { response } = error;
@@ -72,12 +56,17 @@ const request = extend({
     return qs.stringify(params, { arrayFormat: 'repeat' });
   },
   getResponse: true,
-  prefix: '/api/jingtian-decoration-api',
+  prefix: '/api/integral-mall',
   // errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
 });
 request.interceptors.request.use((url, options) => {
-  options.headers = { ...options.headers, Authorization: localStorage.getItem('token') || '' };
+  options.headers = {
+    ...options.headers,
+    Authorization:
+      localStorage.getItem('token') ||
+      'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMzA0ODg3Mjg1MSIsInRpbWUiOjE2MjUwMTM5OTE0MTEsImlzcyI6InNlY3VyaXR5IiwiaWF0IjoxNjI1MDEzOTkxLCJleHAiOjE2MjUxMzM5OTF9.M_0mYSUFAfveb6d5bNZE6BSHkAHeorA_Hl3nqurDfnjbLN6-_goMZ_EHb4CR-TmvUkwmLBVFMWbWy7_B-LIiPw',
+  };
   return {
     url,
     options: { ...options, interceptors: true },
@@ -101,7 +90,10 @@ request.interceptors.response.use(async (response, options) => {
       // 身份认证失败需重新登录
       reject({ response: res });
       errorHandler({ response: res });
-      history.push('/user/login');
+      window.location.href = '/login';
+    } else if (res.code >= -200020 && res.code <= -200000) {
+      window.location.href = '/login';
+      errorHandler({ response: res });
     } else if (res.code !== 200) {
       errorHandler({ response: res });
       reject({ response: res });

@@ -1,18 +1,13 @@
 // import styles from './index.less';
 import React, { useState } from 'react';
-import {
-  PlusOutlined,
-  DownOutlined,
-  UpOutlined,
-  CloseSquareFilled,
-} from '@ant-design/icons';
+import { PlusOutlined, DownOutlined, UpOutlined, CloseSquareFilled } from '@ant-design/icons';
 import { cloneDeep } from 'lodash';
 
 import styles from './searchItem.less';
 
 export type OptionsItemType = {
-  id: number;
-  name: string;
+  keyId: number;
+  valueName: string;
   selected?: boolean;
 };
 
@@ -20,11 +15,7 @@ export type SearchItemProps = {
   name: string;
   value: string;
   options: OptionsItemType[];
-  onSelect: (
-    name: string,
-    value: string,
-    selectedOptions: OptionsItemType[],
-  ) => void;
+  onSelect: (name: string, value: string, selectedOptions: OptionsItemType[]) => void;
 };
 
 const Search: React.FC<SearchItemProps> = (props) => {
@@ -53,27 +44,23 @@ const Search: React.FC<SearchItemProps> = (props) => {
       }),
     );
     setSelectMore(false);
-    onSelect(
-      name,
-      value,
-      optionList.filter((item) => item.selected),
-    );
+    onSelect(name, value, []);
   };
   const clickItem = (item: OptionsItemType) => {
     const list = cloneDeep(optionList);
     if (item.selected) {
       // 点击已选择的取消选中状态
-      const current = list.find((i) => i.id === item.id);
+      const current = list.find((i) => i.keyId === item.keyId);
       if (current) current.selected = false;
     } else if (!selectMore) {
       // 单选状态
       list.map((i) => {
-        i.selected = i.id === item.id;
+        i.selected = i.keyId === item.keyId;
         return i;
       });
     } else {
       // 多选状态 selected直接置为true
-      const current = list.find((i) => i.id === item.id);
+      const current = list.find((i) => i.keyId === item.keyId);
       if (current) current.selected = true;
     }
     // 单选时直接触发搜索
@@ -99,48 +86,25 @@ const Search: React.FC<SearchItemProps> = (props) => {
     <div className={styles.attr}>
       <div className={styles.attrKey}>{name}</div>
       <div className={styles.attrValues}>
-        <ul
-          className={`${styles.collapse} ${isShowMore ? styles.more : ''} ${
-            selectMore ? styles.selectMore : ''
-          }`}
-        >
+        <ul className={`${styles.collapse} ${isShowMore ? styles.more : ''} ${selectMore ? styles.selectMore : ''}`}>
           {optionList.map((item) => (
-            <li
-              className={`${item.selected ? styles.selected : ''}`}
-              onClick={() => clickItem(item)}
-              key={item.id}
-            >
+            <li className={`${item.selected ? styles.selected : ''}`} onClick={() => clickItem(item)} key={item.keyId}>
               <a>
-                {item.name}
-                <CloseSquareFilled
-                  className={`${styles.removeIcon} ${
-                    item.selected ? styles.showRemoveIcon : ''
-                  }`}
-                />
+                {item.valueName}
+                <CloseSquareFilled className={`${styles.removeIcon} ${item.selected ? styles.showRemoveIcon : ''}`} />
               </a>
             </li>
           ))}
         </ul>
         {selectMore ? (
           <div className={styles.selectMoreBtns}>
-            <a
-              className={`${
-                optionList.find((item) => item.selected)
-                  ? styles.btnSelected
-                  : styles.btnDisable
-              }`}
-              onClick={onConfirm}
-            >
+            <a className={`${optionList.find((item) => item.selected) ? styles.btnSelected : styles.btnDisable}`} onClick={onConfirm}>
               确定
             </a>
             <a onClick={cancelSelectMore}>取消</a>
           </div>
         ) : null}
-        <div
-          className={`${styles.options} ${
-            selectMore ? styles.selectedMoreOptions : ''
-          }`}
-        >
+        <div className={`${styles.options} ${selectMore ? styles.selectedMoreOptions : ''}`}>
           {!selectMore ? (
             <span>
               <a onClick={selectPlus}>

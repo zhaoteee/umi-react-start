@@ -1,45 +1,149 @@
-import React from 'react';
-import { Card, Radio, Space, Descriptions } from 'antd';
+import React, { useEffect, useState } from 'react';
+import type { RadioChangeEvent } from 'antd';
+import { Card, Radio, Space, Descriptions, Modal } from 'antd';
 import { toDecimal } from '@/utils/util';
+import useBoolean from '@/hooks/useBoolean';
+import UploadImage from '@/components/UploadImage';
+import type { UploadFile } from 'antd/es/upload/interface';
+import { payOrder, uploadCredential } from '@/services/order';
+import { history } from 'umi';
 
-const PaddingPayOrder: React.FC = () => {
+export type payDetailType = {
+  distributorIntegralPayEnable: boolean; // 是否开启经销商积分支付
+  distributorRebatePayEnable: boolean; // 是否开启经销商返利支付
+  distributorRebatePayBankAccountName: string; // 经销商返利支付开户名称
+  distributorRebatePayBankAccountNum: string; // 经销商返利支付开户账号
+  distributorRebatePayBankName: string; // 经销商返利支付开户行名称
+  integral: number; // 积分
+  integralAmount: number; // 积分抵扣金额
+  rebateAmount: number; // 返利抵扣金额
+  supplierName: string; // 下单店铺名称
+  totalAmount: number; // 订单总金额
+  totalIntegral: number; // 剩余积分
+  totalRebate: number; // 剩余返利
+};
+type PaddingPayOrderType = {
+  orderId: string;
+  detail: payDetailType;
+  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+};
+type payWayType = 'INTEGRAL_PAY' | 'REBATE_PAY' | '';
+const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLoading }) => {
+  const { distributorIntegralPayEnable, distributorRebatePayEnable, rebateAmount, totalAmount, integralAmount } = detail;
+  const [isVisible, { setTrue: openModal, setFalse: closeModal }] = useBoolean(false);
+  const [payMethod, setPayMethod] = useState<payWayType>('');
+  const [remainAmount, setRemainAmount] = useState<number>(0);
+  const [imageUrl, setImageUrl] = useState('');
+
+  useEffect(() => {
+    if (distributorIntegralPayEnable && !distributorRebatePayEnable) {
+      setPayMethod('INTEGRAL_PAY');
+      setRemainAmount(totalAmount - integralAmount);
+    } else if (!distributorIntegralPayEnable && distributorRebatePayEnable) {
+      setPayMethod('REBATE_PAY');
+      setRemainAmount(totalAmount - rebateAmount);
+    } else {
+      setRemainAmount(totalAmount);
+    }
+  }, [distributorIntegralPayEnable, distributorRebatePayEnable, integralAmount, rebateAmount, totalAmount]);
+
+  const handlePayChange = (e: RadioChangeEvent) => {
+    const { value } = e.target;
+    setPayMethod(value);
+    if (value === 'INTEGRAL_PAY') {
+      setRemainAmount(totalAmount - integralAmount);
+    }
+    if (value === 'REBATE_PAY') {
+      setRemainAmount(totalAmount - rebateAmount);
+    }
+  };
+  const onUploadImage = (imgList: UploadFile[]) => {
+    if (imgList.length) {
+      setImageUrl(imgList[0].url as string);
+    }
+  };
+  const handleSubmit = () => {
+    setLoading(true);
+    const params = {
+      orderId,
+      payMethod,
+    };
+    payOrder(params)
+      .then((res: any) => {
+        setLoading(false);
+        if (res.success) {
+          if (remainAmount > 0) {
+            openModal();
+          } else {
+            history.push(`/mall/cart/payed?orderId=${orderId}`);
+          }
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+  const handleOk = () => {
+    const params = {
+      image: imageUrl,
+      orderId,
+    };
+    uploadCredential(params).then((res: any) => {
+      if (res.success) {
+        history.push(`/mall/cart/payed?orderId=${orderId}`);
+      }
+    });
+  };
+  const handleCancel = () => {
+    closeModal();
+    history.push(`/mall/cart/payed?orderId=${orderId}`);
+  };
   return (
     <div>
       <Card bordered={false}>
         <div className="flex items-center">
           <div className="mr-5">
             <span>应付金额:</span>
-            <span className="font-bold text-2xl text-red-500">{`￥${toDecimal(800)}`}</span>
+            <span className="font-bold text-2xl text-red-500">{`￥${toDecimal(detail.totalAmount)}`}</span>
           </div>
           <div>
             <span>下单店铺:</span>
-            <span>小胎店铺</span>
+            <span>{detail.supplierName}</span>
           </div>
         </div>
       </Card>
       <Card bordered={false}>
-        <Radio.Group value={1}>
+        <Radio.Group value={payMethod} onChange={handlePayChange}>
           <Space direction="vertical">
-            <Radio value={1}>可用5000积分抵扣￥500.00（积分余额5000）</Radio>
-            <Radio value={2}>返利可抵￥60.00 （返利余额￥100.00）</Radio>
+            {detail.distributorIntegralPayEnable && <Radio value={'INTEGRAL_PAY'}>{`可用${detail.integral}积分抵扣￥${toDecimal(detail.integralAmount)}（积分余额${detail.totalIntegral}）`}</Radio>}
+            {detail.distributorRebatePayEnable && <Radio value={'REBATE_PAY'}>{`返利可抵￥${toDecimal(detail.rebateAmount)} （返利余额￥${toDecimal(detail.totalRebate)}）`}</Radio>}
           </Space>
         </Radio.Group>
-        <div className="py-5">
-          <span>剩余应付</span>
-          <span>{`￥${toDecimal(800)}`}</span>
-        </div>
-        <Card>
-          <Descriptions column={1}>
-            <Descriptions.Item label="开户名称">杭州中策车空间汽车服务有限公司</Descriptions.Item>
-            <Descriptions.Item label="开户银行">XX银行XX支行</Descriptions.Item>
-            <Descriptions.Item label="帐号">4546 464 46454 56</Descriptions.Item>
-            <Descriptions.Item label="说明">积分或返利支付不足时，也可点击确认支付，并将剩余金额通过其他方式汇入以上帐户。</Descriptions.Item>
-          </Descriptions>
-        </Card>
+        {remainAmount > 0 && (
+          <>
+            <div className="py-5">
+              <span>剩余应付: </span>
+              <span className="text-red-500 font-bold">{`￥${toDecimal(remainAmount)}`}</span>
+            </div>
+            <Card className="w-128" title="线下打款">
+              <Descriptions column={1}>
+                <Descriptions.Item label="开户名称">{detail.distributorRebatePayBankAccountName}</Descriptions.Item>
+                <Descriptions.Item label="开户银行">{detail.distributorRebatePayBankName}</Descriptions.Item>
+                <Descriptions.Item label="帐号">{detail.distributorRebatePayBankAccountNum}</Descriptions.Item>
+                {/* <Descriptions.Item label="说明">积分或返利支付不足时，也可点击确认支付，并将剩余金额通过其他方式汇入以上帐户。</Descriptions.Item> */}
+              </Descriptions>
+            </Card>
+          </>
+        )}
       </Card>
       <div className="text-right px-5">
-        <div className="btn-submit inline-block">确认</div>
+        <div className="btn-submit inline-block" onClick={handleSubmit}>
+          提交订单
+        </div>
       </div>
+      <Modal visible={isVisible} onCancel={handleCancel} onOk={handleOk} title={'上传凭证'}>
+        <UploadImage onChange={onUploadImage} maxCount={1} />
+      </Modal>
     </div>
   );
 };

@@ -1,41 +1,15 @@
 import React from 'react';
 import AddressCardItem from '@/pages/cart/components/AddressCardItem';
 import { history } from 'umi';
+import type { addressItem } from '@/hooks/useAddress';
 
-export const testAddressInfo = [
-  {
-    id: 0,
-    name: '张朝阳',
-    phone: '13812345687',
-    address: '浙江省 杭州市 江干区 下沙一号大街一号朝阳轮胎仓库1号门',
-    default: true,
-  },
-  {
-    id: 1,
-    name: '张朝阳',
-    phone: '13812345687',
-    address: '浙江省 杭州市 江干区 下沙一号大街一号朝阳轮胎仓库1号门',
-  },
-  {
-    id: 2,
-    name: '张朝阳',
-    phone: '13812345687',
-    address: '浙江省 杭州市 江干区 下沙一号大街一号朝阳轮胎仓库1号门',
-  },
-  {
-    id: 3,
-    name: '张朝阳',
-    phone: '13812345687',
-    address: '浙江省 杭州市 江干区 下沙一号大街一号朝阳轮胎仓库1号门',
-  },
-  {
-    id: 4,
-    name: '张朝阳',
-    phone: '13812345687',
-    address: '浙江省 杭州市 江干区 下沙一号大街一号朝阳轮胎仓库1号门',
-  },
-];
-const AddressCard: React.FC = () => {
+type AddressCardType = {
+  addressList: addressItem[];
+  updateAddressChecked: (item: addressItem) => void;
+  handleEditAddress: (id: string) => void;
+};
+const AddressCard: React.FC<AddressCardType> = (props) => {
+  const { addressList, updateAddressChecked, handleEditAddress } = props;
   return (
     <div>
       <div className="flex justify-between items-center p-2.5">
@@ -45,12 +19,12 @@ const AddressCard: React.FC = () => {
         </span>
       </div>
       <div className="flex items-center overflow-x-auto p-2.5 bg-gray-100 border rounded">
-        {testAddressInfo.map((item) => {
-          return <AddressCardItem item={item} key={item.id} />;
+        {addressList.map((item) => {
+          return <AddressCardItem item={item} key={item.id} updateAddressChecked={updateAddressChecked} handleEditAddress={handleEditAddress} />;
         })}
       </div>
     </div>
   );
 };
 
-export default AddressCard;
+export default React.memo(AddressCard);

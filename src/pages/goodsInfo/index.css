@@ -1,0 +1,83 @@
+.e1 {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.e2 {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+.content .top {
+  display: flex;
+}
+.content .top .top_left {
+  width: 100px / 10 * 30;
+}
+.content .top .top_left .top_img {
+  border: 1px solid #eee;
+}
+.content .top .top_left .top_img img {
+  width: 100px / 10 * 30;
+  height: 100px / 10 * 24;
+}
+.content .top .top_left .sliderIcon {
+  padding: 0 0 10px;
+}
+.content .top .top_left .sliderImgItemWrap {
+  position: relative;
+  padding: 1px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+}
+.content .top .top_left .sliderImgItemWrap img {
+  width: 55px;
+  height: 50px;
+}
+.content .top .top_left .current {
+  border-color: #FF0036;
+  border-width: 2px;
+}
+.content .top .top_left .current::before {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-right: 4px solid transparent;
+  border-bottom: 4px solid #FF0036;
+  border-left: 4px solid transparent;
+  transform: translateX(-50%);
+  content: '';
+}
+.content .top .top_right {
+  margin-left: 100px / 10 * 4;
+}
+.content .top .top_right .right_title {
+  margin-bottom: 10px;
+  color: #333;
+  font-weight: bold;
+  font-size: 15px;
+}
+.content .top .top_right .rigth_brandName {
+  margin-bottom: 100px / 10 * 3;
+}
+.content .top .top_right .right_icon {
+  color: red;
+}
+.content .top .top_right .right_symbol {
+  margin-top: 10px;
+  margin-bottom: 100px / 10 * 2;
+  font-size: 14px;
+}
+.content .top .top_right button {
+  margin-right: 100px / 10;
+  background-color: #f59a23;
+  border: none;
+  border-radius: 5px;
+}
+.content .attr .proAttr {
+  padding: 20px 0;
+}

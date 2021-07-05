@@ -1,27 +1,22 @@
 import React from 'react';
-import { connect } from '@@/plugin-dva/exports';
-import type { CartModelState } from '@/models/cart';
 import CartListItem from './CartListItem';
 import type { CartItemInfo } from '@/models/cart';
 
 type CartListProps = {
   list: CartItemInfo[];
+  canEdit?: boolean;
+  col?: number[];
 };
 
-const CartList: React.FC<CartListProps> = ({ list }) => {
+const CartList: React.FC<CartListProps> = ({ list, canEdit = true, col }) => {
+  console.log('CartList渲染了');
   return (
     <div>
-      {list.map((item, index) => {
-        return <CartListItem key={item.storeId} info={item} storeIndex={index} />;
+      {list.map((item) => {
+        return <CartListItem key={item.supplierId} info={item} canEdit={canEdit} col={col} />;
       })}
     </div>
   );
 };
 
-export const mapStateToProps = ({ cart }: { cart: CartModelState }) => {
-  return {
-    list: cart.list,
-  };
-};
-
-export default connect(mapStateToProps)(CartList);
+export default React.memo(CartList);

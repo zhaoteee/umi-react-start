@@ -1,19 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { Spin } from 'antd';
+import React, { useEffect } from 'react';
+import { PageHeader, Spin } from 'antd';
 import CartFooter from '@/pages/cart/components/CartFooter';
 import CartHeader from '@/pages/cart/components/CartHeader';
 import { connect, useDispatch } from '@@/plugin-dva/exports';
-import CartList, { mapStateToProps } from './components/CartList';
-import type { CartItemInfo } from '@/models/cart';
+import CartList from './components/CartList';
+import type { CartItemInfo, GoodsInfo } from '@/models/cart';
 import { Result, Button } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { history } from 'umi';
+import type { Dispatch, Loading } from '@@/plugin-dva/connect';
+import type { CartModelType } from '@/models/cart';
+import type { CartModelState } from '@/models/cart';
 
 type CartProps = {
   list: CartItemInfo[];
+  originalList: GoodsInfo[];
+  loading: boolean;
 };
 const Cart: React.FC<CartProps> = (props) => {
-  const dispatch = useDispatch();
+  const dispatch: Dispatch<CartModelType> = useDispatch();
   useEffect(() => {
     dispatch({
       type: 'cart/fetchCartInfo',
@@ -21,15 +26,14 @@ const Cart: React.FC<CartProps> = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const [loading] = useState(false);
   return (
-    <Spin spinning={loading}>
+    <Spin spinning={props.loading}>
       <div>
-        <h2 className="p-2.5 border-b-2 border-red-500">购物车</h2>
+        <PageHeader className="p-2.5 border-b-2 border-red-500" title="购物车" />
         {props.list.length ? (
           <>
-            <CartHeader />
-            <CartList />
+            <CartHeader list={props.originalList} />
+            <CartList list={props.list} />
             <CartFooter />
           </>
         ) : (
@@ -46,6 +50,14 @@ const Cart: React.FC<CartProps> = (props) => {
       </div>
     </Spin>
   );
+};
+
+const mapStateToProps = ({ cart, loading }: { cart: CartModelState; loading: Loading }) => {
+  return {
+    list: cart.list,
+    originalList: cart.originalList,
+    loading: loading.effects['cart/fetchCartInfo'],
+  };
 };
 
 export default connect(mapStateToProps)(Cart);
