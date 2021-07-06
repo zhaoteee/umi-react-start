@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Spin, PageHeader, message } from 'antd';
-import { LeftCircleFilled, RightCircleFilled, PlusSquareOutlined, MinusSquareOutlined } from '@ant-design/icons';
+import { PlusSquareOutlined, MinusSquareOutlined } from '@ant-design/icons';
 // import testData from './testData';
 import { useDispatch } from '@@/plugin-dva/exports';
-import Slider from 'react-slick';
+// import Slider from 'react-slick';
 import { preFixPath } from '@/utils/util';
 import type { Location } from 'umi';
-import { useLocation } from 'umi';
+import { useLocation, Link } from 'umi';
 import styles from './index.less';
 import type { Dispatch } from '@@/plugin-dva/connect';
 import { getDetail } from '@/services/info';
@@ -57,19 +57,7 @@ const GoodsInfo: React.FC = (props) => {
     setProductImg(url);
     setCurrent(idx);
   };
-
-  const [totalMoney, setMoney] = useState(0);
-  const addToCart = async () => {
-    const hide = message.loading('正在加入购物车');
-    await dispatch({
-      type: 'cart/addGoodsToCart',
-      payload: { productId: id, quantity: totalMoney },
-    });
-    setTimeout(() => {
-      message.success('添加成功，请前往购物车查看');
-      hide();
-    }, 500);
-  };
+  const [totalMoney, setMoney] = useState(1);
   const getDetailData = () => {
     setLoading(true);
     getDetail(id).then((res) => {
@@ -89,6 +77,29 @@ const GoodsInfo: React.FC = (props) => {
       setLoading(false);
     });
   };
+  useEffect(() => {
+    const { userToken, origin = '' } = location.query as HomeQueryType;
+    if (userToken) {
+      localStorage.setItem('token', userToken);
+    }
+    if (origin) {
+      localStorage.setItem('origin', origin);
+    }
+    console.log('222');
+    getDetailData();
+  }, [location.query]);
+  const addToCart = async () => {
+    const hide = message.loading('正在加入购物车');
+    await dispatch({
+      type: 'cart/addGoodsToCart',
+      payload: { productId: id, quantity: totalMoney },
+    });
+    setTimeout(() => {
+      message.success('添加成功，请前往购物车查看');
+      hide();
+    }, 500);
+  };
+
   const toReduce = (s: any) => {
     if (totalMoney === 0) {
       message.warning('已经没有可减的的了!');
@@ -99,18 +110,7 @@ const GoodsInfo: React.FC = (props) => {
   const add = (s: any) => {
     setMoney((s += 1));
   };
-  useEffect(() => {
-    // const { userToken, origin = '' } = location.query as HomeQueryType;
-    const userToken =
-      'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMzA0ODg3Mjg1MSIsInRpbWUiOjE2MjUxMDE4MzA5NjIsImlzcyI6InNlY3VyaXR5IiwiaWF0IjoxNjI1MTAxODMwLCJleHAiOjE2MjUyMjE4MzB9.hXIu3K947eQluvLfENbphoBbBiZrF3eQfD8smKiKeJzTqpj6GU6dET47eRyX9BJIfbWA_0Wx4isqs8GEiIQcTg';
-    if (userToken) {
-      localStorage.setItem('token', userToken);
-    }
-    if (origin) {
-      localStorage.setItem('origin', origin);
-    }
-    getDetailData();
-  }, [location.query]);
+
   return (
     <Spin tip="加载中" spinning={loading}>
       <div className={styles.content}>
@@ -120,23 +120,11 @@ const GoodsInfo: React.FC = (props) => {
             <div className={styles.top_img}>
               <img src={productImg} alt="" />
             </div>
-            <Slider
-              className={styles.sliderIcon}
-              prevArrow={<LeftCircleFilled />}
-              nextArrow={<RightCircleFilled />}
-              dots={false}
-              infinite={false}
-              speed={300}
-              slidesToShow={imgList.length >= 5 ? 5 : imgList.length}
-              slidesToScroll={imgList.length >= 5 ? 5 : imgList.length}
-              variableWidth={true}
-            >
-              {imgList.map((url, idx) => (
-                <div onClick={() => changeImg(url, idx)} key={url} className={`${current === idx ? styles.current : ''} ${styles.sliderImgItemWrap}`}>
-                  <img src={url} />
-                </div>
-              ))}
-            </Slider>
+            {imgList.map((url, idx) => (
+              <span onClick={() => changeImg(url, idx)} key={url} className={`${current === idx ? styles.current : ''} ${styles.sliderImgItemWrap}`}>
+                <img src={`${url}_100w`} />
+              </span>
+            ))}
           </div>
           <div className={styles.top_right}>
             <p className={styles.right_title}>{InfoData.title}</p>
@@ -152,7 +140,9 @@ const GoodsInfo: React.FC = (props) => {
             <Button type="primary" onClick={() => addToCart()}>
               加入购物车
             </Button>
-            <Button type="primary">立即购买</Button>
+            <Link to={`/mall/cart/confirm?id=${id}&quantity=${totalMoney}`}>
+              <Button type="primary">立即购买</Button>
+            </Link>
           </div>
         </div>
         <div className={styles.attr}>

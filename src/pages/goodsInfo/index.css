@@ -17,28 +17,26 @@
   width: 100px / 10 * 30;
 }
 .content .top .top_left .top_img {
+  margin-bottom: 10px;
   border: 1px solid #eee;
 }
 .content .top .top_left .top_img img {
   width: 100px / 10 * 30;
   height: 100px / 10 * 24;
 }
-.content .top .top_left .sliderIcon {
-  padding: 0 0 10px;
-}
 .content .top .top_left .sliderImgItemWrap {
   position: relative;
-  padding: 1px;
-  border: 1px solid #ccc;
   cursor: pointer;
+  margin: 0 3px 0 0;
 }
 .content .top .top_left .sliderImgItemWrap img {
-  width: 55px;
+  width: 56px;
   height: 50px;
 }
 .content .top .top_left .current {
   border-color: #FF0036;
   border-width: 2px;
+  display: inline-block;
 }
 .content .top .top_left .current::before {
   position: absolute;

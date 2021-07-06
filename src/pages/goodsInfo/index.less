@@ -5,26 +5,24 @@
     .top_left {
       width: @space * 30;
       .top_img {
+        margin-bottom: 10px;
         .border();
         img {
           width: @space * 30;
           height: @space * 24;
         }
       }
-      .sliderIcon {
-        padding: 0 0 10px;
-      }
       .sliderImgItemWrap {
         position: relative;
-        padding: 1px;
-        border: 1px solid #ccc;
+        margin: 0 3px 0 0;
         cursor: pointer;
         img {
-          width: 55px;
+          width: 56px;
           height: 50px;
         }
       }
       .current {
+        display: inline-block;
         border-color: @mainColor;
         border-width: 2px;
         &::before {
