@@ -1,6 +1,6 @@
 import request from '@/utils/request';
 
-export const addOrder = (params: { addressId: string; cartIds: number[]; consumerRemark?: string }) => {
+export const addOrder = (params: { addressId?: string; cartIds?: number[]; consumerRemark?: string; productId?: string; quantity?: string }) => {
   return request('/integral/order/add', {
     method: 'POST',
     data: params,

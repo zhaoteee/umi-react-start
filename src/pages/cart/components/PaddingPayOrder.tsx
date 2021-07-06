@@ -36,19 +36,19 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
   const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
-    if (distributorIntegralPayEnable && !distributorRebatePayEnable) {
-      setPayMethod('INTEGRAL_PAY');
-      setRemainAmount(totalAmount - integralAmount);
-    } else if (!distributorIntegralPayEnable && distributorRebatePayEnable) {
+    if (distributorRebatePayEnable) {
       setPayMethod('REBATE_PAY');
       setRemainAmount(totalAmount - rebateAmount);
-    } else {
-      setRemainAmount(totalAmount);
+    }
+    if (distributorIntegralPayEnable) {
+      setPayMethod('INTEGRAL_PAY');
+      setRemainAmount(totalAmount - integralAmount);
     }
   }, [distributorIntegralPayEnable, distributorRebatePayEnable, integralAmount, rebateAmount, totalAmount]);
 
   const handlePayChange = (e: RadioChangeEvent) => {
     const { value } = e.target;
+    console.log(value);
     setPayMethod(value);
     if (value === 'INTEGRAL_PAY') {
       setRemainAmount(totalAmount - integralAmount);
