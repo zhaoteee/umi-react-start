@@ -17,7 +17,7 @@ const tabs: React.FC<TabsProps> = (props) => {
     onConfirmChange(val);
   };
   return (
-    <Tabs defaultActiveKey="1" onChange={onChange}>
+    <Tabs defaultActiveKey="0" onChange={onChange}>
       {statusColumns.map((item) => {
         return <TabPane tab={item.text} key={item.key}></TabPane>;
       })}
@@ -26,13 +26,13 @@ const tabs: React.FC<TabsProps> = (props) => {
 };
 tabs.defaultProps = {
   statusColumns: [
-    { text: '全部订单', key: 1 },
-    { text: '待付款', key: 2 },
-    { text: '待发货', key: 3 },
-    { text: '部分发货', key: 4 },
-    { text: '待收货', key: 5 },
-    { text: '已关闭', key: 6 },
-    { text: '已完成', key: 7 },
+    { text: '全部订单', key: null },
+    { text: '待付款', key: 1 },
+    { text: '待发货', key: 4 },
+    { text: '部分发货', key: 5 },
+    { text: '已发货', key: 6 },
+    { text: '已关闭', key: 7 },
+    { text: '已取消', key: 10 },
   ],
 };
 export default tabs;
