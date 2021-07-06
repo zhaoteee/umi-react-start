@@ -32,9 +32,7 @@ const col = [12, 4, 4, 4];
 const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
   console.log('ConfirmOrder渲染了');
   const { originalList, loading } = props;
-  const location: Location<{
-    query: { id: string; quantity: string };
-  }> = useLocation();
+  const location: Location<{ query: { id: string; quantity: string } }> = useLocation();
   const productId = location.query?.id as string;
   const quantity = location.query?.quantity as string;
   const dispatch = useDispatch();
@@ -74,17 +72,17 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
           const item = {
             ...res.data,
             image: res.data.productInfoExtDTO.productImages[0].resource,
-            quantity: location.query?.quantity,
+            quantity,
             supplierName: res.data.supplierShopName,
           };
           setSelectedList(handleCartInfo([item]));
-          setTotalPrice(res.data.invoicePrice * Number(location.query?.quantity));
+          setTotalPrice(res.data.invoicePrice * Number(quantity));
         })
         .finally(() => {
           setDetailLoading(false);
         });
     }
-  }, [dispatch, productId, location.query?.quantity]);
+  }, [dispatch, productId, quantity]);
 
   const handleSubmit = () => {
     const params = !productId
@@ -110,7 +108,7 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
         <PageHeader className="p-2.5 border-b-2 border-red-500" title="确认订单" onBack={() => history.goBack()} />
         <AddressCard addressList={addressList} updateAddressChecked={updateAddressChecked} handleEditAddress={handleEditAddress} />
         <div className="p-2.5 font-bold">确认订单信息</div>
-        <CartHeader hasAllChecked={false} headerColumns={headerColumns} />
+        <CartHeader headerColumns={headerColumns} />
         <CartList list={selectedList} canEdit={false} col={col} />
         <div className="flex">
           <div className="flex-shrink-0 w-16">订单备注:</div>

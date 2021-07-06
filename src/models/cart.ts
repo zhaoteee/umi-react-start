@@ -40,7 +40,6 @@ export type CartModelType = {
 export type CartModelState = {
   total: number; // 商品总数
   totalPrice: number;
-  isAllChecked: boolean;
   list: CartItemInfo[]; // 商品列表
   originalList: GoodsInfo[];
 };
@@ -76,7 +75,6 @@ export function handleCartInfo(list: GoodsInfo[]) {
 const initialState = {
   total: 0,
   totalPrice: 0,
-  isAllChecked: false,
   list: [],
   originalList: [],
 };
@@ -109,7 +107,7 @@ const CartModel: CartModelType = {
           payload: res?.data ?? [],
         });
       } catch (e) {
-        console.log(e);
+        Promise.reject(e);
       }
     },
     *updateCartItemChecked({ payload: { items, value } }, { call, put }) {
@@ -121,7 +119,7 @@ const CartModel: CartModelType = {
         const res = yield call(updateCartItemChecked, params);
         if (res.success) yield put({ type: 'fetchCartInfo' });
       } catch (e) {
-        console.log(e);
+        Promise.reject(e);
       }
     },
     *updateCartItemQuantity({ payload: { item, quantity } }, { call, put }) {
@@ -129,7 +127,7 @@ const CartModel: CartModelType = {
         const res = yield call(updateCartItemQuantity, { ...item, quantity });
         if (res.success) yield put({ type: 'fetchCartInfo' });
       } catch (e) {
-        console.log(e);
+        Promise.reject(e);
       }
     },
     *deleteCartItem({ payload: { items } }, { call, put }) {
@@ -138,7 +136,7 @@ const CartModel: CartModelType = {
         const res = yield call(deleteCartItem, { ids });
         if (res.success) yield put({ type: 'fetchCartInfo' });
       } catch (e) {
-        console.log(e);
+        Promise.reject(e);
       }
     },
   },
@@ -148,7 +146,6 @@ const CartModel: CartModelType = {
         ...state,
         total: payload.length,
         totalPrice: payload.filter((item: GoodsInfo) => item.isChecked).reduce((acc: number, cur: GoodsInfo) => acc + cur.invoicePrice * cur.quantity, 0),
-        isAllChecked: payload.every((item: GoodsInfo) => item.isChecked),
         list: handleCartInfo(payload),
         originalList: payload,
       };
