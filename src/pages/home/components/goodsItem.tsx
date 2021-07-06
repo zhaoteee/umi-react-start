@@ -56,7 +56,7 @@ const GoodsItem: React.FC<GooodsItemProps> = (props) => {
       </Link>
       <div className="between">
         <span>
-          ￥{item.salePrice}/{item.unit}
+          ￥{item.invoicePrice}/{item.unit}
         </span>
         <a onClick={() => addToCart(item)}>加入购物车</a>
       </div>
