@@ -34,7 +34,6 @@ const CartFooter: React.FC<CartFooterProps> = (props) => {
       });
     }
   };
-  // console.log(props);
   const updateAllChecked = (value: boolean) => {
     dispatch({
       type: 'cart/updateCartItemChecked',

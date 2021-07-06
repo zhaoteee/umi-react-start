@@ -8,8 +8,7 @@ import type { CartItemInfo, GoodsInfo } from '@/models/cart';
 import { Result, Button } from 'antd';
 import { ShoppingCartOutlined } from '@ant-design/icons';
 import { history } from 'umi';
-import type { Dispatch, Loading } from '@@/plugin-dva/connect';
-import type { CartModelType } from '@/models/cart';
+import type { Loading } from '@@/plugin-dva/connect';
 import type { CartModelState } from '@/models/cart';
 
 type CartProps = {
@@ -18,13 +17,12 @@ type CartProps = {
   loading: boolean;
 };
 const Cart: React.FC<CartProps> = (props) => {
-  const dispatch: Dispatch<CartModelType> = useDispatch();
+  const dispatch = useDispatch();
   useEffect(() => {
     dispatch({
       type: 'cart/fetchCartInfo',
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch]);
 
   return (
     <Spin spinning={props.loading}>

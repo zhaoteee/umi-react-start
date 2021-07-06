@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import type { payDetailType } from '@/pages/cart/components/PaddingPayOrder';
 import PaddingPayOrder from '@/pages/cart/components/PaddingPayOrder';
 import { PageHeader, Spin } from 'antd';
+import type { Location } from 'umi';
 import { history, useLocation } from 'umi';
 import { getPayDetail } from '@/services/order';
 
@@ -21,21 +22,21 @@ const initialPayDetail = {
   totalIntegral: 0,
 };
 const PayingOrder: React.FC = () => {
-  const location: any = useLocation();
+  const location: Location<{ query: { orderId: string } }> = useLocation();
   const [payDetail, setPayDetail] = useState<payDetailType>(initialPayDetail);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getPayDetail(location.query.orderId).then((res) => {
+    getPayDetail(location.query?.orderId as string).then((res) => {
       setPayDetail(res.data);
     });
-  }, [location.query.orderId]);
+  }, [location.query?.orderId]);
 
   return (
     <div>
       <PageHeader className="p-2.5 border-b-2 border-red-500" title="订单支付" onBack={() => history.goBack()} />
       <Spin spinning={loading}>
-        <PaddingPayOrder detail={payDetail} setLoading={setLoading} orderId={location.query.orderId} />
+        <PaddingPayOrder detail={payDetail} setLoading={setLoading} orderId={location.query?.orderId as string} />
       </Spin>
     </div>
   );
