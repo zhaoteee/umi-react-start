@@ -30,7 +30,6 @@ const headerColumns = [
 ];
 const col = [12, 4, 4, 4];
 const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
-  console.log('ConfirmOrder渲染了');
   const { originalList, loading } = props;
   const location: Location<{ query: { id: string; quantity: string } }> = useLocation();
   const productId = location.query?.id as string;

@@ -12,7 +12,6 @@ type CartItemprops = {
 };
 
 const CartListItem: React.FC<CartItemprops> = (props) => {
-  console.log('CartListItem 渲染了');
   const { info, col, canEdit } = props;
   const dispatch = useDispatch();
 
