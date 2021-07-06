@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import { LeftCircleFilled, RightCircleFilled } from '@ant-design/icons';
 import { Link } from 'umi';
-import Slider from 'react-slick';
 import { preFixPath } from '@/utils/util';
 
 import styles from '../index.less';
@@ -22,7 +20,8 @@ const GoodsItem: React.FC<GooodsItemProps> = (props) => {
   });
   const [productImg, setProductImg] = useState(productImage[0]);
   const [current, setCurrent] = useState(-1);
-  const imgList = productImage;
+  // 暂时最多5张商品图片
+  const imgList = productImage.slice(0, 5);
   const changeImg = (url: string, idx: number) => {
     setProductImg(url);
     setCurrent(idx);
@@ -34,29 +33,19 @@ const GoodsItem: React.FC<GooodsItemProps> = (props) => {
           <img className={styles.productImg} src={productImg} />
         </div>
       </Link>
-      <Slider
-        className={styles.sliderIcon}
-        prevArrow={<LeftCircleFilled />}
-        nextArrow={<RightCircleFilled />}
-        dots={false}
-        infinite={false}
-        speed={300}
-        slidesToShow={imgList.length >= 5 ? 5 : imgList.length}
-        slidesToScroll={imgList.length >= 5 ? 5 : imgList.length}
-        variableWidth={true}
-      >
+      <div className={styles.sliderIcon}>
         {imgList.map((url, idx) => (
-          <div onClick={() => changeImg(url, idx)} key={url} style={{ width: 35 }} className={`${current === idx ? styles.current : ''} ${styles.sliderImgItemWrap}`}>
+          <div onClick={() => changeImg(url, idx)} key={url} className={`${current === idx ? styles.current : ''} ${styles.sliderImgItemWrap}`}>
             <img src={`${url}_100w`} />
           </div>
         ))}
-      </Slider>
+      </div>
       <Link to={`/mall/goodsInfo?id=${item.id}`} className={styles.goodsTitle}>
         <p className="e1">{item.title || '--'}</p>
       </Link>
       <div className="between">
         <span>
-          ￥{item.salePrice}/{item.unit}
+          ￥{item.invoicePrice}/{item.unit}
         </span>
         <a onClick={() => addToCart(item)}>加入购物车</a>
       </div>
