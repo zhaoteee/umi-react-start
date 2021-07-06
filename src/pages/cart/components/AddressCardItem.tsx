@@ -11,6 +11,10 @@ type AddressCardItemProps = {
 const AddressCardItem: React.FC<AddressCardItemProps> = (props) => {
   const { handleEditAddress } = props;
   const { item, updateAddressChecked } = props;
+  const handleEdit = (e: React.MouseEvent<HTMLElement>, id: string) => {
+    e.stopPropagation();
+    handleEditAddress(id);
+  };
   return (
     <div
       className={`w-80 h-32 p-2.5 mr-2.5 flex flex-col justify-between flex-shrink-0 border rounded cursor-pointer bg-white ${item.isChecked ? 'border-red-500' : ''}`}
@@ -22,7 +26,7 @@ const AddressCardItem: React.FC<AddressCardItemProps> = (props) => {
       </div>
       <div className="my-2.5 flex-1 e2">{`${item.provinceName} ${item.cityName} ${item.areaName} ${item.address}`}</div>
       <div className="flex justify-between items-center">
-        <Button className="text-blue-500 p-0" type="link" size="small" onClick={() => handleEditAddress(item.id)}>
+        <Button className="text-blue-500 p-0" type="link" size="small" onClick={(e) => handleEdit(e, item.id)}>
           编辑
         </Button>
         {item.isDefault ? <span className="text-gray-400">默认地址</span> : null}

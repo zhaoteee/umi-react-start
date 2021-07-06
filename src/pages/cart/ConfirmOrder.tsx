@@ -30,10 +30,13 @@ const headerColumns = [
 ];
 const col = [12, 4, 4, 4];
 const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
+  console.log('ConfirmOrder渲染了');
   const { originalList, loading } = props;
   const location: Location<{
     query: { id: string; quantity: string };
   }> = useLocation();
+  const productId = location.query?.id as string;
+  const quantity = location.query?.quantity as string;
   const dispatch = useDispatch();
   const { TextArea } = Input;
   const [isVisible, { setTrue: openModal, setFalse: closeModal }] = useBoolean(false);
@@ -53,20 +56,20 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
   );
 
   useEffect(() => {
-    if (!location.query?.id) {
+    if (!productId) {
       setTotalPrice(props.totalPrice);
       setSelectedList(handleCartInfo(originalList.filter((item) => item.isChecked)));
     }
-  }, [originalList, location.query?.id, props.totalPrice]);
+  }, [originalList, productId, props.totalPrice]);
 
   useEffect(() => {
-    if (!location.query?.id) {
+    if (!productId) {
       dispatch({
         type: 'cart/fetchCartInfo',
       });
     } else {
       setDetailLoading(false);
-      getDetail(location.query?.id as string)
+      getDetail(productId)
         .then((res) => {
           const item = {
             ...res.data,
@@ -81,10 +84,10 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
           setDetailLoading(false);
         });
     }
-  }, [dispatch, location.query?.id, location.query?.quantity]);
+  }, [dispatch, productId, location.query?.quantity]);
 
   const handleSubmit = () => {
-    const params = !location.query?.id
+    const params = !productId
       ? {
           addressId: selectedAddressId,
           cartIds: originalList.filter((item) => item.isChecked).map((item) => item.id),
@@ -92,8 +95,8 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
         }
       : {
           addressId: selectedAddressId,
-          productId: location.query.id as string,
-          quantity: location.query.quantity as string,
+          productId,
+          quantity,
         };
     addOrder(params).then((res: any) => {
       if (res.success) {
@@ -102,7 +105,7 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
     });
   };
   return (
-    <Spin spinning={location.query?.id ? detailLoading : loading}>
+    <Spin spinning={productId ? detailLoading : loading}>
       <div>
         <PageHeader className="p-2.5 border-b-2 border-red-500" title="确认订单" onBack={() => history.goBack()} />
         <AddressCard addressList={addressList} updateAddressChecked={updateAddressChecked} handleEditAddress={handleEditAddress} />
