@@ -14,29 +14,29 @@
   display: flex;
 }
 .content .top .top_left {
-  width: 100px / 10 * 30;
+  width: 100px / 10 * 32;
 }
 .content .top .top_left .top_img {
   margin-bottom: 10px;
   border: 1px solid #eee;
 }
 .content .top .top_left .top_img img {
-  width: 100px / 10 * 30;
-  height: 100px / 10 * 24;
+  width: 100px / 10 * 32;
+  height: 100px / 10 * 32;
 }
 .content .top .top_left .sliderImgItemWrap {
   position: relative;
-  cursor: pointer;
   margin: 0 3px 0 0;
+  cursor: pointer;
 }
 .content .top .top_left .sliderImgItemWrap img {
-  width: 56px;
+  width: 60px;
   height: 50px;
 }
 .content .top .top_left .current {
+  display: inline-block;
   border-color: #FF0036;
   border-width: 2px;
-  display: inline-block;
 }
 .content .top .top_left .current::before {
   position: absolute;
@@ -57,17 +57,18 @@
   margin-bottom: 10px;
   color: #333;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 20px;
 }
 .content .top .top_right .rigth_brandName {
   margin-bottom: 100px / 10 * 3;
 }
 .content .top .top_right .right_icon {
   color: red;
+  font-size: 20px;
 }
 .content .top .top_right .right_symbol {
-  margin-top: 10px;
-  margin-bottom: 100px / 10 * 2;
+  margin-top: 100px / 10 * 10;
+  margin-bottom: 100px / 10 * 1.2;
   font-size: 14px;
 }
 .content .top .top_right button {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Spin, PageHeader, message } from 'antd';
+import { Button, Spin, PageHeader, message, Card } from 'antd';
 import { PlusSquareOutlined, MinusSquareOutlined } from '@ant-design/icons';
 // import testData from './testData';
 import { useDispatch } from '@@/plugin-dva/exports';
@@ -128,36 +128,38 @@ const GoodsInfo: React.FC = (props) => {
           </div>
           <div className={styles.top_right}>
             <p className={styles.right_title}>{InfoData.title}</p>
+            <p className={styles.right_brandName}>品牌: {InfoData.brandName}</p>
             <span>库存: {InfoData.stock}</span>
-            <p className={styles.right_brandName}>{InfoData.brandName}</p>
             <div>
               <span className={styles.right_icon}>￥{InfoData.invoicePrice}</span>/ <span>{InfoData.unit}</span>
             </div>
             <div className={styles.right_symbol}>
-              <MinusSquareOutlined onClick={() => toReduce(totalMoney)} style={{ fontSize: '23px' }} /> <span> {totalMoney} </span>{' '}
-              <PlusSquareOutlined onClick={() => add(totalMoney)} style={{ fontSize: '23px' }} />
+              <MinusSquareOutlined onClick={() => toReduce(totalMoney)} style={{ fontSize: '30px' }} /> <span> {totalMoney} </span>{' '}
+              <PlusSquareOutlined onClick={() => add(totalMoney)} style={{ fontSize: '30px' }} />
             </div>
             <Button type="primary" onClick={() => addToCart()}>
               加入购物车
             </Button>
             <Link to={`/mall/cart/confirm?id=${id}&quantity=${totalMoney}`}>
-              <Button type="primary">立即购买</Button>
+              <Button type="primary" danger>
+                立即购买
+              </Button>
             </Link>
           </div>
         </div>
         <div className={styles.attr}>
           {InfoData.productAttributeDTOs.map((it, idx) => (
             <div key={idx} className={styles.proAttr}>
-              <span>
-                商品属性区:
-                <span>{it.attributeName}</span>:<span>{it.attributeValue}</span>
-              </span>
+              <Card title="商品属性区">
+                <p>
+                  <span>{it.attributeName}</span>: <span>{it.attributeValue}</span>
+                </p>
+              </Card>
             </div>
           ))}
-          <div>
-            <p>商品详情区:</p>
-            <div dangerouslySetInnerHTML={{ __html: InfoData.productInfoExtDTO.description }}></div>
-          </div>
+          <Card title="商品详情区">
+            <div style={{ textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: InfoData.productInfoExtDTO.description }}></div>
+          </Card>
         </div>
       </div>
     </Spin>
