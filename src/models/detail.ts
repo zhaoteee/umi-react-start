@@ -1,4 +1,8 @@
 import type { Reducer, Effect } from 'umi';
+import { getOrderDetail } from '@/services/order';
+import type { goodInfo } from './order';
+import { statusMap } from './order';
+import { preFixPath } from '@/utils/util';
 
 export type ModelType = {
   namespace: string;
@@ -13,90 +17,47 @@ export type ModelType = {
 export type OrderModelState = {
   detail: DetailInfo;
 };
-export type goodInfo = {
-  id: number;
-  img: string;
-  name: string;
-  price: number;
-  quantity: number;
-  total: number;
-};
 export type DetailInfo = {
   sn: string;
-  state: string;
-  total: number;
-  date: string;
+  orderStatus: string;
+  statusText: string;
+  totalAmount: number;
+  createDate: string;
   address: string;
-  receiverName: string;
-  tel: string;
-  storeName: string;
+  receiverContactName: string;
+  receiverContactPhone: string;
+  supplierName: string;
   payDate: string;
-  completeDate: string;
-  remark: string;
-  productTotal: number;
+  shipDate: string;
+  sellerRemark: string;
+  receivableAmount: number;
+  integralAmount: number;
   integral: number;
-  useIntegral: number;
-  rebate: number;
-  offline: number;
+  rebateAmount: number;
+  offlineAmount: number;
   hasOperate: boolean;
-  goodsList: goodInfo[];
-};
-const detailData = {
-  sn: '1701463358915213660',
-  state: '待付款',
-  total: 200,
-  date: '2021-04-05',
-  address: '浙江省杭州市江干区下沙一号大街一号',
-  receiverName: '王小明',
-  tel: '18758109716',
-  storeName: '小胎品牌方名称',
-  payDate: '2021-04-05',
-  completeDate: '2021-04-05',
-  remark: '尽快发货',
-  productTotal: 180,
-  integral: 10,
-  useIntegral: 20,
-  rebate: 30,
-  offline: 50,
-  hasOperate: false,
-  goodsList: [
-    {
-      id: 5,
-      img: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      name: '商品名称',
-      price: 200,
-      quantity: 3,
-      total: 600,
-    },
-    {
-      id: 6,
-      img: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
-      name: '商品名称',
-      price: 200,
-      quantity: 3,
-      total: 600,
-    },
-  ],
+  integralOrderItemDTOs: goodInfo[];
 };
 const initialDetail = {
   sn: '',
-  state: '',
-  total: 0,
-  date: '',
+  orderStatus: '',
+  statusText: '',
+  totalAmount: 0,
+  createDate: '',
   address: '',
-  receiverName: '',
-  tel: '',
-  storeName: '',
+  receiverContactName: '',
+  receiverContactPhone: '',
+  supplierName: '',
   payDate: '',
-  completeDate: '',
-  remark: '',
-  productTotal: 0,
+  shipDate: '',
+  sellerRemark: '',
+  receivableAmount: 0,
+  integralAmount: 0,
   integral: 0,
-  useIntegral: 0,
-  rebate: 0,
-  offline: 0,
+  rebateAmount: 0,
+  offlineAmount: 0,
   hasOperate: false,
-  goodsList: [],
+  integralOrderItemDTOs: [],
 };
 const OrderModel: ModelType = {
   namespace: 'detail',
@@ -106,16 +67,27 @@ const OrderModel: ModelType = {
     },
   },
   effects: {
-    *getData(_, { put }) {
-      // const res: { data: DetailInfoType } = yield call(getMateriaDetail, payload);
-      yield put({
-        type: 'saveOrderDetail',
-        payload: detailData,
-      });
+    *getData({ payload }, { call, put }) {
+      try {
+        const res = yield call(getOrderDetail, payload.id);
+        yield put({
+          type: 'saveOrderDetail',
+          payload: res.data,
+        });
+      } catch (e) {
+        console.log(e);
+      }
     },
   },
   reducers: {
     saveOrderDetail(state, { payload }): OrderModelState {
+      payload.statusText = statusMap[payload.orderStatus];
+      payload.integralOrderItemDTOs.map((item) => {
+        if (item.images && item.images.indexOf('http') < 0) {
+          item.images = preFixPath + item.images;
+        }
+        return item;
+      });
       return {
         detail: payload,
       };

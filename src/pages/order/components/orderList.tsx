@@ -1,7 +1,6 @@
-import { connect } from '@@/plugin-dva/exports';
 import React from 'react';
 import OrderItem from './orderItem';
-import type { OrderModelState, OrderItemInfo } from '@/models/order';
+import type { OrderItemInfo } from '@/models/order';
 
 type OrderListProps = {
   list: OrderItemInfo[];
@@ -16,8 +15,4 @@ const listItem: React.FC<OrderListProps> = (props) => {
     </div>
   );
 };
-export default connect(({ order }: { order: OrderModelState }) => {
-  return {
-    list: order.list,
-  };
-})(listItem);
+export default listItem;

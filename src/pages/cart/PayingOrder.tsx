@@ -23,20 +23,21 @@ const initialPayDetail = {
 };
 const PayingOrder: React.FC = () => {
   const location: Location<{ query: { orderId: string } }> = useLocation();
+  const orderId = location.query?.orderId as string;
   const [payDetail, setPayDetail] = useState<payDetailType>(initialPayDetail);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getPayDetail(location.query?.orderId as string).then((res) => {
+    getPayDetail(orderId).then((res) => {
       setPayDetail(res.data);
     });
-  }, [location.query?.orderId]);
+  }, [orderId]);
 
   return (
     <div>
       <PageHeader className="p-2.5 border-b-2 border-red-500" title="订单支付" onBack={() => history.goBack()} />
       <Spin spinning={loading}>
-        <PaddingPayOrder detail={payDetail} setLoading={setLoading} orderId={location.query?.orderId as string} />
+        <PaddingPayOrder detail={payDetail} setLoading={setLoading} orderId={orderId} />
       </Spin>
     </div>
   );

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import type { RadioChangeEvent } from 'antd';
 import { Card, Radio, Space, Descriptions, Modal } from 'antd';
 import { toDecimal } from '@/utils/util';
@@ -48,7 +48,6 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
 
   const handlePayChange = (e: RadioChangeEvent) => {
     const { value } = e.target;
-    console.log(value);
     setPayMethod(value);
     if (value === 'INTEGRAL_PAY') {
       setRemainAmount(totalAmount - integralAmount);
@@ -57,11 +56,12 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
       setRemainAmount(totalAmount - rebateAmount);
     }
   };
-  const onUploadImage = (imgList: UploadFile[]) => {
+  const onUploadImage = useCallback((imgList: UploadFile[]) => {
     if (imgList.length) {
       setImageUrl(imgList[0].url as string);
     }
-  };
+  }, []);
+
   const handleSubmit = () => {
     setLoading(true);
     const params = {

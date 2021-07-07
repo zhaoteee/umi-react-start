@@ -30,7 +30,7 @@ const Cart: React.FC<CartProps> = (props) => {
         <PageHeader className="p-2.5 border-b-2 border-red-500" title="购物车" />
         {props.list.length ? (
           <>
-            <CartHeader list={props.originalList} />
+            <CartHeader />
             <CartList list={props.list} />
             <CartFooter />
           </>
