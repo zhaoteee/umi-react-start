@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'umi';
 import { preFixPath } from '@/utils/util';
+import { Button } from 'antd';
 
 import styles from '../index.less';
 import type { GoodsItemType } from '../index';
@@ -40,16 +41,21 @@ const GoodsItem: React.FC<GooodsItemProps> = (props) => {
           </div>
         ))}
       </div>
+
       <Link to={`/mall/goodsInfo?id=${item.id}`} className={styles.goodsTitle}>
-        <p className="e1">{item.title || '--'}</p>
+        <p className="e2">{item.title || '--'}</p>
       </Link>
-      <div className="between">
-        <span>
-          ￥{item.invoicePrice}/{item.unit}
-        </span>
-        <a onClick={() => addToCart(item)}>加入购物车</a>
-      </div>
       <p className={styles.productStore}>{item.supplierShopName}</p>
+      <div className={`between ${styles.footerInfo}`}>
+        <div className={styles.goodsPrice}>
+          <span className={styles.priceIcon}>￥</span>
+          {item.invoicePrice}
+          <span className={styles.priceUnit}> / {item.unit}</span>
+        </div>
+        <Button type="primary" onClick={() => addToCart(item)}>
+          加入购物车
+        </Button>
+      </div>
     </div>
   );
 };

@@ -19,7 +19,7 @@ const VoucherModal: React.FC<VoucherProps> = (props) => {
   const handleOk = () => {
     if (!imageUrl) {
       message.info('请上传支付凭证');
-      return
+      return;
     }
     const params = {
       image: imageUrl,
@@ -37,8 +37,7 @@ const VoucherModal: React.FC<VoucherProps> = (props) => {
       setImageUrl(imgList[0].url as string);
     }
   };
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
   return (
     <Modal title="上传凭证" visible={isShow} onOk={handleOk} onCancel={hide}>
       <UploadImage onChange={onUploadImage} maxCount={1} />
