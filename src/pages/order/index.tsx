@@ -32,53 +32,55 @@ const IndexPage: React.FC = () => {
       size: pageInfo.size,
       title: keyword,
       orderStatus: status,
-      ...p
-    }
-    getOrderList(params).then((res) => {
-      const data = res.data || { records: [], current: 1, size: 20, total: 0 };
-      const { current, total, size } = data
-      const list = (data.records || []).map(item => {
-        return {
-          id: item.id,
-          sn: item.sn,
-          createDate: item.createDate,
-          supplierName: item.supplierName,
-          statusText: statusMap[item.orderStatus],
-          hasOperate: true,
-          integralOrderItemDTOs: (item.integralOrderItemDTOs || []).map(cell => {
-            if (cell.images && cell.images.indexOf('http') < 0) {
-              cell.images = preFixPath + cell.images;
-            }
-            return {
-              ...cell
-            }
-          })
-        }
+      ...p,
+    };
+    getOrderList(params)
+      .then((res) => {
+        const data = res.data || { records: [], current: 1, size: 20, total: 0 };
+        const { current, total, size } = data;
+        const list = (data.records || []).map((item) => {
+          return {
+            id: item.id,
+            sn: item.sn,
+            createDate: item.createDate,
+            supplierName: item.supplierName,
+            statusText: statusMap[item.orderStatus],
+            hasOperate: true,
+            integralOrderItemDTOs: (item.integralOrderItemDTOs || []).map((cell) => {
+              if (cell.images && cell.images.indexOf('http') < 0) {
+                cell.images = preFixPath + cell.images;
+              }
+              return {
+                ...cell,
+              };
+            }),
+          };
+        });
+        setOrderList(list);
+        setIsLoading(false);
+        setPageInfo({
+          current: Number(current),
+          size: Number(size),
+          total: Number(total),
+        });
       })
-      setOrderList(list);
-      setIsLoading(false);
-      setPageInfo({
-        current: Number(current),
-        size: Number(size),
-        total: Number(total)
+      .catch((e) => {
+        console.log(e);
       });
-    }).catch(e => {
-      console.log(e);
-    });
   };
   const onConfirmSearch = (val: string) => {
     setKeyword(val);
-    getData({keyword: val, current: 1});
+    getData({ keyword: val, current: 1 });
   };
   const onConfirmChange = (val: number) => {
     setStatus(Number(val));
     getData({
       orderStatus: Number(val),
-      current: 1
+      current: 1,
     });
   };
   useEffect(() => {
-    getData()
+    getData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -89,14 +91,16 @@ const IndexPage: React.FC = () => {
         {orderList.length ? (
           <>
             <OrderHeader />
-            <OrderList list={orderList}/>
-            <Pagination 
-              defaultCurrent={pageInfo.current} 
-              total={pageInfo.total} 
-              className="text-right mt-5" 
+            <OrderList list={orderList} />
+            <Pagination
+              current={pageInfo.current}
+              pageSize={pageInfo.size}
+              total={pageInfo.total}
+              className="text-right mt-5"
               onChange={(page: number, pageSize?: number) => {
                 getData({ current: page, size: pageSize });
-              }}/>
+              }}
+            />
           </>
         ) : (
           <Result icon={<FileSearchOutlined className="text-gray-200" />} subTitle="暂无数据" />
