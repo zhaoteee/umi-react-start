@@ -33,7 +33,7 @@ const MallHeader: React.FC<MallHeaderType> = (props) => {
       <div className="fleft">
         <div className={styles.title}>
           <Link to="/">
-            <img style={{ width: '100px' }} src={logo} alt="采购商城" />
+            <img src={logo} alt="采购商城" />
           </Link>
         </div>
         <div className="fleft">
