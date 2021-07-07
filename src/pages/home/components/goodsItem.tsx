@@ -46,13 +46,13 @@ const GoodsItem: React.FC<GooodsItemProps> = (props) => {
         <p className="e2">{item.title || '--'}</p>
       </Link>
       <p className={styles.productStore}>{item.supplierShopName}</p>
-      <div className="between" style={{ textAlign: 'right', padding: '0 6px' }}>
+      <div className={`between ${styles.footerInfo}`}>
         <div className={styles.goodsPrice}>
           <span className={styles.priceIcon}>￥</span>
           {item.invoicePrice}
           <span className={styles.priceUnit}> / {item.unit}</span>
         </div>
-        <Button style={{ margin: '10px 0 10px', height: '30px', padding: '2px 10px', borderRadius: '4px' }} type="primary" onClick={() => addToCart(item)}>
+        <Button type="primary" onClick={() => addToCart(item)}>
           加入购物车
         </Button>
       </div>
