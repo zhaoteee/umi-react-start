@@ -31,8 +31,7 @@ tabs.defaultProps = {
     { text: '待发货', key: 4 },
     { text: '部分发货', key: 5 },
     { text: '已发货', key: 6 },
-    { text: '已关闭', key: 7 },
-    { text: '已取消', key: 10 },
+    { text: '已关闭', key: 10 },
   ],
 };
 export default tabs;
