@@ -29,7 +29,7 @@ const listItem: React.FC<OrderItemProps> = (props) => {
               <Row className="pt-5 pb-5" key={item.id}>
                 <Col span={col[0]} className="flex">
                   <img className="w-25 h-25 mx-2.5 object-cover flex-shrink-0 ml-5" src={`${item.images}_100w`} alt="" />
-                  <div className="text-gray-500">{item.brandName}</div>
+                  <div className="text-gray-500">{item.title}</div>
                 </Col>
                 <Col span={col[1]} className="text-center font-bold text-gray-700">
                   {`￥${toDecimal(item.price)}`}
