@@ -26,7 +26,7 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
     });
   };
 
-  const updateCartItemChecked = debounce((item: GoodsInfo, value: boolean) => {
+  const updateCartItemChecked = (item: GoodsInfo, value: boolean) => {
     dispatch({
       type: 'cart/updateCartItemChecked',
       payload: {
@@ -34,7 +34,7 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
         value,
       },
     });
-  }, 500);
+  };
 
   const deleteCartItem = (item: GoodsInfo) => {
     Modal.confirm({
@@ -69,7 +69,7 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
   return (
     <div className="mb-4">
       <div className="p-2.5">
-        {canEdit && <Checkbox defaultChecked={info.isChecked} onChange={(e) => updateStoreChecked(info, e.target.checked)} />}
+        {canEdit && <Checkbox checked={info.isChecked} onChange={(e) => updateStoreChecked(info, e.target.checked)} />}
         <span className="ml-4">店铺: {info.supplierName}</span>
       </div>
       <div className="mx-2.5 border border-solid border-gray-400 divide-y divide-gray-300">
@@ -77,7 +77,7 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
           return (
             <Row className="p-5" key={item.id}>
               <Col span={col![0]} className="flex">
-                {canEdit && <Checkbox key={`${item.isChecked}`} defaultChecked={item.isChecked} onChange={(e) => updateCartItemChecked(item, e.target.checked)} />}
+                {canEdit && <Checkbox checked={item.isChecked} onChange={(e) => updateCartItemChecked(item, e.target.checked)} />}
                 <img className="w-25 h-25 mx-2.5 object-contain flex-shrink-0" src={item.image.indexOf('http') < 0 ? `${preFixPath}${item.image}` : item.image} alt={item.title} />
                 <div className="text-gray-500">{item.title}</div>
               </Col>
