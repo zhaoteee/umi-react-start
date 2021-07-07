@@ -14,18 +14,39 @@
     width: 233px;
     margin-right: 19px;
     margin-bottom: 20px;
-    padding: 4px;
+    padding: 0;
     border: 1px solid #e5e5e5;
     transition: all 0.1s ease-in-out;
+    .goodsPrice {
+      color: @mainColor;
+      font-size: 18px;
+      .priceIcon {
+        font-size: 12px;
+      }
+      .priceUnit {
+        color: rgba(0, 0, 0, 0.85);
+        font-size: 12px;
+      }
+    }
     .goodsTitle {
+      display: inline-block;
+      height: 44px;
+      padding: 0 6px;
       color: #333;
+      font-size: 15px;
+      p {
+        margin-bottom: 0;
+      }
       &:hover {
         color: @mainColor;
         text-decoration: underline;
       }
     }
     .productStore {
-      margin: 5px 0;
+      margin-bottom: 0;
+      padding: 0 6px;
+      color: rgba(0, 0, 0, 0.6);
+      font-size: 12px;
     }
     .imgWrap {
       display: flex;
@@ -38,13 +59,14 @@
     }
     .sliderIcon {
       display: flex;
-      padding: 8px 0 10px;
+      padding: 4px 6px 10px;
     }
     .sliderImgItemWrap {
       position: relative;
       width: 36px;
       height: 36px;
       margin-right: 10px;
+      padding: 0 6px;
       padding: 1px;
       border: 1px solid #ccc;
       cursor: pointer;
