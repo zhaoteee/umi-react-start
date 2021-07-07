@@ -1,9 +1,10 @@
-import React, { memo } from 'react';
+import React from 'react';
 import { Row, Col, Checkbox, InputNumber, Button, Modal } from 'antd';
 import { preFixPath, toDecimal } from '@/utils/util';
 import type { CartItemInfo } from '@/models/cart';
 import { useDispatch } from '@@/plugin-dva/exports';
 import type { GoodsInfo } from '@/models/cart';
+import { debounce } from 'lodash';
 
 type CartItemprops = {
   col?: number[];
@@ -49,14 +50,20 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
     });
   };
 
-  const updateCartItemQuantity = (item: GoodsInfo, quantity: number) => {
+  const updateCartItemQuantity = debounce((item: GoodsInfo, quantity: number) => {
+    const farmatQuantity = !Number.isNaN(quantity) ? String(quantity).replace(/^(0+)|[^\d]/g, '') : '';
+    if (item.quantity === Number(farmatQuantity)) return;
     dispatch({
       type: 'cart/updateCartItemQuantity',
       payload: {
         item,
-        quantity,
+        quantity: farmatQuantity,
       },
     });
+  }, 500);
+
+  const limitNumber = (value: number | undefined) => {
+    return !Number.isNaN(value) ? String(value).replace(/^(0+)|[^\d]/g, '') : '';
   };
 
   return (
@@ -78,7 +85,7 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
                 {`￥${toDecimal(item.invoicePrice)}`}
               </Col>
               <Col className="text-center" span={col![2]}>
-                {canEdit ? <InputNumber min={1} defaultValue={item.quantity} onChange={(quantity) => updateCartItemQuantity(item, quantity)} /> : <span>{item.quantity}</span>}
+                {canEdit ? <InputNumber min={1} formatter={limitNumber} defaultValue={item.quantity} onChange={(quantity) => updateCartItemQuantity(item, quantity)} /> : <span>{item.quantity}</span>}
               </Col>
               <Col className="text-center font-bold text-red-500" span={col![3]}>
                 {`￥${toDecimal(item.invoicePrice * item.quantity)}`}
@@ -101,4 +108,4 @@ CartListItem.defaultProps = {
   col: [12, 3, 3, 3, 3],
   canEdit: true,
 };
-export default memo(CartListItem);
+export default React.memo(CartListItem);
