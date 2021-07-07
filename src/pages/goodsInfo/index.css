@@ -14,31 +14,35 @@
   display: flex;
 }
 .content .top .top_left {
-  width: 100px / 10 * 32;
+  width: 100px / 10 * 42;
 }
 .content .top .top_left .top_img {
   margin-bottom: 10px;
-  border: 1px solid #eee;
 }
 .content .top .top_left .top_img img {
-  width: 100px / 10 * 32;
-  height: 100px / 10 * 32;
+  border: 1px solid #eee;
+  width: 100px / 10 * 42;
+  height: 100px / 10 * 42;
 }
-.content .top .top_left .sliderImgItemWrap {
+.content .top .top_left .top_smallImg {
+  width: 100px / 10 * 42;
+  display: flex;
+}
+.content .top .top_left .top_smallImg .sliderImgItemWrap {
   position: relative;
-  margin: 0 3px 0 0;
+  margin-right: 18px;
   cursor: pointer;
 }
-.content .top .top_left .sliderImgItemWrap img {
-  width: 60px;
-  height: 50px;
+.content .top .top_left .top_smallImg .sliderImgItemWrap img {
+  width: 100px / 10 * 7;
+  height: 100px / 10 * 7;
 }
-.content .top .top_left .current {
+.content .top .top_left .top_smallImg .current {
   display: inline-block;
   border-color: #FF0036;
-  border-width: 2px;
+  border-width: 1px;
 }
-.content .top .top_left .current::before {
+.content .top .top_left .top_smallImg .current::before {
   position: absolute;
   top: -6px;
   left: 50%;
@@ -56,27 +60,46 @@
 .content .top .top_right .right_title {
   margin-bottom: 10px;
   color: #333;
-  font-weight: bold;
-  font-size: 20px;
 }
-.content .top .top_right .rigth_brandName {
-  margin-bottom: 100px / 10 * 3;
+.content .top .top_right .right_brandName {
+  margin-bottom: 100px / 10*1;
+}
+.content .top .top_right .right_stock {
+  margin-bottom: 100px / 10*1;
+}
+.content .top .top_right .right_common {
+  color: black;
+  font-size: 15px;
+  font-weight: bold;
+  height: 100px / 10 * 3;
+  line-height: 30px;
+  margin-bottom: 100px / 10*1;
+  padding-left: 30px;
+}
+.content .top .top_right .right_money {
+  background: url('../../assets/images/bj.png') no-repeat center;
+  width: 509px;
+  height: 41px;
+  line-height: 41px;
+  background-size: cover;
+  padding-left: 10px;
+  margin-top: 10px;
 }
 .content .top .top_right .right_icon {
   color: red;
   font-size: 20px;
+  padding-left: 20px;
 }
 .content .top .top_right .right_symbol {
-  margin-top: 100px / 10 * 10;
-  margin-bottom: 100px / 10 * 1.2;
+  margin-top: 100px / 10 * 8;
+  margin-bottom: 100px / 10 * 3;
   font-size: 14px;
 }
 .content .top .top_right button {
+  width: 100px / 10 * 18;
+  height: 100px / 10 * 4;
   margin-right: 100px / 10;
-  background-color: #f59a23;
-  border: none;
-  border-radius: 5px;
 }
-.content .attr .proAttr {
-  padding: 20px 0;
+.content .proIn {
+  margin: 20px 0;
 }
