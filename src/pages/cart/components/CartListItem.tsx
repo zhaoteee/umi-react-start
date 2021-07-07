@@ -51,6 +51,7 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
   };
 
   const updateCartItemQuantity = debounce((item: GoodsInfo, quantity: number) => {
+    quantity = quantity || 1;
     const farmatQuantity = !Number.isNaN(quantity) ? String(quantity).replace(/^(0+)|[^\d]/g, '') : '';
     if (item.quantity === Number(farmatQuantity)) return;
     dispatch({
@@ -63,7 +64,10 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
   }, 500);
 
   const limitNumber = (value: number | undefined) => {
-    return !Number.isNaN(value) ? String(value).replace(/^(0+)|[^\d]/g, '') : '';
+    if (value) {
+      return !Number.isNaN(value) ? String(value).replace(/^(0+)|[^\d]/g, '') : '';
+    }
+    return '1';
   };
 
   return (
