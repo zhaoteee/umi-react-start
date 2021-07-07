@@ -44,10 +44,10 @@ const CartFooter: React.FC<CartFooterProps> = (props) => {
   };
 
   return (
-    <div className="flex justify-between items-center bg-gray-100">
+    <div className="flex justify-between items-center bg-gray-100 fixed min-w-wp bottom-0 left-1/2 transform -translate-x-1/2">
       <div className="px-5 flex-1 flex justify-between items-center">
         <div>
-          <Button danger type="link" onClick={deleteAllCartItem}>
+          <Button className="text-gray-600 hover:opacity-70" type="link" onClick={deleteAllCartItem}>
             删除
           </Button>
         </div>
