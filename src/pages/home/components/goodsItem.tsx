@@ -29,7 +29,7 @@ const GoodsItem: React.FC<GooodsItemProps> = (props) => {
   };
   return (
     <div key={item.id} className={styles.product}>
-      <Link to={`/mall/goodsInfo?id=${item.id}`}>
+      <Link to={`/mall/goodsInfo?id=${item.id}`} target="_blank">
         <div className={styles.imgWrap}>
           <img className={styles.productImg} src={productImg} />
         </div>
@@ -42,7 +42,7 @@ const GoodsItem: React.FC<GooodsItemProps> = (props) => {
         ))}
       </div>
 
-      <Link to={`/mall/goodsInfo?id=${item.id}`} className={styles.goodsTitle}>
+      <Link to={`/mall/goodsInfo?id=${item.id}`} target="_blank" className={styles.goodsTitle}>
         <p className="e2">{item.title || '--'}</p>
       </Link>
       <p className={styles.productStore}>{item.supplierShopName}</p>

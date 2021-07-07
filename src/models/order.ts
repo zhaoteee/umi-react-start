@@ -16,7 +16,7 @@ export type OrderItemInfo = {
 export type goodInfo = {
   id: number;
   images: string;
-  brandName: string;
+  title: string;
   price: number;
   quantity: number;
   totalAmount: number;

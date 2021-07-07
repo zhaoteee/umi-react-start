@@ -93,7 +93,8 @@ const IndexPage: React.FC = () => {
             <OrderHeader />
             <OrderList list={orderList} />
             <Pagination
-              defaultCurrent={pageInfo.current}
+              current={pageInfo.current}
+              pageSize={pageInfo.size}
               total={pageInfo.total}
               className="text-right mt-5"
               onChange={(page: number, pageSize?: number) => {
