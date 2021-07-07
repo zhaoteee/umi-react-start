@@ -75,24 +75,24 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
       <div className="mx-2.5 border border-solid border-gray-400 divide-y divide-gray-300">
         {info.goodsList.map((item) => {
           return (
-            <Row className="p-5" key={item.id}>
+            <Row className="p-5 text-sm" key={item.id}>
               <Col span={col![0]} className="flex">
                 {canEdit && <Checkbox checked={item.isChecked} onChange={(e) => updateCartItemChecked(item, e.target.checked)} />}
                 <img className="w-25 h-25 mx-2.5 object-contain flex-shrink-0" src={item.image.indexOf('http') < 0 ? `${preFixPath}${item.image}` : item.image} alt={item.title} />
                 <div className="text-gray-500">{item.title}</div>
               </Col>
-              <Col className="text-center font-bold text-gray-700" span={col![1]}>
+              <Col className="pl-8 font-bold text-gray-700" span={col![1]}>
                 {`￥${toDecimal(item.invoicePrice)}`}
               </Col>
               <Col className="text-center" span={col![2]}>
                 {canEdit ? <InputNumber min={1} formatter={limitNumber} defaultValue={item.quantity} onChange={(quantity) => updateCartItemQuantity(item, quantity)} /> : <span>{item.quantity}</span>}
               </Col>
-              <Col className="text-center font-bold text-red-500" span={col![3]}>
+              <Col className="pl-8 font-bold text-red-500" span={col![3]}>
                 {`￥${toDecimal(item.invoicePrice * item.quantity)}`}
               </Col>
               {canEdit && (
                 <Col className="text-center" span={col![4]}>
-                  <Button type="link" danger onClick={() => deleteCartItem(item)}>
+                  <Button type="link" className="text-gray-600 hover:opacity-70 p-0 -mt-2" onClick={() => deleteCartItem(item)}>
                     删除
                   </Button>
                 </Col>
