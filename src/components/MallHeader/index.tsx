@@ -4,6 +4,7 @@ import type { ConnectState, CartModelState } from '@/models/connect';
 import type { HomeQueryType } from '@/pages/home/index';
 import { connect, Link, history, useLocation } from 'umi';
 import type { Location } from 'umi';
+import logo from '@/assets/images/logo.png';
 
 import styles from './index.less';
 
@@ -32,7 +33,7 @@ const MallHeader: React.FC<MallHeaderType> = (props) => {
       <div className="fleft">
         <div className={styles.title}>
           <Link to="/">
-            <span>采购商城</span>
+            <img src={logo} alt="采购商城" />
           </Link>
         </div>
         <div className="fleft">

@@ -77,19 +77,19 @@ const OrderModel: ModelType = {
       } catch (e) {
         console.log(e);
       }
-    }
+    },
   },
   reducers: {
     saveOrderDetail(state, { payload }): OrderModelState {
-      payload.statusText = statusMap[payload.orderStatus]
-      payload.integralOrderItemDTOs.map(item => {
+      payload.statusText = statusMap[payload.orderStatus];
+      payload.integralOrderItemDTOs.map((item) => {
         if (item.images && item.images.indexOf('http') < 0) {
           item.images = preFixPath + item.images;
         }
-        return item
-      })
+        return item;
+      });
       return {
-        detail: payload
+        detail: payload,
       };
     },
   },

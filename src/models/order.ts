@@ -22,12 +22,11 @@ export type goodInfo = {
   totalAmount: number;
 };
 export const statusMap = {
-  'PART_PAY': '部分付款',
-  'WAIT_PAY': '待付款',
-  'SHIPED': '已发货',
-  'WAIT_CONFIRM': '待确认',
-  'CANCELED': '已关闭',
-  'WAIT_SHIP': '待发货',
-  'PART_SHIP': '部分发货'
-}
-
+  PART_PAY: '部分付款',
+  WAIT_PAY: '待付款',
+  SHIPED: '已发货',
+  WAIT_CONFIRM: '待确认',
+  CANCELED: '已关闭',
+  WAIT_SHIP: '待发货',
+  PART_SHIP: '部分发货',
+};

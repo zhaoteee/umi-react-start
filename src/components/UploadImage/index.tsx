@@ -19,9 +19,7 @@ const UploadPicList: FC<UploadPicProps> = (props) => {
   const [previewVisible, setPreviewVisible] = React.useState(false);
   const [previewImage, setPreviewImage] = React.useState('');
   const headers = {
-    Authorization:
-      localStorage.getItem('token') ||
-      'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMzA0ODg3Mjg1MSIsInRpbWUiOjE2MjUwMTM5OTE0MTEsImlzcyI6InNlY3VyaXR5IiwiaWF0IjoxNjI1MDEzOTkxLCJleHAiOjE2MjUxMzM5OTF9.M_0mYSUFAfveb6d5bNZE6BSHkAHeorA_Hl3nqurDfnjbLN6-_goMZ_EHb4CR-TmvUkwmLBVFMWbWy7_B-LIiPw',
+    Authorization: localStorage.getItem('token') || '',
   };
 
   const handlePreview = async (file: UploadFile) => {
@@ -42,7 +40,7 @@ const UploadPicList: FC<UploadPicProps> = (props) => {
       errorHandler({ response: p.file.response });
       if (tokenValidCodeList.find((c) => c === p.file.response.code)) {
         // 身份认证失败需重新登录
-        history.push('/user/login');
+        history.push('/login');
       }
     }
     // 拼接成功上传的图片地址

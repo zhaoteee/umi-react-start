@@ -27,7 +27,7 @@ export const getOrderList = (params: any) => {
 // 取消订单
 export const cancelOrder = (id: string) => {
   return request(`/integral/order/cancel/${id}`, {
-    method: 'POST'
+    method: 'POST',
   });
 };
 

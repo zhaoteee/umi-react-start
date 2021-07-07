@@ -23,9 +23,7 @@ const DetailHeader: React.FC<DetailHeaderProp> = (props) => {
         <Descriptions.Item label="支付时间">{info.payDate}</Descriptions.Item>
         <Descriptions.Item label="发货时间">{info.shipDate}</Descriptions.Item>
         <Descriptions.Item label="收货人信息" span={3}>
-          {info.receiverContactName}-
-          {info.address}-
-          {info.receiverContactPhone}
+          {info.receiverContactName}-{info.address}-{info.receiverContactPhone}
         </Descriptions.Item>
         {info.sellerRemark && (
           <Descriptions.Item label="买家备注" span={3}>
