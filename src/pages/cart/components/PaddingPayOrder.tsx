@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import '../index.less';
 import type { RadioChangeEvent } from 'antd';
 import { Card, Radio, Space, Descriptions, Modal } from 'antd';
 import { toDecimal } from '@/utils/util';
@@ -120,12 +119,12 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
             {detail.distributorRebatePayEnable && <Radio value={'REBATE_PAY'}>{`返利可抵￥${toDecimal(detail.rebateAmount)} （返利余额￥${toDecimal(detail.totalRebate)}）`}</Radio>}
           </Space>
         </Radio.Group>
+        <div className="py-5">
+          <span>剩余应付: </span>
+          <span className="text-red-500 font-bold">{`￥${toDecimal(remainAmount)}`}</span>
+        </div>
         {remainAmount > 0 && (
           <>
-            <div className="py-5">
-              <span>剩余应付: </span>
-              <span className="text-red-500 font-bold">{`￥${toDecimal(remainAmount)}`}</span>
-            </div>
             <Card className="w-128" title="线下打款">
               <Descriptions column={1}>
                 <Descriptions.Item label="开户名称">{detail.distributorRebatePayBankAccountName}</Descriptions.Item>

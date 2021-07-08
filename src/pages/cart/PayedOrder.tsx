@@ -3,6 +3,7 @@ import SuccessPayOrder from '@/pages/cart/components/SuccessPayOrder';
 import { PageHeader } from 'antd';
 import type { Location } from 'umi';
 import { history, useLocation } from 'umi';
+import './index.less';
 
 const PayingOrder: React.FC = () => {
   const location: Location<{ query: { orderId: string } }> = useLocation();

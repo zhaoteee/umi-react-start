@@ -5,6 +5,7 @@ import { PageHeader, Spin } from 'antd';
 import type { Location } from 'umi';
 import { history, useLocation } from 'umi';
 import { getPayDetail } from '@/services/order';
+import './index.less';
 
 export type OrderPayStatus = 'padding' | 'success';
 const initialPayDetail = {
