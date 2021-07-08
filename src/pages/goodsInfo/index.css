@@ -25,8 +25,8 @@
   height: 100px / 10 * 42;
 }
 .content .top .top_left .top_smallImg {
-  width: 100px / 10 * 42;
   display: flex;
+  width: 100px / 10 * 42;
 }
 .content .top .top_left .top_smallImg .sliderImgItemWrap {
   position: relative;
@@ -68,27 +68,26 @@
   margin-bottom: 100px / 10*1;
 }
 .content .top .top_right .right_common {
-  color: black;
-  font-size: 15px;
-  font-weight: bold;
   height: 100px / 10 * 3;
-  line-height: 30px;
   margin-bottom: 100px / 10*1;
   padding-left: 30px;
+  color: black;
+  font-size: 15px;
+  line-height: 30px;
 }
 .content .top .top_right .right_money {
-  background: url('../../assets/images/bj.png') no-repeat center;
   width: 509px;
   height: 41px;
-  line-height: 41px;
-  background-size: cover;
-  padding-left: 10px;
   margin-top: 10px;
+  padding-left: 10px;
+  line-height: 41px;
+  background: url('../../assets/images/bj.png') no-repeat center;
+  background-size: cover;
 }
 .content .top .top_right .right_icon {
+  padding-left: 20px;
   color: red;
   font-size: 20px;
-  padding-left: 20px;
 }
 .content .top .top_right .right_symbol {
   margin-top: 100px / 10 * 8;
