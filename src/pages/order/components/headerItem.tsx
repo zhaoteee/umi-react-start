@@ -14,7 +14,7 @@ const header: React.FC<headerProps> = (props) => {
     <Row>
       {headerColumns.map((item) => {
         return (
-          <Col span={item.col} key={item.text} className="text-center">
+          <Col span={item.col} key={item.text} className={item.align || 'text-left'}>
             <span className="flex-1 text-center">{item.text}</span>
           </Col>
         );
@@ -24,11 +24,11 @@ const header: React.FC<headerProps> = (props) => {
 };
 header.defaultProps = {
   headerColumns: [
-    { text: '商品', col: 12 },
+    { text: '商品', col: 12, align: 'text-center' },
     { text: '售价', col: 3 },
     { text: '数量', col: 3 },
     { text: '金额', col: 3 },
-    { text: '操作', col: 3 },
+    { text: '操作', col: 3 , align: 'text-center'},
   ],
 };
 export default header;

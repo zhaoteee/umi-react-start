@@ -86,7 +86,7 @@ const IndexPage: React.FC = () => {
   return (
     <Spin spinning={isLoading} tip="加载中...">
       <div>
-        <PageHeader className="site-page-header" backIcon={false} title="我的订单" extra={<Search onConfirmSearch={onConfirmSearch} />} />
+        <PageHeader className="site-page-header" backIcon={false} extra={<Search onConfirmSearch={onConfirmSearch} />} />
         <Tabs onConfirmChange={onConfirmChange} />
         {orderList.length ? (
           <>
