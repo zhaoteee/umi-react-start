@@ -43,6 +43,7 @@ const IndexPage: React.FC = () => {
             id: item.id,
             sn: item.sn,
             createDate: item.createDate,
+            orderStatus: item.orderStatus,
             supplierName: item.supplierName,
             statusText: statusMap[item.orderStatus],
             hasOperate: true,
@@ -91,7 +92,7 @@ const IndexPage: React.FC = () => {
         {orderList.length ? (
           <>
             <OrderHeader />
-            <OrderList list={orderList} />
+            <OrderList list={orderList} onHandleCancel={() => getData()} />
             <Pagination
               current={pageInfo.current}
               pageSize={pageInfo.size}

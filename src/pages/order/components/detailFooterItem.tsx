@@ -18,7 +18,7 @@ const DetailHeader: React.FC<DetailFooterProp> = (props) => {
     });
   };
   return (
-    <div className="text-right mt-5 mb-5">
+    <div className="text-right">
       <Popconfirm title="确认取消订单吗?" onConfirm={() => handleCancelOrder(info.id)} okText="是" cancelText="否" key="4">
         <Button className="mr-2.5">取消订单</Button>
       </Popconfirm>
@@ -28,7 +28,7 @@ const DetailHeader: React.FC<DetailFooterProp> = (props) => {
         </Button>
       )}
       {info.orderStatus === 'WAIT_PAY' && (
-        <Button key="3" type="primary" onClick={() => history.push(`/mall/cart/paying?orderId=${detail.id}`)}>
+        <Button key="3" type="primary" onClick={() => history.push(`/mall/cart/paying?orderId=${info.id}`)}>
           支付
         </Button>
       )}

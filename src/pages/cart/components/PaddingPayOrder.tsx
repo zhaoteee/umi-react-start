@@ -117,14 +117,12 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
         </div>
       </Card>
       <Card bordered={false}>
-        {distributorIntegralPayEnable && distributorRebatePayEnable && (
-          <Radio.Group value={payMethod} onChange={handlePayChange}>
-            <Space direction="vertical">
-              {detail.distributorIntegralPayEnable && <Radio value={'INTEGRAL_PAY'}>{`可用${detail.integral}积分抵扣￥${toDecimal(detail.integralAmount)}（积分余额${detail.totalIntegral}）`}</Radio>}
-              {detail.distributorRebatePayEnable && <Radio value={'REBATE_PAY'}>{`返利可抵￥${toDecimal(detail.rebateAmount)} （返利余额￥${toDecimal(detail.totalRebate)}）`}</Radio>}
-            </Space>
-          </Radio.Group>
-        )}
+        <Radio.Group value={payMethod} onChange={handlePayChange}>
+          <Space direction="vertical">
+            {distributorIntegralPayEnable && <Radio value={'INTEGRAL_PAY'}>{`可用${detail.integral}积分抵扣￥${toDecimal(detail.integralAmount)}（积分余额${detail.totalIntegral}）`}</Radio>}
+            {distributorRebatePayEnable && <Radio value={'REBATE_PAY'}>{`返利可抵￥${toDecimal(detail.rebateAmount)} （返利余额￥${toDecimal(detail.totalRebate)}）`}</Radio>}
+          </Space>
+        </Radio.Group>
         <div className="py-5">
           <span>剩余应付: </span>
           <span className="text-red-500 font-bold">{`￥${toDecimal(remainAmount)}`}</span>

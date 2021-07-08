@@ -47,7 +47,11 @@ const OrderDetail: React.FC<DetailProps> = (props) => {
         <OrderHeader headerColumns={headerColumns} />
         <OrderItem info={detail} />
         <DetailTotal info={detail} />
-        {(detail.orderStatus === 'PART_PAY' || detail.orderStatus === 'WAIT_PAY') && <DetailFooter info={detail} onHandleCancel={() => getData(query)} onHandleShow={() => setIsShow(true)} />}
+        {(detail.orderStatus === 'PART_PAY' || detail.orderStatus === 'WAIT_PAY') && (
+          <div className="mt-5 mb-5">
+            <DetailFooter info={detail} onHandleCancel={() => getData(query)} onHandleShow={() => setIsShow(true)} />
+          </div>
+        )}
         <VoucherModal isShow={isShow} id={detail.id} onHandleHide={() => setIsShow(false)} onHandleOK={() => getData(query)} />
       </div>
     </PageContainer>
