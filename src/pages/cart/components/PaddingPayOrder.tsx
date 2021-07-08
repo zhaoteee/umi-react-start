@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import type { RadioChangeEvent } from 'antd';
-import { Card, Radio, Space, Descriptions, Modal } from 'antd';
+import { Card, Radio, Space, Descriptions, Modal, Button } from 'antd';
 import { toDecimal } from '@/utils/util';
 import useBoolean from '@/hooks/useBoolean';
 import UploadImage from '@/components/UploadImage';
@@ -36,14 +36,18 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
   const [imageUrl, setImageUrl] = useState('');
 
   useEffect(() => {
-    if (distributorRebatePayEnable) {
-      setPayMethod('REBATE_PAY');
-      setRemainAmount(totalAmount - rebateAmount);
-    }
     if (distributorIntegralPayEnable) {
       setPayMethod('INTEGRAL_PAY');
       setRemainAmount(totalAmount - integralAmount);
+      return;
     }
+    if (distributorRebatePayEnable) {
+      setPayMethod('REBATE_PAY');
+      setRemainAmount(totalAmount - rebateAmount);
+      return;
+    }
+    setPayMethod('');
+    setRemainAmount(totalAmount);
   }, [distributorIntegralPayEnable, distributorRebatePayEnable, integralAmount, rebateAmount, totalAmount]);
 
   const handlePayChange = (e: RadioChangeEvent) => {
@@ -113,17 +117,19 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
         </div>
       </Card>
       <Card bordered={false}>
-        <Radio.Group value={payMethod} onChange={handlePayChange}>
-          <Space direction="vertical">
-            {detail.distributorIntegralPayEnable && <Radio value={'INTEGRAL_PAY'}>{`可用${detail.integral}积分抵扣￥${toDecimal(detail.integralAmount)}（积分余额${detail.totalIntegral}）`}</Radio>}
-            {detail.distributorRebatePayEnable && <Radio value={'REBATE_PAY'}>{`返利可抵￥${toDecimal(detail.rebateAmount)} （返利余额￥${toDecimal(detail.totalRebate)}）`}</Radio>}
-          </Space>
-        </Radio.Group>
+        {distributorIntegralPayEnable && distributorRebatePayEnable && (
+          <Radio.Group value={payMethod} onChange={handlePayChange}>
+            <Space direction="vertical">
+              {detail.distributorIntegralPayEnable && <Radio value={'INTEGRAL_PAY'}>{`可用${detail.integral}积分抵扣￥${toDecimal(detail.integralAmount)}（积分余额${detail.totalIntegral}）`}</Radio>}
+              {detail.distributorRebatePayEnable && <Radio value={'REBATE_PAY'}>{`返利可抵￥${toDecimal(detail.rebateAmount)} （返利余额￥${toDecimal(detail.totalRebate)}）`}</Radio>}
+            </Space>
+          </Radio.Group>
+        )}
         <div className="py-5">
           <span>剩余应付: </span>
           <span className="text-red-500 font-bold">{`￥${toDecimal(remainAmount)}`}</span>
         </div>
-        {remainAmount > 0 && (
+        {remainAmount > 0 && distributorRebatePayEnable && (
           <>
             <Card className="w-128" title="线下打款">
               <Descriptions column={1}>
@@ -137,11 +143,11 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
         )}
       </Card>
       <div className="text-right px-5">
-        <div className="btn-submit inline-block" onClick={handleSubmit}>
+        <Button type="primary" size="large" onClick={handleSubmit} disabled={!distributorIntegralPayEnable && !distributorIntegralPayEnable}>
           提交订单
-        </div>
+        </Button>
       </div>
-      <Modal visible={isVisible} onCancel={handleCancel} onOk={handleOk} title={'上传凭证'}>
+      <Modal visible={isVisible} cancelText="待会上传" okText="确认上传" onCancel={handleCancel} onOk={handleOk} title={'上传凭证'}>
         <UploadImage onChange={onUploadImage} maxCount={1} />
       </Modal>
     </div>

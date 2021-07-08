@@ -26,7 +26,7 @@ const Cart: React.FC<CartProps> = (props) => {
 
   return (
     <Spin spinning={props.loading}>
-      <div className="relative">
+      <div className="relative pb-25">
         <PageHeader className="p-2.5 border-b-2 border-red-500" title="购物车" />
         {props.list.length ? (
           <>
