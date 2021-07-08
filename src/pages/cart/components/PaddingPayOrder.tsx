@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import '../index.less';
 import type { RadioChangeEvent } from 'antd';
 import { Card, Radio, Space, Descriptions, Modal } from 'antd';
 import { toDecimal } from '@/utils/util';

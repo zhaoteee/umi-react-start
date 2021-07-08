@@ -26,7 +26,7 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
     });
   };
 
-  const updateCartItemChecked = debounce((item: GoodsInfo, value: boolean) => {
+  const updateCartItemChecked = (item: GoodsInfo, value: boolean) => {
     dispatch({
       type: 'cart/updateCartItemChecked',
       payload: {
@@ -34,7 +34,7 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
         value,
       },
     });
-  }, 500);
+  };
 
   const deleteCartItem = (item: GoodsInfo) => {
     Modal.confirm({
@@ -51,6 +51,7 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
   };
 
   const updateCartItemQuantity = debounce((item: GoodsInfo, quantity: number) => {
+    quantity = quantity || 1;
     const farmatQuantity = !Number.isNaN(quantity) ? String(quantity).replace(/^(0+)|[^\d]/g, '') : '';
     if (item.quantity === Number(farmatQuantity)) return;
     dispatch({
@@ -63,36 +64,39 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
   }, 500);
 
   const limitNumber = (value: number | undefined) => {
-    return !Number.isNaN(value) ? String(value).replace(/^(0+)|[^\d]/g, '') : '';
+    if (value) {
+      return !Number.isNaN(value) ? String(value).replace(/^(0+)|[^\d]/g, '') : '';
+    }
+    return '1';
   };
 
   return (
     <div className="mb-4">
       <div className="p-2.5">
-        {canEdit && <Checkbox defaultChecked={info.isChecked} onChange={(e) => updateStoreChecked(info, e.target.checked)} />}
+        {canEdit && <Checkbox checked={info.isChecked} onChange={(e) => updateStoreChecked(info, e.target.checked)} />}
         <span className="ml-4">店铺: {info.supplierName}</span>
       </div>
       <div className="mx-2.5 border border-solid border-gray-400 divide-y divide-gray-300">
         {info.goodsList.map((item) => {
           return (
-            <Row className="p-5" key={item.id}>
+            <Row className="p-5 text-sm" key={item.id}>
               <Col span={col![0]} className="flex">
-                {canEdit && <Checkbox key={`${item.isChecked}`} defaultChecked={item.isChecked} onChange={(e) => updateCartItemChecked(item, e.target.checked)} />}
+                {canEdit && <Checkbox checked={item.isChecked} onChange={(e) => updateCartItemChecked(item, e.target.checked)} />}
                 <img className="w-25 h-25 mx-2.5 object-contain flex-shrink-0" src={item.image.indexOf('http') < 0 ? `${preFixPath}${item.image}` : item.image} alt={item.title} />
                 <div className="text-gray-500">{item.title}</div>
               </Col>
-              <Col className="text-center font-bold text-gray-700" span={col![1]}>
+              <Col className="pl-8 font-bold text-gray-700" span={col![1]}>
                 {`￥${toDecimal(item.invoicePrice)}`}
               </Col>
               <Col className="text-center" span={col![2]}>
                 {canEdit ? <InputNumber min={1} formatter={limitNumber} defaultValue={item.quantity} onChange={(quantity) => updateCartItemQuantity(item, quantity)} /> : <span>{item.quantity}</span>}
               </Col>
-              <Col className="text-center font-bold text-red-500" span={col![3]}>
+              <Col className="pl-8 font-bold text-red-500" span={col![3]}>
                 {`￥${toDecimal(item.invoicePrice * item.quantity)}`}
               </Col>
               {canEdit && (
                 <Col className="text-center" span={col![4]}>
-                  <Button type="link" danger onClick={() => deleteCartItem(item)}>
+                  <Button type="link" className="text-gray-600 hover:opacity-70 p-0 -mt-2" onClick={() => deleteCartItem(item)}>
                     删除
                   </Button>
                 </Col>

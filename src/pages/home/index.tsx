@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'umi';
 import { useDispatch } from '@@/plugin-dva/exports';
-import { Pagination, PageHeader, Spin, Result, message } from 'antd';
+import { Pagination, Spin, Result, message } from 'antd';
 import Search from './components/search';
 import GoodsItem from './components/goodsItem';
 import { FileSearchOutlined } from '@ant-design/icons';
@@ -108,7 +108,6 @@ const IndexPage: React.FC = () => {
   return (
     <Spin spinning={isLoading} tip="加载中...">
       <div className={styles.goodsListPage}>
-        <PageHeader className="site-page-header" backIcon={false} title="商品列表" />
         <Search onConfirmSelect={onConfirmSelect} />
         {goodsList.length ? (
           <>

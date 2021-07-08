@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Spin, PageHeader, message, Card } from 'antd';
-import { PlusSquareOutlined, MinusSquareOutlined } from '@ant-design/icons';
+import { Button, Spin, PageHeader, message, Card, InputNumber } from 'antd';
+import { ShoppingCartOutlined } from '@ant-design/icons';
 // import testData from './testData';
 import { useDispatch } from '@@/plugin-dva/exports';
 // import Slider from 'react-slick';
 import { preFixPath } from '@/utils/util';
 import type { Location } from 'umi';
-import { useLocation, Link } from 'umi';
+import { history, useLocation, Link } from 'umi';
 import styles from './index.less';
 import type { Dispatch } from '@@/plugin-dva/connect';
 import { getDetail } from '@/services/info';
@@ -99,65 +99,65 @@ const GoodsInfo: React.FC = (props) => {
       hide();
     }, 500);
   };
-
-  const toReduce = (s: any) => {
-    if (totalMoney === 0) {
-      message.warning('已经没有可减的的了!');
-      return;
+  const onchange = (e: any) => {
+    if (e > InfoData.stock) {
+      message.warning('暂无这么多库存!');
     }
-    setMoney((s -= 1));
-  };
-  const add = (s: any) => {
-    setMoney((s += 1));
+    setMoney(e);
   };
 
   return (
     <Spin tip="加载中" spinning={loading}>
       <div className={styles.content}>
-        <PageHeader className="site-page-header" backIcon={true} title="商品详情"></PageHeader>
+        <PageHeader className={styles.site_page_header} onBack={() => history.goBack()} title="商品详情"></PageHeader>
         <div className={styles.top}>
           <div className={styles.top_left}>
             <div className={styles.top_img}>
               <img src={productImg} alt="" />
             </div>
-            {imgList.map((url, idx) => (
-              <span onClick={() => changeImg(url, idx)} key={url} className={`${current === idx ? styles.current : ''} ${styles.sliderImgItemWrap}`}>
-                <img src={`${url}_100w`} />
-              </span>
-            ))}
+            <div className={styles.top_smallImg}>
+              {imgList.map((url, idx) => (
+                <div onClick={() => changeImg(url, idx)} key={url} className={`${current === idx ? styles.current : ''} ${styles.sliderImgItemWrap}`}>
+                  <img src={`${url}_100w`} />
+                </div>
+              ))}
+            </div>
           </div>
           <div className={styles.top_right}>
-            <p className={styles.right_title}>{InfoData.title}</p>
-            <p className={styles.right_brandName}>品牌: {InfoData.brandName}</p>
-            <span>库存: {InfoData.stock}</span>
-            <div>
-              <span className={styles.right_icon}>￥{InfoData.invoicePrice}</span>/ <span>{InfoData.unit}</span>
+            <h1 className={styles.right_title}>{InfoData.title}</h1>
+            <p className={styles.right_brandName}>
+              品牌 <span className={styles.right_common}>{InfoData.brandName}</span>{' '}
+            </p>
+            <p className={styles.right_stock}>
+              库存 <span className={styles.right_common}>{InfoData.stock}</span>{' '}
+            </p>
+            <div className={styles.right_money}>
+              价格 <span className={styles.right_icon}>￥{InfoData.invoicePrice}</span> /<span>{InfoData.unit}</span>
             </div>
             <div className={styles.right_symbol}>
-              <MinusSquareOutlined onClick={() => toReduce(totalMoney)} style={{ fontSize: '30px' }} /> <span> {totalMoney} </span>{' '}
-              <PlusSquareOutlined onClick={() => add(totalMoney)} style={{ fontSize: '30px' }} />
+              <span style={{ marginRight: '30px' }}>数量</span>
+              <InputNumber defaultValue={1} min={1} onChange={onchange} />
             </div>
-            <Button type="primary" onClick={() => addToCart()}>
+            <Button danger onClick={() => addToCart()}>
               加入购物车
             </Button>
             <Link to={`/mall/cart/confirm?id=${id}&quantity=${totalMoney}`}>
-              <Button type="primary" danger>
+              <Button type="primary">
+                <ShoppingCartOutlined />
                 立即购买
               </Button>
             </Link>
           </div>
         </div>
         <div className={styles.attr}>
-          {InfoData.productAttributeDTOs.map((it, idx) => (
-            <div key={idx} className={styles.proAttr}>
-              <Card title="商品属性区">
-                <p>
-                  <span>{it.attributeName}</span>: <span>{it.attributeValue}</span>
-                </p>
-              </Card>
-            </div>
-          ))}
-          <Card title="商品详情区">
+          <Card title="商品属性" className={styles.proIn}>
+            {InfoData.productAttributeDTOs.map((it, idx) => (
+              <div key={idx} className={styles.proAttr}>
+                <span>{it.attributeName}</span>: <span>{it.attributeValue}</span>
+              </div>
+            ))}
+          </Card>
+          <Card title="商品详情">
             <div style={{ textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: InfoData.productInfoExtDTO.description }}></div>
           </Card>
         </div>

@@ -14,6 +14,9 @@ module.exports = {
       colors: {
         white: '#ffffff',
       },
+      minWidth: {
+        wp: '74.375rem',
+      },
     },
   },
   variants: {
