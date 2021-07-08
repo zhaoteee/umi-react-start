@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { Input } from 'antd';
-import { ProfileOutlined } from '@ant-design/icons';
 import type { ConnectState, CartModelState } from '@/models/connect';
 import type { HomeQueryType } from '@/pages/home/index';
 import { connect, Link, history, useLocation } from 'umi';
 import type { Location } from 'umi';
 import logo from '@/assets/images/logo.png';
 import cartIcon from '@/assets/images/cart-icon.png';
+import orderIcon from '@/assets/images/order-icon.png';
 
 import styles from './index.less';
 
@@ -44,11 +44,11 @@ const MallHeader: React.FC<MallHeaderType> = (props) => {
       </div>
       <div className={styles.orderInfo}>
         <Link className={styles.mycart} to="/mall/cart">
-          <img style={{ width: '16px', marginRight: '4px' }} src={cartIcon} alt="购物车" />
+          <img src={cartIcon} alt="购物车" />
           购物车({cart.total})
         </Link>
         <Link className={styles.myorder} to="/mall/order">
-          <ProfileOutlined style={{ marginRight: '4px' }} />
+          <img src={orderIcon} alt="订单" />
           我的订单
         </Link>
       </div>
