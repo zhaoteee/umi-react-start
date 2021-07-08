@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Modal, message } from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
 import UploadImage from '@/components/UploadImage';
@@ -32,11 +32,11 @@ const VoucherModal: React.FC<VoucherProps> = (props) => {
       }
     });
   };
-  const onUploadImage = (imgList: UploadFile[]) => {
+  const onUploadImage = useCallback((imgList: UploadFile[]) => {
     if (imgList.length) {
       setImageUrl(imgList[0].url as string);
     }
-  };
+  }, []);
   useEffect(() => {}, []);
   return (
     <Modal title="上传凭证" visible={isShow} onOk={handleOk} onCancel={hide}>
