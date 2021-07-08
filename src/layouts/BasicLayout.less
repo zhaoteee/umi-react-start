@@ -2,6 +2,7 @@
 
 .layoutWrap {
   position: relative;
+  width: @mainWidth;
   margin: auto;
   border-bottom: 1px solid #e5e5e5;
 }
@@ -13,8 +14,10 @@
   display: flex;
   justify-content: center;
   width: 100%;
+  min-width: @mainWidth;
   padding-right: 0;
   padding-left: 0;
+  overflow: hidden;
   background-color: #f7f5f5 !important;
   > div {
     width: @mainWidth;
