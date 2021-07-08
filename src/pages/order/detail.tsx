@@ -1,15 +1,13 @@
 import React, { useEffect } from 'react';
-import { Button, Popconfirm, message } from 'antd';
 import { PageContainer } from '@ant-design/pro-layout';
 import { connect, useDispatch } from '@@/plugin-dva/exports';
 import type { Loading } from '@@/plugin-dva/connect';
-import { history } from 'umi';
 import type { OrderModelState, DetailInfo } from '@/models/detail';
-import { cancelOrder } from '@/services/order';
 import DetailHeader from './components/detailHeaderItem';
 import OrderHeader from './components/headerItem';
 import OrderItem from './components/orderItem';
 import DetailTotal from './components/detailTotalItem';
+import DetailFooter from './components/detailFooterItem';
 import VoucherModal from './components/voucherModal';
 
 type detailQuery = { id: string };
@@ -38,44 +36,18 @@ const OrderDetail: React.FC<DetailProps> = (props) => {
       payload: q,
     });
   };
-  const handleCancelOrder = (id: string) => {
-    cancelOrder(id).then(() => {
-      getData(query);
-      message.success('取消成功');
-    });
-  };
   useEffect(() => {
     getData(query);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query]);
   return (
-    <PageContainer
-      loading={props.loading}
-      footer={
-        detail.orderStatus === 'PART_PAY' || detail.orderStatus === 'WAIT_PAY'
-          ? [
-              <Popconfirm title="确认取消订单吗?" onConfirm={() => handleCancelOrder(detail.id)} okText="是" cancelText="否" key="4">
-                <Button>取消订单</Button>
-              </Popconfirm>,
-              detail.orderStatus === 'PART_PAY' && (
-                <Button key="2" type="primary" onClick={() => setIsShow(true)}>
-                  线下打款
-                </Button>
-              ),
-              detail.orderStatus === 'WAIT_PAY' && (
-                <Button key="3" type="primary" onClick={() => history.push(`/mall/cart/paying?orderId=${detail.id}`)}>
-                  支付
-                </Button>
-              ),
-            ]
-          : []
-      }
-    >
+    <PageContainer loading={props.loading}>
       <div>
         <DetailHeader info={detail} />
         <OrderHeader headerColumns={headerColumns} />
         <OrderItem info={detail} />
         <DetailTotal info={detail} />
+        {(detail.orderStatus === 'PART_PAY' || detail.orderStatus === 'WAIT_PAY') && <DetailFooter info={detail} onHandleCancel={() => getData(query)} onHandleShow={() => setIsShow(true)} />}
         <VoucherModal isShow={isShow} id={detail.id} onHandleHide={() => setIsShow(false)} onHandleOK={() => getData(query)} />
       </div>
     </PageContainer>

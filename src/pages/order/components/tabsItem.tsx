@@ -17,7 +17,7 @@ const tabs: React.FC<TabsProps> = (props) => {
     onConfirmChange(val);
   };
   return (
-    <Tabs defaultActiveKey="0" onChange={onChange}>
+    <Tabs defaultActiveKey="0" onChange={onChange} size="large">
       {statusColumns.map((item) => {
         return <TabPane tab={item.text} key={item.key}></TabPane>;
       })}
