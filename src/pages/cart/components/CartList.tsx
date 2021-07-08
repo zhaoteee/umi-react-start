@@ -10,7 +10,7 @@ type CartListProps = {
 
 const CartList: React.FC<CartListProps> = ({ list, canEdit = true, col }) => {
   return (
-    <div className="mb-25">
+    <div>
       {list.map((item) => {
         return <CartListItem key={item.supplierId} info={item} canEdit={canEdit} col={col} />;
       })}
