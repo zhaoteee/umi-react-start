@@ -43,7 +43,7 @@ export default defineConfig({
           path: '/mall',
           name: 'mall',
           component: './home',
-          title: '首页',
+          title: '采购商城',
         },
         {
           path: '/mall/cart',
