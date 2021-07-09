@@ -15,7 +15,7 @@ module.exports = {
         white: '#ffffff',
       },
       minWidth: {
-        wp: '74.375rem',
+        wp: '73.2rem',
       },
     },
   },

@@ -109,7 +109,7 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
         <div className="p-2.5 font-bold">确认订单信息</div>
         <CartHeader headerColumns={headerColumns} />
         <CartList list={selectedList} canEdit={false} col={col} />
-        <div className="flex">
+        <div className="flex px-2.5">
           <div className="flex-shrink-0 w-16">订单备注:</div>
           <TextArea placeholder="请输入备注" onChange={(e) => setConsumerRemark(e.target.value)} />
         </div>
