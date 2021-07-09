@@ -66,7 +66,11 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
     }
   }, []);
 
-  const handleSubmit = () => {
+  const handlePay = () => {
+    if (!distributorIntegralPayEnable && !distributorRebatePayEnable) {
+      openModal();
+      return;
+    }
     setLoading(true);
     const params = {
       orderId,
@@ -100,7 +104,6 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
   };
   const handleCancel = () => {
     closeModal();
-    history.push(`/mall/cart/payed?orderId=${orderId}`);
   };
   return (
     <div>
@@ -127,22 +130,21 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
           <span>剩余应付: </span>
           <span className="text-red-500 font-bold">{`￥${toDecimal(remainAmount)}`}</span>
         </div>
-        {remainAmount > 0 && distributorRebatePayEnable && (
+        {remainAmount > 0 && (
           <>
             <Card className="w-128" title="线下打款">
               <Descriptions column={1}>
                 <Descriptions.Item label="开户名称">{detail.distributorRebatePayBankAccountName}</Descriptions.Item>
                 <Descriptions.Item label="开户银行">{detail.distributorRebatePayBankName}</Descriptions.Item>
                 <Descriptions.Item label="帐号">{detail.distributorRebatePayBankAccountNum}</Descriptions.Item>
-                {/* <Descriptions.Item label="说明">积分或返利支付不足时，也可点击确认支付，并将剩余金额通过其他方式汇入以上帐户。</Descriptions.Item> */}
               </Descriptions>
             </Card>
           </>
         )}
       </Card>
       <div className="text-right px-5">
-        <Button type="primary" size="large" onClick={handleSubmit} disabled={!distributorIntegralPayEnable && !distributorIntegralPayEnable}>
-          提交订单
+        <Button type="primary" size="large" onClick={handlePay}>
+          确认支付
         </Button>
       </div>
       <Modal visible={isVisible} cancelText="待会上传" okText="确认上传" onCancel={handleCancel} onOk={handleOk} title={'上传凭证'}>

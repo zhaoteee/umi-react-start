@@ -40,7 +40,7 @@ const SuccessPayOrder: React.FC<SuccessPayOrderType> = ({ orderId }) => {
         </Card>
       </div>
       <div className="text-right mt-5">
-        <div className="btn-submit inline-block" onClick={() => history.push(`/mall/order?orderId=${orderId}`)}>
+        <div className="btn-submit inline-block" onClick={() => history.push(`/mall/order/detail?id=${orderId}`)}>
           查看订单
         </div>
       </div>
