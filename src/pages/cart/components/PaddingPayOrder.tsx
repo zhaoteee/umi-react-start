@@ -110,7 +110,6 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
   };
   const handleCancel = () => {
     closeModal();
-    history.push(`/mall/cart/payed?orderId=${orderId}`);
   };
   return (
     <div>
