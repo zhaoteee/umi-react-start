@@ -83,7 +83,7 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
           if (remainAmount > 0) {
             openModal();
           } else {
-            history.push(`/mall/cart/payed?orderId=${orderId}`);
+            history.replace(`/mall/cart/payed?orderId=${orderId}`);
           }
         }
       })
@@ -104,7 +104,7 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
     };
     uploadCredential(params).then((res: any) => {
       if (res.success) {
-        history.push(`/mall/cart/payed?orderId=${orderId}`);
+        history.replace(`/mall/cart/payed?orderId=${orderId}`);
       }
     });
   };
