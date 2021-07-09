@@ -24,7 +24,7 @@ const SuccessPayOrder: React.FC<SuccessPayOrderType> = ({ orderId }) => {
         <Card title="订单信息" className="w-1/2 mr-2.5">
           <Descriptions column={1}>
             <Descriptions.Item label="下单店铺">{orderDetail.supplierName}</Descriptions.Item>
-            <Descriptions.Item label="订单号">{orderDetail.id}</Descriptions.Item>
+            <Descriptions.Item label="订单号">{orderDetail.sn}</Descriptions.Item>
             <Descriptions.Item label="订单总金额">{`￥${toDecimal(Number(orderDetail.totalAmount))}`}</Descriptions.Item>
             <Descriptions.Item label="积分支付">{`${orderDetail.integral}积分抵扣￥${toDecimal(Number(orderDetail.integralAmount))}`}</Descriptions.Item>
             <Descriptions.Item label="返利支付">{`￥${toDecimal(Number(orderDetail.rebateAmount))}`}</Descriptions.Item>
