@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import type { RadioChangeEvent } from 'antd';
-import { Card, Radio, Space, Descriptions, Modal, Button } from 'antd';
+import { Card, Radio, Space, Descriptions, Modal, Button, notification } from 'antd';
 import { toDecimal } from '@/utils/util';
 import useBoolean from '@/hooks/useBoolean';
 import UploadImage from '@/components/UploadImage';
@@ -92,6 +92,12 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
       });
   };
   const handleOk = () => {
+    if (!imageUrl) {
+      notification.warn({
+        message: '支付凭证不能为空',
+      });
+      return;
+    }
     const params = {
       image: imageUrl,
       orderId,
@@ -104,6 +110,7 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
   };
   const handleCancel = () => {
     closeModal();
+    history.push(`/mall/cart/payed?orderId=${orderId}`);
   };
   return (
     <div>
@@ -146,7 +153,7 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
       </div>
       <div className="text-right px-5">
         <Button type="primary" size="large" onClick={handlePay}>
-          确认支付
+          {!distributorIntegralPayEnable && !distributorRebatePayEnable ? '上传凭证' : '确认支付'}
         </Button>
       </div>
       <Modal visible={isVisible} cancelText="待会上传" okText="确认上传" onCancel={handleCancel} onOk={handleOk} title={'上传凭证'}>

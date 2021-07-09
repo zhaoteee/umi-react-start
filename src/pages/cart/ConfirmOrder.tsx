@@ -94,6 +94,7 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
           addressId: selectedAddressId,
           productId,
           quantity,
+          consumerRemark,
         };
     addOrder(params).then((res: any) => {
       if (res.success) {
