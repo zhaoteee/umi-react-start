@@ -43,7 +43,7 @@ const MallHeader: React.FC<MallHeaderType> = (props) => {
       </div>
       <div className={styles.orderInfo}>
         <Link className={styles.mycart} to="/mall/cart">
-          <svg t="1625724881103" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7769" width="200" height="200">
+          <svg t="1625724881103" className="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="7769" width="200" height="200">
             <path d="M352 832m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z" p-id="7770" fill="#FF0036"></path>
             <path d="M800 832m-64 0a64 64 0 1 0 128 0 64 64 0 1 0-128 0Z" p-id="7771" fill="#FF0036"></path>
             <path

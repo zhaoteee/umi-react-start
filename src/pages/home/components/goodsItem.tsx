@@ -36,7 +36,7 @@ const GoodsItem: React.FC<GooodsItemProps> = (props) => {
       </Link>
       <div className={styles.sliderIcon}>
         {imgList.map((url, idx) => (
-          <div onClick={() => changeImg(url, idx)} key={url} className={`${current === idx ? styles.current : ''} ${styles.sliderImgItemWrap}`}>
+          <div onClick={() => changeImg(url, idx)} key={idx} className={`${current === idx ? styles.current : ''} ${styles.sliderImgItemWrap}`}>
             <img src={`${url}_100w`} />
           </div>
         ))}

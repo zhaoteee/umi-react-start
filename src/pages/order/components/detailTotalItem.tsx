@@ -13,7 +13,7 @@ const DetailTotal: React.FC<DetailTotalProps> = (props) => {
       <Descriptions>
         <Descriptions.Item label="商品金额">{`￥${toDecimal(info.totalAmount)}`}</Descriptions.Item>
         <Descriptions.Item label="积分支付">{`￥${toDecimal(info.integralAmount)}`}</Descriptions.Item>
-        <Descriptions.Item label="使用积分">{`￥${toDecimal(info.integral)}`}</Descriptions.Item>
+        <Descriptions.Item label="使用积分">{info.integral}</Descriptions.Item>
         <Descriptions.Item label="返利支付">{`￥${toDecimal(info.rebateAmount)}`}</Descriptions.Item>
         <Descriptions.Item label="线下打款">{`￥${toDecimal(info.offlineAmount)}`}</Descriptions.Item>
       </Descriptions>
