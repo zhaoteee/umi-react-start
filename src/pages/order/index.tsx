@@ -71,7 +71,7 @@ const IndexPage: React.FC = () => {
   };
   const onConfirmSearch = (val: string) => {
     setKeyword(val);
-    getData({ keyword: val, current: 1 });
+    getData({ title: val, current: 1 });
   };
   const onConfirmChange = (val: number) => {
     setStatus(Number(val));
