@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import type { payDetailType } from '@/pages/cart/components/PaddingPayOrder';
+import type { payDetailType, orderStatusType } from '@/pages/cart/components/PaddingPayOrder';
 import PaddingPayOrder from '@/pages/cart/components/PaddingPayOrder';
 import { PageHeader, Spin } from 'antd';
 import type { Location } from 'umi';
@@ -7,7 +7,6 @@ import { history, useLocation } from 'umi';
 import { getPayDetail } from '@/services/order';
 import './index.less';
 
-export type OrderPayStatus = 'padding' | 'success';
 const initialPayDetail = {
   distributorIntegralPayEnable: true, // 是否开启经销商积分支付
   distributorRebatePayEnable: false, // 是否开启经销商返利支付
@@ -21,6 +20,7 @@ const initialPayDetail = {
   totalAmount: 0, // 订单总金额
   totalRebate: 0,
   totalIntegral: 0,
+  orderStatus: 'WAIT_PAY' as orderStatusType,
 };
 const PayingOrder: React.FC = () => {
   const location: Location<{ query: { orderId: string } }> = useLocation();

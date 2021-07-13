@@ -21,19 +21,30 @@ export type payDetailType = {
   totalAmount: number; // 订单总金额
   totalIntegral: number; // 剩余积分
   totalRebate: number; // 剩余返利
+  orderStatus: orderStatusType;
 };
+
+export type orderStatusType = 'WAIT_PAY' | 'PART_PAY' | 'WAIT_CONFIRM' | 'WAIT_SHIP' | 'PART_SHIP' | 'SHIPED' | 'CANCELED';
+
 type PaddingPayOrderType = {
   orderId: string;
   detail: payDetailType;
   setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
 type payWayType = 'INTEGRAL_PAY' | 'REBATE_PAY' | '';
+
 const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLoading }) => {
   const { distributorIntegralPayEnable, distributorRebatePayEnable, rebateAmount, totalAmount, integralAmount } = detail;
   const [isVisible, { setTrue: openModal, setFalse: closeModal }] = useBoolean(false);
   const [payMethod, setPayMethod] = useState<payWayType>('');
   const [remainAmount, setRemainAmount] = useState<number>(0);
   const [imageUrl, setImageUrl] = useState('');
+  const [hasPayed, setHasPayed] = useState(false);
+
+  useEffect(() => {
+    setHasPayed(detail.orderStatus !== 'WAIT_PAY');
+  }, [detail.orderStatus]);
 
   useEffect(() => {
     if (distributorIntegralPayEnable) {
@@ -67,7 +78,8 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
   }, []);
 
   const handlePay = () => {
-    if (!distributorIntegralPayEnable && !distributorRebatePayEnable) {
+    // 如果返利支付或者积分支付没有权限 或者 已经支付 直接展示上传凭证窗口
+    if ((!distributorIntegralPayEnable && !distributorRebatePayEnable) || hasPayed) {
       openModal();
       return;
     }
@@ -80,6 +92,7 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
       .then((res: any) => {
         setLoading(false);
         if (res.success) {
+          setHasPayed(true);
           if (remainAmount > 0) {
             openModal();
           } else {
@@ -152,7 +165,7 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
       </div>
       <div className="text-right px-5">
         <Button type="primary" size="large" onClick={handlePay}>
-          {!distributorIntegralPayEnable && !distributorRebatePayEnable ? '上传凭证' : '确认支付'}
+          {(!distributorIntegralPayEnable && !distributorRebatePayEnable) || hasPayed ? '上传凭证' : '确认支付'}
         </Button>
       </div>
       <Modal visible={isVisible} cancelText="待会上传" okText="确认上传" onCancel={handleCancel} onOk={handleOk} title={'上传凭证'}>
