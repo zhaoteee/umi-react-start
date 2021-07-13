@@ -49,6 +49,11 @@ type ParamsPropsType = {
   size?: number;
   title?: string;
 };
+type SearchParamsType = {
+  brandIds?: string[];
+  categoryIds?: string[];
+  supplierIds?: string[];
+};
 
 const IndexPage: React.FC = () => {
   const dispatch: Dispatch = useDispatch();
@@ -59,8 +64,9 @@ const IndexPage: React.FC = () => {
   });
   const [goodsList, setGoodsList] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchParams, setSearchParams] = useState<SearchParamsType>({});
   const location: Location = useLocation();
-  const getData = (p: ParamsPropsType) => {
+  const getData = (p: ParamsPropsType & SearchParamsType) => {
     setIsLoading(true);
     const params = {
       current: pageInfo.current,
@@ -94,11 +100,12 @@ const IndexPage: React.FC = () => {
       a[c.value] = c.options.map((op) => op.keyId);
       return a;
     }, {});
+    setSearchParams(obj);
     getData(obj);
   };
   useEffect(() => {
     const { keyword = '' } = location.query as HomeQueryType;
-    const p = keyword ? { title: keyword } : {};
+    const p = keyword ? { title: keyword, ...searchParams } : searchParams;
     getData(p);
     dispatch({
       type: 'cart/getCartTotalCount',
