@@ -38,7 +38,6 @@ const GoodsInfo: React.FC = () => {
     }
     return p.resource;
   });
-  console.log(productImage[0]);
   const [productImg, setProductImg] = useState('');
   const imgList = productImage;
   const [current, setCurrent] = useState(-1);
@@ -61,7 +60,7 @@ const GoodsInfo: React.FC = () => {
         productInfoExtDTO,
         productAttributeDTOs,
       };
-      const img = preFixPath + res.data.productInfoExtDTO.productImages[0].resource;
+      const img = res.data.productInfoExtDTO.productImages[0].resource;
       setProductImg(img);
       setData(data);
       setLoading(false);
