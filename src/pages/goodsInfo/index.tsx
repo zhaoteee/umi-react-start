@@ -61,6 +61,7 @@ const GoodsInfo: React.FC = () => {
         productAttributeDTOs,
       };
       const img = res.data.productInfoExtDTO.productImages[0].resource;
+      document.title = title;
       setProductImg(img);
       setData(data);
       setLoading(false);
@@ -131,14 +132,16 @@ const GoodsInfo: React.FC = () => {
           </div>
         </div>
         <div className={styles.attr}>
-          <Card title="商品属性" className={styles.proIn}>
-            {InfoData.productAttributeDTOs.map((it, idx) => (
-              <div key={idx} className={styles.proAttr}>
-                <span>{it.attributeName}</span>: <span>{it.attributeValue}</span>
-              </div>
-            ))}
-          </Card>
-          <Card title="商品详情">
+          {InfoData.productAttributeDTOs.length ? (
+            <Card title="商品属性" className={styles.proIn}>
+              {InfoData.productAttributeDTOs.map((it, idx) => (
+                <div key={idx} className={styles.proAttr}>
+                  <span>{it.attributeName}</span>: <span>{it.attributeValue}</span>
+                </div>
+              ))}
+            </Card>
+          ) : null}
+          <Card title="商品详情" className={styles.info}>
             <div style={{ textAlign: 'center' }} dangerouslySetInnerHTML={{ __html: InfoData.productInfoExtDTO.description }}></div>
           </Card>
         </div>
