@@ -82,9 +82,6 @@ const GoodsInfo: React.FC = () => {
     }, 500);
   };
   const onchange = (e: any) => {
-    if (e > InfoData.stock) {
-      message.warning('暂无这么多库存!');
-    }
     setMoney(e);
   };
 
@@ -118,7 +115,7 @@ const GoodsInfo: React.FC = () => {
             </div>
             <div className={styles.right_symbol}>
               <span style={{ marginRight: '30px' }}>数量</span>
-              <InputNumber defaultValue={1} min={1} onChange={onchange} />
+              <InputNumber defaultValue={1} min={1} max={InfoData.stock} onChange={onchange} />
             </div>
             <Button danger onClick={() => addToCart()}>
               加入购物车
