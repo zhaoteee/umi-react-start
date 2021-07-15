@@ -2,11 +2,13 @@ import React from 'react';
 import AddressCardItem from '@/pages/cart/components/AddressCardItem';
 import { history } from 'umi';
 import type { addressItem } from '@/hooks/useAddress';
+import { Button } from 'antd';
 
 type AddressCardType = {
   addressList: addressItem[];
   updateAddressChecked: (item: addressItem) => void;
   handleEditAddress: (id: string) => void;
+  openModal: () => void;
 };
 const AddressCard: React.FC<AddressCardType> = (props) => {
   const { addressList, updateAddressChecked, handleEditAddress } = props;
@@ -19,9 +21,18 @@ const AddressCard: React.FC<AddressCardType> = (props) => {
         </span>
       </div>
       <div className="flex items-center overflow-x-auto p-2.5 bg-gray-100 border rounded">
-        {addressList.map((item) => {
-          return <AddressCardItem item={item} key={item.id} updateAddressChecked={updateAddressChecked} handleEditAddress={handleEditAddress} />;
-        })}
+        {addressList.length ? (
+          addressList.map((item) => {
+            return <AddressCardItem item={item} key={item.id} updateAddressChecked={updateAddressChecked} handleEditAddress={handleEditAddress} />;
+          })
+        ) : (
+          <div>
+            <span>暂无收货地址</span>
+            <Button type="link" className="text-blue-500" onClick={props.openModal}>
+              立即添加
+            </Button>
+          </div>
+        )}
       </div>
     </div>
   );
