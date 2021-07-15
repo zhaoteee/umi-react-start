@@ -2,11 +2,10 @@
 import { defineConfig } from 'umi';
 import proxy from './proxy';
 const { REACT_APP_ENV } = process.env;
-const productionPublicPath = '//misc.hzzcckj.cn/skin/cg/1.0.0/';
 
 export default defineConfig({
   base: '/integral/',
-  publicPath: REACT_APP_ENV === 'dev' || REACT_APP_ENV === 'test' ? '/integral/' : productionPublicPath,
+  publicPath: '/integral/',
   hash: true,
   antd: {},
   // publicPath: process.env.NODE_ENV === 'production' ? '/1.0.0/' : '/',
