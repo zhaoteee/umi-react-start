@@ -5,7 +5,7 @@ const { REACT_APP_ENV } = process.env;
 const productionPublicPath = '//misc.hzzcckj.cn/skin/cg/1.0.0/';
 
 export default defineConfig({
-  base: REACT_APP_ENV === 'test' ? '/integral/' : '/',
+  base: '/integral/',
   publicPath: REACT_APP_ENV === 'dev' || REACT_APP_ENV === 'test' ? '/integral/' : productionPublicPath,
   hash: true,
   antd: {},
