@@ -68,9 +68,12 @@ const IndexPage: React.FC = () => {
   const location: Location = useLocation();
   const getData = (p: ParamsPropsType & SearchParamsType) => {
     setIsLoading(true);
+    const { keyword = '' } = location.query as HomeQueryType;
+    const query = keyword ? { title: keyword } : {};
     const params = {
       current: pageInfo.current,
       size: pageInfo.size,
+      ...query,
       ...p,
     };
     getProductList(params).then((res) => {
@@ -104,9 +107,7 @@ const IndexPage: React.FC = () => {
     getData(obj);
   };
   useEffect(() => {
-    const { keyword = '' } = location.query as HomeQueryType;
-    const p = keyword ? { title: keyword, ...searchParams } : searchParams;
-    getData(p);
+    getData(searchParams);
     dispatch({
       type: 'cart/getCartTotalCount',
     });
