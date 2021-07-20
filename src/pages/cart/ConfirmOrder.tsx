@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import './index.less';
 import CartHeader from '@/pages/cart/components/CartHeader';
 import CartList from '@/pages/cart/components/CartList';
-import { Spin, Input, PageHeader } from 'antd';
+import { Spin, Input, PageHeader, notification } from 'antd';
 import AddressCard from '@/pages/cart/components/AddressCard';
 import { toDecimal } from '@/utils/util';
 import type { Location } from 'umi';
@@ -39,7 +39,7 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
   const [isVisible, { setTrue: openModal, setFalse: closeModal }] = useBoolean(false);
   const [editingAddressId, setEditingAddressId] = useState('');
   const [consumerRemark, setConsumerRemark] = useState('');
-  const { addressList, updateAddressChecked, updateAddress, selectedAddressId } = useAddress();
+  const { addressList, updateAddressChecked, updateAddress, selectedAddressId, addNewAddress } = useAddress();
   const [selectedList, setSelectedList] = useState<CartItemInfo[]>([]);
   const [detailLoading, setDetailLoading] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
@@ -84,6 +84,12 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
   }, [dispatch, productId, quantity]);
 
   const handleSubmit = () => {
+    if (!selectedAddressId) {
+      notification.warn({
+        message: '请选择收货地址',
+      });
+      return;
+    }
     const params = !productId
       ? {
           addressId: selectedAddressId,
@@ -106,7 +112,7 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
     <Spin spinning={productId ? detailLoading : loading}>
       <div>
         <PageHeader className="p-2.5 border-b-2 border-red-500" title="确认订单" onBack={() => history.goBack()} />
-        <AddressCard addressList={addressList} updateAddressChecked={updateAddressChecked} handleEditAddress={handleEditAddress} />
+        <AddressCard openModal={openModal} addressList={addressList} updateAddressChecked={updateAddressChecked} handleEditAddress={handleEditAddress} />
         <div className="p-2.5 font-bold">确认订单信息</div>
         <CartHeader headerColumns={headerColumns} />
         <CartList list={selectedList} canEdit={false} col={col} />
@@ -123,7 +129,7 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
             提交订单
           </div>
         </div>
-        <EditAddressForm isVisible={isVisible} id={editingAddressId} onCancel={closeModal} updateAddress={updateAddress} />
+        <EditAddressForm isVisible={isVisible} id={editingAddressId} onCancel={closeModal} updateAddress={updateAddress} addNewAddress={addNewAddress} />
       </div>
     </Spin>
   );
