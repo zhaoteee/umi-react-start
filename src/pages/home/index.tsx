@@ -130,7 +130,7 @@ const IndexPage: React.FC = () => {
                 pageSize={pageInfo.size}
                 total={pageInfo.total}
                 onChange={(page: number, pageSize?: number) => {
-                  getData({ current: page, size: pageSize });
+                  getData({ current: page, size: pageSize, ...searchParams });
                 }}
               />
             </div>
