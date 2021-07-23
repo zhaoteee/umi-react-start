@@ -47,7 +47,8 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
   }, [detail.orderStatus]);
 
   useEffect(() => {
-    if (distributorIntegralPayEnable) {
+    // 当开启了积分支付 并且积分抵扣金额大于要支付的总额的时候,才设置积分支付
+    if (distributorIntegralPayEnable && integralAmount >= totalAmount) {
       setPayMethod('INTEGRAL_PAY');
       setRemainAmount(totalAmount - integralAmount);
       return;
@@ -142,7 +143,9 @@ const PaddingPayOrder: React.FC<PaddingPayOrderType> = ({ detail, orderId, setLo
         {(distributorIntegralPayEnable || distributorRebatePayEnable) && (
           <Radio.Group value={payMethod} onChange={handlePayChange}>
             <Space direction="vertical">
-              {distributorIntegralPayEnable && <Radio value={'INTEGRAL_PAY'}>{`可用${detail.integral}积分抵扣￥${toDecimal(detail.integralAmount)}（积分余额${detail.totalIntegral}）`}</Radio>}
+              {distributorIntegralPayEnable && integralAmount >= totalAmount && (
+                <Radio value={'INTEGRAL_PAY'}>{`可用${detail.integral}积分抵扣￥${toDecimal(detail.integralAmount)}（积分余额${detail.totalIntegral}）`}</Radio>
+              )}
               {distributorRebatePayEnable && <Radio value={'REBATE_PAY'}>{`返利可抵￥${toDecimal(detail.rebateAmount)} （返利余额￥${toDecimal(detail.totalRebate)}）`}</Radio>}
             </Space>
           </Radio.Group>
