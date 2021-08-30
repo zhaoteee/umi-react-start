@@ -71,6 +71,10 @@ const GoodsInfo: React.FC = () => {
     getDetailData();
   }, [location.query]);
   const addToCart = async () => {
+    if (InfoData.stock === 0) {
+      message.loading('商品库存不足!');
+      return;
+    }
     const hide = message.loading('正在加入购物车');
     await dispatch({
       type: 'cart/addGoodsToCart',
@@ -115,7 +119,7 @@ const GoodsInfo: React.FC = () => {
             </div>
             <div className={styles.right_symbol}>
               <span style={{ marginRight: '30px' }}>数量</span>
-              <InputNumber defaultValue={1} min={1} max={InfoData.stock} onChange={onchange} />
+              <InputNumber defaultValue={1} min={1} max={InfoData.stock} step={1} onChange={onchange} />
             </div>
             <Button danger onClick={() => addToCart()}>
               加入购物车
