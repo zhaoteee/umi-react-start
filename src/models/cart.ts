@@ -13,6 +13,8 @@ export type GoodsInfo = {
   supplierId: number;
   supplierName: string;
   unit: string;
+  orderNum: number;
+  primaryNum: number;
 };
 export type CartItemInfo = {
   supplierId: number;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Row, Col, Checkbox, InputNumber, Button, Modal } from 'antd';
+import { Row, Col, Checkbox, InputNumber, Button, Modal, message } from 'antd';
 import { preFixPath, toDecimal } from '@/utils/util';
 import type { CartItemInfo } from '@/models/cart';
 import { useDispatch } from '@@/plugin-dva/exports';
@@ -51,23 +51,28 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
   };
 
   const updateCartItemQuantity = debounce((item: GoodsInfo, quantity: number) => {
-    quantity = quantity || 1;
-    const farmatQuantity = !Number.isNaN(quantity) ? String(quantity).replace(/^(0+)|[^\d]/g, '') : '';
-    if (item.quantity === Number(farmatQuantity)) return;
+    if (quantity % item.primaryNum !== 0) {
+      message.warning(`下单只能是${item.primaryNum}的倍数`);
+      return;
+    }
+    if (item.quantity === quantity) return;
     dispatch({
       type: 'cart/updateCartItemQuantity',
       payload: {
         item,
-        quantity: farmatQuantity,
+        quantity,
       },
     });
   }, 500);
 
-  const limitNumber = (value: number | undefined) => {
+  const limitNumber = (value: number | undefined, item: GoodsInfo) => {
     if (value) {
-      return !Number.isNaN(value) ? String(value).replace(/^(0+)|[^\d]/g, '') : '';
+      return `${value}`;
     }
-    return '1';
+    return `${item.orderNum}`;
+  };
+  const parserNumber = (value: string | undefined) => {
+    return Number(value?.replace(/[^\d]/, ''));
   };
 
   return (
@@ -89,7 +94,18 @@ const CartListItem: React.FC<CartItemprops> = (props) => {
                 {`￥${toDecimal(item.invoicePrice)}`}
               </Col>
               <Col className="text-center" span={col![2]}>
-                {canEdit ? <InputNumber min={1} formatter={limitNumber} defaultValue={item.quantity} onChange={(quantity) => updateCartItemQuantity(item, quantity)} /> : <span>{item.quantity}</span>}
+                {canEdit ? (
+                  <InputNumber<number>
+                    min={item.orderNum}
+                    formatter={(value) => limitNumber(value, item)}
+                    parser={parserNumber}
+                    step={item.primaryNum}
+                    defaultValue={item.quantity}
+                    onChange={(quantity) => updateCartItemQuantity(item, quantity)}
+                  />
+                ) : (
+                  <span>{item.quantity}</span>
+                )}
               </Col>
               <Col className="pl-8 font-bold text-red-500" span={col![3]}>
                 {`￥${toDecimal(item.invoicePrice * item.quantity)}`}
