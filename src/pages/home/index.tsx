@@ -41,6 +41,8 @@ export type GoodsItemType = {
   title: string;
   unit: string;
   productInfoExtDTO: productInfoExtType;
+  orderNum: number;
+  primaryNum: number;
 };
 export type HomeQueryType = Location['query'] & { userToken?: string; origin?: string; keyword?: string };
 
@@ -91,7 +93,7 @@ const IndexPage: React.FC = () => {
     const hide = message.loading('正在加入购物车');
     await dispatch({
       type: 'cart/addGoodsToCart',
-      payload: { productId: p.id, quantity: 1 },
+      payload: { productId: p.id, quantity: p.orderNum || 1 },
     });
     setTimeout(() => {
       message.success('添加成功,请前往购物车查看');
@@ -121,7 +123,7 @@ const IndexPage: React.FC = () => {
           <>
             <div className={styles.goodsList}>
               {goodsList.map((item: GoodsItemType) => {
-                return <GoodsItem key={item.id} item={item} addToCart={addGoodsToCart}></GoodsItem>;
+                return <GoodsItem key={item.id} item={item} addToCart={addGoodsToCart} />;
               })}
             </div>
             <div style={{ textAlign: 'right' }}>
