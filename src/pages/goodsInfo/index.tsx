@@ -21,6 +21,7 @@ const GoodsInfo: React.FC = () => {
     supplierId: '',
     title: '',
     unit: '',
+    primaryNum: '',
     productInfoExtDTO: {
       description: '',
       id: '',
@@ -49,7 +50,7 @@ const GoodsInfo: React.FC = () => {
   const getDetailData = () => {
     setLoading(true);
     getDetail(id).then((res) => {
-      const { brandId, brandName, stock, invoicePrice, title, productInfoExtDTO, productAttributeDTOs } = res.data;
+      const { brandId, brandName, stock, invoicePrice, title, productInfoExtDTO, productAttributeDTOs, primaryNum } = res.data;
       const data = {
         ...res.data,
         brandId,
@@ -59,6 +60,7 @@ const GoodsInfo: React.FC = () => {
         title,
         productInfoExtDTO,
         productAttributeDTOs,
+        primaryNum,
       };
       const img = res.data.productInfoExtDTO.productImages[0].resource;
       document.title = title;
@@ -119,7 +121,7 @@ const GoodsInfo: React.FC = () => {
             </div>
             <div className={styles.right_symbol}>
               <span style={{ marginRight: '30px' }}>数量</span>
-              <InputNumber defaultValue={1} min={1} max={InfoData.stock} step={1} onChange={onchange} />
+              <InputNumber defaultValue={1} min={1} max={InfoData.stock} step={InfoData.primaryNum} onChange={onchange} />
             </div>
             <Button danger onClick={() => addToCart()}>
               加入购物车
