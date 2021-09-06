@@ -18,6 +18,7 @@ export type OrderModelState = {
   detail: DetailInfo;
 };
 export type DetailInfo = {
+  id: string;
   sn: string;
   orderStatus: string;
   statusText: string;
@@ -36,9 +37,16 @@ export type DetailInfo = {
   rebateAmount: number;
   offlineAmount: number;
   hasOperate: boolean;
+  shipDTOList: shipInfo[];
   integralOrderItemDTOs: goodInfo[];
 };
+export type shipInfo = {
+  shipStoreHouse: string;
+  expressName: string;
+  expressNo: string;
+};
 const initialDetail = {
+  id: '',
   sn: '',
   orderStatus: '',
   statusText: '',
@@ -58,6 +66,7 @@ const initialDetail = {
   offlineAmount: 0,
   hasOperate: false,
   integralOrderItemDTOs: [],
+  shipDTOList: [],
 };
 const OrderModel: ModelType = {
   namespace: 'detail',
@@ -82,7 +91,14 @@ const OrderModel: ModelType = {
   reducers: {
     saveOrderDetail(state, { payload }): OrderModelState {
       payload.statusText = statusMap[payload.orderStatus];
-      payload.integralOrderItemDTOs.map((item) => {
+      payload.shipDTOList.map((item: any) => {
+        return {
+          shipStoreHouse: item.shipStoreHouse,
+          expressName: item.expressName,
+          expressNo: item.expressNo,
+        };
+      });
+      payload.integralOrderItemDTOs.map((item: any) => {
         if (item.images && item.images.indexOf('http') < 0) {
           item.images = preFixPath + item.images;
         }

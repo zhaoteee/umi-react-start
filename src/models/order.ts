@@ -4,7 +4,7 @@ export type OrderModelState = {
   total: number;
 };
 export type OrderItemInfo = {
-  id: number;
+  id: string;
   supplierName: string;
   sn: string;
   createDate: string;
@@ -12,9 +12,27 @@ export type OrderItemInfo = {
   statusText: string;
   hasOperate: boolean;
   integralOrderItemDTOs: goodInfo[];
+  shipDTOList: shipInfo[];
+  totalAmount: number;
+  address: string;
+  receiverContactName: string;
+  receiverContactPhone: string;
+  payDate: string;
+  shipDate: string;
+  sellerRemark: string;
+  receivableAmount: number;
+  integralAmount: number;
+  integral: number;
+  rebateAmount: number;
+  offlineAmount: number;
+};
+export type shipInfo = {
+  shipStoreHouse: string;
+  expressName: string;
+  expressNo: string;
 };
 export type goodInfo = {
-  id: number;
+  id: string;
   images: string;
   title: string;
   price: number;

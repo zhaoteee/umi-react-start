@@ -9,6 +9,7 @@ import OrderItem from './components/orderItem';
 import DetailTotal from './components/detailTotalItem';
 import DetailFooter from './components/detailFooterItem';
 import VoucherModal from './components/voucherModal';
+import DetailShip from './components/detailShipItem';
 
 type detailQuery = { id: string };
 type DetailProps = {
@@ -29,7 +30,7 @@ const OrderDetail: React.FC<DetailProps> = (props) => {
   const { detail } = props;
   const { query } = props.location;
   const dispatch = useDispatch();
-  const getData = (q) => {
+  const getData = (q: any) => {
     setIsShow(false);
     dispatch({
       type: 'detail/getData',
@@ -46,6 +47,7 @@ const OrderDetail: React.FC<DetailProps> = (props) => {
         <DetailHeader info={detail} />
         <OrderHeader headerColumns={headerColumns} />
         <OrderItem info={detail} />
+        <DetailShip info={detail} />
         <DetailTotal info={detail} />
         {(detail.orderStatus === 'PART_PAY' || detail.orderStatus === 'WAIT_PAY') && (
           <div className="mt-5 mb-5">

@@ -16,7 +16,7 @@ const ListItem: React.FC<OrderItemProps> = (props) => {
   const [isShow, setIsShow] = React.useState(false);
   const onHandleOK = () => {
     setIsShow(false);
-    onHandleCancel();
+    if (onHandleCancel) onHandleCancel();
   };
   return (
     <div className="border mt-2">
@@ -31,7 +31,7 @@ const ListItem: React.FC<OrderItemProps> = (props) => {
         </Col>
         <Col span="4" className="text-right pr-2.5">
           {info.hasOperate && (info.orderStatus === 'PART_PAY' || info.orderStatus === 'WAIT_PAY') && (
-            <DetailFooter info={info} onHandleCancel={() => onHandleCancel()} onHandleShow={() => setIsShow(true)} />
+            <DetailFooter info={info} onHandleCancel={() => onHandleCancel && onHandleCancel()} onHandleShow={() => setIsShow(true)} />
           )}
           {!info.hasOperate && <span className="text-red-500">{info.statusText}</span>}
         </Col>
@@ -41,21 +41,21 @@ const ListItem: React.FC<OrderItemProps> = (props) => {
           info.integralOrderItemDTOs.map((item) => {
             return (
               <Row className="pt-5 pb-5" key={item.id}>
-                <Col span={col[0]} className="flex">
+                <Col span={col![0]} className="flex">
                   <img className="w-25 h-25 mx-2.5 object-cover flex-shrink-0 ml-5" src={`${item.images}_100w`} alt="" />
                   <div className="text-gray-500">{item.title}</div>
                 </Col>
-                <Col span={col[1]} className="text-left font-bold text-gray-700">
+                <Col span={col![1]} className="text-left font-bold text-gray-700">
                   {`￥${toDecimal(item.price)}`}
                 </Col>
-                <Col span={col[2]} className="text-left font-bold text-gray-700">
+                <Col span={col![2]} className="text-left font-bold text-gray-700">
                   {item.quantity}
                 </Col>
-                <Col span={col[3]} className="text-left font-bold text-gray-700">
+                <Col span={col![3]} className="text-left font-bold text-gray-700">
                   {`￥${toDecimal(item.totalAmount)}`}
                 </Col>
                 {info.hasOperate && (
-                  <Col span={col[3]} className="text-center">
+                  <Col span={col![3]} className="text-center">
                     <Button type="link" onClick={() => history.push(`/mall/order/detail?id=${info.id}`)}>
                       详情
                     </Button>
