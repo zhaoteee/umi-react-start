@@ -38,7 +38,7 @@ const IndexPage: React.FC = () => {
       .then((res) => {
         const data = res.data || { records: [], current: 1, size: 20, total: 0 };
         const { current, total, size } = data;
-        const list = (data.records || []).map((item) => {
+        const list = (data.records || []).map((item: any) => {
           return {
             id: item.id,
             sn: item.sn,
@@ -47,7 +47,7 @@ const IndexPage: React.FC = () => {
             supplierName: item.supplierName,
             statusText: statusMap[item.orderStatus],
             hasOperate: true,
-            integralOrderItemDTOs: (item.integralOrderItemDTOs || []).map((cell) => {
+            integralOrderItemDTOs: (item.integralOrderItemDTOs || []).map((cell: any) => {
               if (cell.images && cell.images.indexOf('http') < 0) {
                 cell.images = preFixPath + cell.images;
               }

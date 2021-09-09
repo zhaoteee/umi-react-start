@@ -21,7 +21,7 @@ const ListItem: React.FC<OrderItemProps> = (props) => {
   return (
     <div className="border mt-2">
       <Row className="bg-gray-100 pt-2 pb-2">
-        <Col span="20" className="pl-2">
+        <Col span="18" className="pl-2">
           <span className="pr-5">下单时间：{info.createDate}</span>订单号：
           <span className="pr-5 cursor-pointer" onClick={() => info.hasOperate && history.push(`/mall/order/detail?id=${info.id}`)}>
             {info.sn}
@@ -29,7 +29,7 @@ const ListItem: React.FC<OrderItemProps> = (props) => {
           <span className="pr-5">品牌商名称：{info.supplierName}</span>
           {info.hasOperate && <span className="text-red-500">{info.statusText}</span>}
         </Col>
-        <Col span="4" className="text-right pr-2.5">
+        <Col span="6" className="text-right pr-2.5">
           {info.hasOperate && (info.orderStatus === 'PART_PAY' || info.orderStatus === 'WAIT_PAY') && (
             <DetailFooter info={info} onHandleCancel={() => onHandleCancel && onHandleCancel()} onHandleShow={() => setIsShow(true)} />
           )}

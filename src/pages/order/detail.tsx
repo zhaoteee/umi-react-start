@@ -47,7 +47,7 @@ const OrderDetail: React.FC<DetailProps> = (props) => {
         <DetailHeader info={detail} />
         <OrderHeader headerColumns={headerColumns} />
         <OrderItem info={detail} />
-        <DetailShip info={detail} />
+        {detail.shipDTOList.length > 0 && <DetailShip info={detail} />}
         <DetailTotal info={detail} />
         {(detail.orderStatus === 'PART_PAY' || detail.orderStatus === 'WAIT_PAY') && (
           <div className="mt-5 mb-5">

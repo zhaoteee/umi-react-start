@@ -19,7 +19,7 @@ export type OrderItemInfo = {
   receiverContactPhone: string;
   payDate: string;
   shipDate: string;
-  sellerRemark: string;
+  consumerRemark: string;
   receivableAmount: number;
   integralAmount: number;
   integral: number;
@@ -47,4 +47,5 @@ export const statusMap = {
   CANCELED: '已关闭',
   WAIT_SHIP: '待发货',
   PART_SHIP: '部分发货',
+  PAYMENT_REVIEW: '打款审核',
 };

@@ -19,15 +19,15 @@ const DetailHeader: React.FC<DetailHeaderProp> = (props) => {
         extra={<span className="text-red-500 text-2xl">{`￥${toDecimal(info.receivableAmount)}`}</span>}
       />
       <Descriptions className="bg-gray-50 p-2 pb-0 mb-2.5 border-t-2 border-red-500">
-        <Descriptions.Item label="下单时间">{info.createDate}</Descriptions.Item>
-        <Descriptions.Item label="支付时间">{info.payDate}</Descriptions.Item>
-        <Descriptions.Item label="发货时间">{info.shipDate}</Descriptions.Item>
+        <Descriptions.Item label="下单时间">{info.createDate || '-'}</Descriptions.Item>
+        <Descriptions.Item label="支付时间">{info.payDate || '-'}</Descriptions.Item>
+        <Descriptions.Item label="发货时间">{info.shipDate || '-'}</Descriptions.Item>
         <Descriptions.Item label="收货人信息" span={3}>
           {info.receiverContactName}-{info.address}-{info.receiverContactPhone}
         </Descriptions.Item>
-        {info.sellerRemark && (
+        {info.consumerRemark && (
           <Descriptions.Item label="买家备注" span={3}>
-            {info.sellerRemark}
+            {info.consumerRemark}
           </Descriptions.Item>
         )}
       </Descriptions>
