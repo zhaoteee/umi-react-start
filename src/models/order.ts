@@ -19,7 +19,7 @@ export type OrderItemInfo = {
   receiverContactPhone: string;
   payDate: string;
   shipDate: string;
-  sellerRemark: string;
+  consumerRemark: string;
   receivableAmount: number;
   integralAmount: number;
   integral: number;

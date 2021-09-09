@@ -30,7 +30,7 @@ export type DetailInfo = {
   supplierName: string;
   payDate: string;
   shipDate: string;
-  sellerRemark: string;
+  consumerRemark: string;
   receivableAmount: number;
   integralAmount: number;
   integral: number;
@@ -58,7 +58,7 @@ const initialDetail = {
   supplierName: '',
   payDate: '',
   shipDate: '',
-  sellerRemark: '',
+  consumerRemark: '',
   receivableAmount: 0,
   integralAmount: 0,
   integral: 0,
