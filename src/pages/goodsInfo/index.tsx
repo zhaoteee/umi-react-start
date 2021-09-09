@@ -41,7 +41,7 @@ const GoodsInfo: React.FC = () => {
     return p.resource;
   });
   const [productImg, setProductImg] = useState('');
-  // const [initOrderNum, setOrderNum] = useState(InfoData.orderNum);
+  const [initOrderNum, setOrderNum] = useState(InfoData.orderNum);
   const imgList = productImage;
   const [current, setCurrent] = useState(-1);
   const changeImg = (url: string, idx: number) => {
@@ -70,7 +70,7 @@ const GoodsInfo: React.FC = () => {
       document.title = title;
       console.log(orderNum);
       setProductImg(img);
-      // setOrderNum(orderNum)
+      setOrderNum(orderNum);
       setData(data);
       setLoading(false);
     });
@@ -94,6 +94,7 @@ const GoodsInfo: React.FC = () => {
     }, 500);
   };
   const onchange = (e: any) => {
+    setOrderNum(e);
     setMoney(e);
   };
 
@@ -127,7 +128,7 @@ const GoodsInfo: React.FC = () => {
             </div>
             <div className={styles.right_symbol}>
               <span style={{ marginRight: '30px' }}>数量</span>
-              <InputNumber defaultValue={InfoData.orderNum} min={InfoData.orderNum} value={InfoData.orderNum} max={InfoData.stock} step={InfoData.primaryNum} onChange={onchange} />
+              <InputNumber defaultValue={initOrderNum} min={InfoData.orderNum} value={initOrderNum} max={InfoData.stock} step={InfoData.primaryNum} onChange={onchange} />
             </div>
             <Button danger onClick={() => addToCart()}>
               加入购物车
