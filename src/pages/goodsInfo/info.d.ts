@@ -19,7 +19,8 @@ export type InfoItem = {
   supplierId: string;
   title: string;
   unit: string;
-  primaryNum: string;
+  primaryNum: number;
+  orderNum: number;
   productInfoExtDTO: productInfoExtDTOInfo;
   productAttributeDTOs: productAttributeDTOs;
 };

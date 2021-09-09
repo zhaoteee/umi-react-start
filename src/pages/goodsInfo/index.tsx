@@ -20,8 +20,9 @@ const GoodsInfo: React.FC = () => {
     stock: 0,
     supplierId: '',
     title: '',
+    orderNum: 0,
     unit: '',
-    primaryNum: '',
+    primaryNum: 0,
     productInfoExtDTO: {
       description: '',
       id: '',
@@ -40,17 +41,18 @@ const GoodsInfo: React.FC = () => {
     return p.resource;
   });
   const [productImg, setProductImg] = useState('');
+  // const [initOrderNum, setOrderNum] = useState(InfoData.orderNum);
   const imgList = productImage;
   const [current, setCurrent] = useState(-1);
   const changeImg = (url: string, idx: number) => {
     setProductImg(url);
     setCurrent(idx);
   };
-  const [totalMoney, setMoney] = useState(1);
+  const [totalMoney, setMoney] = useState(InfoData.primaryNum);
   const getDetailData = () => {
     setLoading(true);
     getDetail(id).then((res) => {
-      const { brandId, brandName, stock, invoicePrice, title, productInfoExtDTO, productAttributeDTOs, primaryNum } = res.data;
+      const { brandId, brandName, stock, invoicePrice, title, productInfoExtDTO, productAttributeDTOs, primaryNum, orderNum } = res.data;
       const data = {
         ...res.data,
         brandId,
@@ -61,10 +63,14 @@ const GoodsInfo: React.FC = () => {
         productInfoExtDTO,
         productAttributeDTOs,
         primaryNum,
+        orderNum,
       };
+      console.log(data, 'data');
       const img = res.data.productInfoExtDTO.productImages[0].resource;
       document.title = title;
+      console.log(orderNum);
       setProductImg(img);
+      // setOrderNum(orderNum)
       setData(data);
       setLoading(false);
     });
@@ -121,7 +127,7 @@ const GoodsInfo: React.FC = () => {
             </div>
             <div className={styles.right_symbol}>
               <span style={{ marginRight: '30px' }}>数量</span>
-              <InputNumber defaultValue={1} min={1} max={InfoData.stock} step={InfoData.primaryNum} onChange={onchange} />
+              <InputNumber defaultValue={InfoData.orderNum} min={InfoData.orderNum} value={InfoData.orderNum} max={InfoData.stock} step={InfoData.primaryNum} onChange={onchange} />
             </div>
             <Button danger onClick={() => addToCart()}>
               加入购物车
