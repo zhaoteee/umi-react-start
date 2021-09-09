@@ -86,13 +86,19 @@ const CartModel: CartModelType = {
   state: initialState,
 
   effects: {
+    // eslint-disable-next-line consistent-return
     *addGoodsToCart({ payload }, { put, call }) {
-      // 触发添加到购物车
-      yield call(addToCart, payload);
-      // 更新购物车数据
-      yield put({
-        type: 'fetchCartInfo',
-      });
+      try {
+        // 触发添加到购物车
+        const res = yield call(addToCart, payload);
+        // 更新购物车数据
+        yield put({
+          type: 'fetchCartInfo',
+        });
+        return res;
+      } catch (e) {
+        Promise.reject(e);
+      }
     },
     *getCartTotalCount(_, { put, call }) {
       const res = yield call(getCartCount);

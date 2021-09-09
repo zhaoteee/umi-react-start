@@ -90,15 +90,12 @@ const IndexPage: React.FC = () => {
     });
   };
   const addGoodsToCart = async (p: GoodsItemType) => {
-    const hide = message.loading('正在加入购物车');
-    await dispatch({
+    // const hide = message.loading('正在加入购物车');
+    const res = await dispatch({
       type: 'cart/addGoodsToCart',
       payload: { productId: p.id, quantity: p.orderNum || 1 },
     });
-    setTimeout(() => {
-      message.success('添加成功,请前往购物车查看');
-      hide();
-    }, 500);
+    if (res) message.success('添加成功,请前往购物车查看');
   };
   const onConfirmSelect = (p: SearchListType[]) => {
     const obj = p.reduce((a, c) => {
