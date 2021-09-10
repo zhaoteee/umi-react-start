@@ -16,6 +16,7 @@ export type SearchListType = {
 };
 const selectedList: SearchListType[] = [];
 const Search: React.FC<SearchProps> = (props) => {
+  selectedList.splice(0);
   const [serachList, setSearchList] = useState<SearchListType[]>([]);
   useEffect(() => {
     getProductAgg().then((res) => {
