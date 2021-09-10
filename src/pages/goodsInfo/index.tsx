@@ -48,7 +48,7 @@ const GoodsInfo: React.FC = () => {
     setProductImg(url);
     setCurrent(idx);
   };
-  const [totalMoney, setMoney] = useState(InfoData.primaryNum);
+  const [totalMoney, setMoney] = useState('');
   const getDetailData = () => {
     setLoading(true);
     getDetail(id).then((res) => {
@@ -65,13 +65,12 @@ const GoodsInfo: React.FC = () => {
         primaryNum,
         orderNum,
       };
-      console.log(data, 'data');
       const img = res.data.productInfoExtDTO.productImages[0].resource;
       document.title = title;
-      console.log(orderNum);
       setProductImg(img);
       setOrderNum(orderNum);
       setData(data);
+      setMoney(orderNum);
       setLoading(false);
     });
   };
