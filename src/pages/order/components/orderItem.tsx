@@ -2,7 +2,7 @@ import React from 'react';
 import { Row, Col, Button } from 'antd';
 import type { OrderItemInfo } from '@/models/order';
 import { toDecimal } from '@/utils/util';
-import { history } from 'umi';
+import { history, Link } from 'umi';
 import DetailFooter from './detailFooterItem';
 import VoucherModal from './voucherModal';
 
@@ -56,9 +56,9 @@ const ListItem: React.FC<OrderItemProps> = (props) => {
                 </Col>
                 {info.hasOperate && (
                   <Col span={col![3]} className="text-center">
-                    <Button type="link" onClick={() => history.push(`/mall/order/detail?id=${info.id}`)}>
-                      详情
-                    </Button>
+                    <Link to={`/mall/order/detail?id=${info.id}`} target="_blank">
+                      <Button type="link">详情</Button>
+                    </Link>
                   </Col>
                 )}
               </Row>

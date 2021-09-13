@@ -10,15 +10,16 @@ import { getOrderList } from '@/services/order';
 import { preFixPath } from '@/utils/util';
 
 type orderQuery = {
-  status?: number;
+  orderStatus?: string;
   keyword?: string;
   current?: number;
   size?: number;
+  title?: string;
+  orderStatusList?: string[] | string;
 };
 const IndexPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [keyword, setKeyword] = useState('');
-  const [status, setStatus] = useState(null);
   const [orderList, setOrderList] = useState([]);
   const [pageInfo, setPageInfo] = useState({
     current: 1,
@@ -31,9 +32,10 @@ const IndexPage: React.FC = () => {
       current: pageInfo.current,
       size: pageInfo.size,
       title: keyword,
-      orderStatus: status,
       ...p,
     };
+    params.orderStatusList = params.orderStatus ? params.orderStatus.split(',') : [];
+    delete params.orderStatus;
     getOrderList(params)
       .then((res) => {
         const data = res.data || { records: [], current: 1, size: 20, total: 0 };
@@ -73,15 +75,14 @@ const IndexPage: React.FC = () => {
     setKeyword(val);
     getData({ title: val, current: 1 });
   };
-  const onConfirmChange = (val: number) => {
-    setStatus(Number(val));
+  const onConfirmChange = (val: string) => {
     getData({
-      orderStatus: Number(val),
+      orderStatus: val,
       current: 1,
     });
   };
   useEffect(() => {
-    getData();
+    getData({});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
@@ -92,7 +93,7 @@ const IndexPage: React.FC = () => {
         {orderList.length ? (
           <>
             <OrderHeader />
-            <OrderList list={orderList} onHandleCancel={() => getData()} />
+            <OrderList list={orderList} onHandleCancel={() => getData({})} />
             <Pagination
               current={pageInfo.current}
               pageSize={pageInfo.size}

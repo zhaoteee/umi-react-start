@@ -2,7 +2,7 @@ import React, { useEffect, useState, useCallback } from 'react';
 import { Modal, message } from 'antd';
 import type { UploadFile } from 'antd/es/upload/interface';
 import UploadImage from '@/components/UploadImage';
-import { uploadCredential } from '@/services/order';
+import { uploadCredential, confirmOrder } from '@/services/order';
 
 export type VoucherProps = {
   isShow: boolean;
@@ -21,13 +21,9 @@ const VoucherModal: React.FC<VoucherProps> = (props) => {
       message.info('请上传支付凭证');
       return;
     }
-    const params = {
-      image: imageUrl,
-      orderId: id,
-    };
-    uploadCredential(params).then((res: any) => {
+    confirmOrder(id).then((res: any) => {
       if (res.success) {
-        message.success('提交成功');
+        message.success('确认成功');
         onHandleOK();
       }
     });
@@ -35,6 +31,15 @@ const VoucherModal: React.FC<VoucherProps> = (props) => {
   const onUploadImage = useCallback((imgList: UploadFile[]) => {
     if (imgList.length) {
       setImageUrl(imgList[0].url as string);
+      const params = {
+        image: imgList[0].url || '',
+        orderId: id,
+      };
+      uploadCredential(params).then((res: any) => {
+        if (res.success) {
+          message.success('上传成功');
+        }
+      });
     }
   }, []);
   useEffect(() => {}, []);
