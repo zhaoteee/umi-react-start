@@ -11,7 +11,7 @@ const listItem: React.FC<OrderListProps> = (props) => {
   return (
     <div>
       {list.map((item) => {
-        return <OrderItem key={item.id} info={item} onHandleCancel={() => onHandleCancel()} />;
+        return <OrderItem key={item.id} info={item} onHandleCancel={() => onHandleCancel && onHandleCancel()} />;
       })}
     </div>
   );

@@ -31,10 +31,18 @@ export const cancelOrder = (id: string) => {
   });
 };
 
+// 提交凭证
 export const uploadCredential = (params: { image: string; orderId: string }) => {
   return request('/integral/order/up_credential', {
     method: 'POST',
     data: params,
+  });
+};
+
+// 确认订单
+export const confirmOrder = (id: string) => {
+  return request(`/integral/order/confirm/${id}`, {
+    method: 'POST',
   });
 };
 
