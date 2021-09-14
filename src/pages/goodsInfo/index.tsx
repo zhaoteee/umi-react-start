@@ -4,11 +4,13 @@ import { ShoppingCartOutlined } from '@ant-design/icons';
 import { useDispatch } from '@@/plugin-dva/exports';
 import { preFixPath } from '@/utils/util';
 import type { Location } from 'umi';
-import { useLocation, Link } from 'umi';
+import { useLocation } from 'umi';
+import { history } from 'umi';
 import styles from './index.less';
 import type { Dispatch } from '@@/plugin-dva/connect';
 import { getDetail } from '@/services/info';
 import type { InfoItem } from './info.d';
+import { debounce } from 'lodash';
 
 const GoodsInfo: React.FC = () => {
   const dispatch: Dispatch = useDispatch();
@@ -78,6 +80,10 @@ const GoodsInfo: React.FC = () => {
     getDetailData();
   }, [location.query]);
   const addToCart = async () => {
+    if (Number(totalMoney) % InfoData.primaryNum !== 0) {
+      message.warning(`加入购物车只能是${InfoData.primaryNum}的倍数`);
+      return;
+    }
     if (InfoData.stock === 0) {
       message.loading('商品库存不足!');
       return;
@@ -96,6 +102,13 @@ const GoodsInfo: React.FC = () => {
     setOrderNum(e);
     setMoney(e);
   };
+  const goBuy = debounce(() => {
+    if (Number(totalMoney) % InfoData.primaryNum !== 0) {
+      message.warning(`下单只能是${InfoData.primaryNum}的倍数`);
+    } else {
+      history.push(`/mall/cart/confirm?id=${id}&quantity=${totalMoney}`);
+    }
+  }, 500);
 
   return (
     <Spin tip="加载中" spinning={loading}>
@@ -132,12 +145,10 @@ const GoodsInfo: React.FC = () => {
             <Button danger onClick={() => addToCart()}>
               加入购物车
             </Button>
-            <Link to={`/mall/cart/confirm?id=${id}&quantity=${totalMoney}`}>
-              <Button type="primary">
-                <ShoppingCartOutlined />
-                立即购买
-              </Button>
-            </Link>
+            <Button type="primary" onClick={() => goBuy()}>
+              <ShoppingCartOutlined />
+              立即购买
+            </Button>
           </div>
         </div>
         <div className={styles.attr}>
