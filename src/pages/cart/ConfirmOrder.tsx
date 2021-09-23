@@ -16,6 +16,9 @@ import { handleCartInfo } from '@/models/cart';
 import { addOrder } from '@/services/order';
 import type { Loading } from '@@/plugin-dva/connect';
 import { getDetail } from '@/services/info';
+import type { FreightType, FreightTemplate } from '@/pages/cart/components/ShippingList';
+import ShippingList from '@/pages/cart/components/ShippingList';
+import { getFreightList } from '@/services/cart';
 
 type ConfirmOrderProps = {
   originalList: GoodsInfo[];
@@ -43,6 +46,11 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
   const [selectedList, setSelectedList] = useState<CartItemInfo[]>([]);
   const [detailLoading, setDetailLoading] = useState(false);
   const [totalPrice, setTotalPrice] = useState(0);
+  const [freightList, setFreightList] = useState<FreightType>({
+    freightName: '',
+    freightTemplates: [],
+  });
+  const [selectedTem, setSelectedTem] = useState<FreightTemplate | null>(null);
 
   const handleEditAddress = useCallback(
     (id: string) => {
@@ -58,6 +66,15 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
       setSelectedList(handleCartInfo(originalList.filter((item) => item.isChecked)));
     }
   }, [originalList, productId, props.totalPrice]);
+
+  useEffect(() => {
+    const params = !productId ? { cartIds: originalList.filter((item) => item.isChecked).map((item) => item.id) } : { productId, quantity };
+    if (params.cartIds?.length || params.productId) {
+      getFreightList(params).then((res) => {
+        setFreightList(res.data);
+      });
+    }
+  }, [originalList, productId, quantity]);
 
   useEffect(() => {
     if (!productId) {
@@ -95,12 +112,14 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
           addressId: selectedAddressId,
           cartIds: originalList.filter((item) => item.isChecked).map((item) => item.id),
           consumerRemark,
+          freightTemplateItemId: selectedTem?.freightTemplateItem.freightTemplateId,
         }
       : {
           addressId: selectedAddressId,
           productId,
           quantity,
           consumerRemark,
+          freightTemplateItemId: selectedTem?.freightTemplateItem.freightTemplateId,
         };
     addOrder(params).then((res: any) => {
       if (res.success) {
@@ -116,7 +135,8 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
         <div className="p-2.5 font-bold">确认订单信息</div>
         <CartHeader headerColumns={headerColumns} />
         <CartList list={selectedList} canEdit={false} col={col} />
-        <div className="flex px-2.5">
+        <ShippingList freightList={freightList} selectedTem={selectedTem} setSelectedTem={setSelectedTem} />
+        <div className="flex px-2.5 mt-2.5">
           <div className="flex-shrink-0 w-16">订单备注:</div>
           <TextArea placeholder="请输入备注" onChange={(e) => setConsumerRemark(e.target.value)} />
         </div>

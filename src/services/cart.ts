@@ -40,3 +40,11 @@ export const getCartCount = () => {
     method: 'GET',
   });
 };
+
+// 查询运费模板
+export const getFreightList = (params: any) => {
+  return request('/integral/order/freight', {
+    method: 'POST',
+    data: params,
+  });
+};
