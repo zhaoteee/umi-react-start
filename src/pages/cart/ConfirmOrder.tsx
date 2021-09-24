@@ -112,14 +112,14 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
           addressId: selectedAddressId,
           cartIds: originalList.filter((item) => item.isChecked).map((item) => item.id),
           consumerRemark,
-          freightTemplateItemId: selectedTem?.freightTemplateItem.freightTemplateId,
+          freightTemplateItemId: selectedTem?.freightTemplateItem.id,
         }
       : {
           addressId: selectedAddressId,
           productId,
           quantity,
           consumerRemark,
-          freightTemplateItemId: selectedTem?.freightTemplateItem.freightTemplateId,
+          freightTemplateItemId: selectedTem?.freightTemplateItem.id,
         };
     addOrder(params).then((res: any) => {
       if (res.success) {
