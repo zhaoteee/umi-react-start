@@ -25,6 +25,7 @@ export type OrderItemInfo = {
   integral: number;
   rebateAmount: number;
   offlineAmount: number;
+  freightFee: number;
 };
 export type shipInfo = {
   shipStoreHouse: string;

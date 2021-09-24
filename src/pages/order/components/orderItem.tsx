@@ -30,6 +30,9 @@ const ListItem: React.FC<OrderItemProps> = (props) => {
           {info.hasOperate && <span className="text-red-500">{info.statusText}</span>}
         </Col>
         <Col span="6" className="text-right pr-2.5">
+          <span>
+            总金额：<span className="text-red-500">{`￥${toDecimal(info.receivableAmount)}`}</span>（含运费：<span className="text-red-500">{`￥${toDecimal(info.freightFee)}`}）</span>
+          </span>
           {info.hasOperate && (info.orderStatus === 'PART_PAY' || info.orderStatus === 'WAIT_PAY') && (
             <DetailFooter info={info} onHandleCancel={() => onHandleCancel && onHandleCancel()} onHandleShow={() => setIsShow(true)} />
           )}

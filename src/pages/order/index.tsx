@@ -48,6 +48,8 @@ const IndexPage: React.FC = () => {
             orderStatus: item.orderStatus,
             supplierName: item.supplierName,
             statusText: statusMap[item.orderStatus],
+            freightFee: item.freightFee,
+            receivableAmount: item.receivableAmount,
             hasOperate: true,
             integralOrderItemDTOs: (item.integralOrderItemDTOs || []).map((cell: any) => {
               if (cell.images && cell.images.indexOf('http') < 0) {

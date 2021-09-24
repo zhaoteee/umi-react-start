@@ -37,6 +37,7 @@ export type DetailInfo = {
   rebateAmount: number;
   offlineAmount: number;
   hasOperate: boolean;
+  freightFee: number;
   shipDTOList: shipInfo[];
   integralOrderItemDTOs: goodInfo[];
 };
@@ -67,6 +68,7 @@ const initialDetail = {
   hasOperate: false,
   integralOrderItemDTOs: [],
   shipDTOList: [],
+  freightFee: 0,
 };
 const OrderModel: ModelType = {
   namespace: 'detail',
