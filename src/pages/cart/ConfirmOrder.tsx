@@ -143,7 +143,7 @@ const ConfirmOrder: React.FC<ConfirmOrderProps> = (props) => {
         <div className="flex flex-col items-end px-2.5">
           <div className="py-4">
             <span className="font-bold mr-2.5">应付金额: </span>
-            <span className="text-3xl text-red-500 font-bold">{`￥${toDecimal(totalPrice)}`}</span>
+            <span className="text-3xl text-red-500 font-bold">{`￥${toDecimal(totalPrice + (selectedTem?.orderFreight ?? 0))}`}</span>
           </div>
           <div className="btn-submit" onClick={handleSubmit}>
             提交订单

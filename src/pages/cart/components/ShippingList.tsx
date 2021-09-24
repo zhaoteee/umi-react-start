@@ -8,6 +8,7 @@ type ShippingListItemProps = {
   info: FreightTemplate;
   selectedTem: FreightTemplate | null;
   setSelectedTem: Dispatch<SetStateAction<FreightTemplate | null>>;
+  freightName: string;
 };
 const ShippingListItem = (props: ShippingListItemProps) => {
   const {
@@ -21,7 +22,7 @@ const ShippingListItem = (props: ShippingListItemProps) => {
       }`}
       onClick={() => props.setSelectedTem(props.info)}
     >
-      <div>商品运费</div>
+      <div>{props.freightName}</div>
       <div>配送描述：{deliveryDescribe}</div>
       <div>运费：{freightRuleDesc}</div>
       {props.selectedTem?.freightTemplateItem.freightTemplateId === freightTemplateId && (
@@ -73,7 +74,7 @@ const ShippingList = (props: ShippingListProps) => {
       </div>
       <div className="flex items-center overflow-x-auto p-2.5 bg-gray-100 border rounded">
         {freightTemplates.map((item) => (
-          <ShippingListItem info={item} key={item.freightTemplateItem.id} selectedTem={selectedTem} setSelectedTem={setSelectedTem} />
+          <ShippingListItem info={item} key={item.freightTemplateItem.id} selectedTem={selectedTem} setSelectedTem={setSelectedTem} freightName={props.freightList?.freightName ?? ''} />
         ))}
       </div>
     </div>
