@@ -12,20 +12,20 @@ type ShippingListItemProps = {
 };
 const ShippingListItem = (props: ShippingListItemProps) => {
   const {
-    freightTemplateItem: { deliveryDescribe, freightTemplateId },
+    freightTemplateItem: { deliveryDescribe, id },
     freightRuleDesc,
   } = props.info;
   return (
     <div
       className={`w-80 h-32 p-2.5 mr-2.5 flex flex-col justify-between flex-shrink-0 border rounded cursor-pointer bg-white relative ${
-        props.selectedTem?.freightTemplateItem.freightTemplateId === freightTemplateId ? 'border-red-500' : ''
+        props.selectedTem?.freightTemplateItem.id === id ? 'border-red-500' : ''
       }`}
       onClick={() => props.setSelectedTem(props.info)}
     >
       <div>{props.freightName}</div>
       <div>配送描述：{deliveryDescribe}</div>
       <div>运费：{freightRuleDesc}</div>
-      {props.selectedTem?.freightTemplateItem.freightTemplateId === freightTemplateId && (
+      {props.selectedTem?.freightTemplateItem.id === id && (
         <div className="absolute bottom-0 right-0 checkBg">
           <CheckOutlined className="absolute -bottom-1 -right-5 text-white text-xs" />
         </div>
@@ -65,7 +65,7 @@ const ShippingList = (props: ShippingListProps) => {
       setSelectedTem(freightTemplates.find((item) => item.freightTemplateItem.isDefault) ?? null);
     }
   }, [freightTemplates, setSelectedTem]);
-
+  console.log(selectedTem);
   return (
     <div>
       <div className="flex justify-between items-center p-2.5">
