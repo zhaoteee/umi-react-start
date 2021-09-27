@@ -13,7 +13,7 @@ type GooodsItemProps = {
 
 const GoodsItem: React.FC<GooodsItemProps> = (props) => {
   const { item, addToCart } = props;
-  const productImage = item.productInfoExtDTO.productImageDTOList.map((p) => {
+  const productImage = (item.productInfoExtDTO.productImageDTOList || []).map((p) => {
     if (p.resource && p.resource.indexOf('http') < 0) {
       p.resource = preFixPath + p.resource;
     }
