@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Pagination, PageHeader, Spin, Result, Button } from 'antd';
+import { Pagination, PageHeader, Spin, Result, Button, message } from 'antd';
 import Search from './components/searchItem';
 import Tabs from './components/tabsItem';
 import OrderHeader from './components/headerItem';
@@ -37,7 +37,10 @@ const IndexPage: React.FC = () => {
     params.orderStatusList = params.orderStatus ? params.orderStatus.split(',') : [];
     delete params.orderStatus;
     exportIntegral(params).then(() => {
-      window.open('/setting/export/list');
+      message.success('导出成功,请到导出列表查看!');
+      setTimeout(() => {
+        window.open('/setting/export/list');
+      }, 1000);
       setIsLoading(false);
     });
   };
