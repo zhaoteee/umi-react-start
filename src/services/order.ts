@@ -52,3 +52,11 @@ export const payOrder = (params: { orderId: string; credentialImage?: string; pa
     data: params,
   });
 };
+
+// 订单列表
+export const exportIntegral = (params: any) => {
+  return request(`/integral/order/export`, {
+    method: 'POST',
+    data: params,
+  });
+};

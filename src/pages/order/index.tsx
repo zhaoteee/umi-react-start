@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Pagination, PageHeader, Spin, Result } from 'antd';
+import { Pagination, PageHeader, Spin, Result, Button } from 'antd';
 import Search from './components/searchItem';
 import Tabs from './components/tabsItem';
 import OrderHeader from './components/headerItem';
 import OrderList from './components/orderList';
 import { statusMap } from '@/models/order';
 import { FileSearchOutlined } from '@ant-design/icons';
-import { getOrderList } from '@/services/order';
+import { getOrderList, exportIntegral } from '@/services/order';
 import { preFixPath } from '@/utils/util';
 
 type orderQuery = {
@@ -26,6 +26,21 @@ const IndexPage: React.FC = () => {
     size: 20,
     total: 0,
   });
+  const integralExport = (p: orderQuery) => {
+    setIsLoading(true);
+    const params = {
+      current: pageInfo.current,
+      size: pageInfo.size,
+      title: keyword,
+      ...p,
+    };
+    params.orderStatusList = params.orderStatus ? params.orderStatus.split(',') : [];
+    delete params.orderStatus;
+    exportIntegral(params).then(() => {
+      window.open('/setting/export/list');
+      setIsLoading(false);
+    });
+  };
   const getData = (p: orderQuery) => {
     setIsLoading(true);
     const params = {
@@ -91,6 +106,11 @@ const IndexPage: React.FC = () => {
     <Spin spinning={isLoading} tip="加载中...">
       <div>
         <PageHeader className="site-page-header" backIcon={false} extra={<Search onConfirmSearch={onConfirmSearch} />} />
+        <div className="text-right  mr">
+          <Button onClick={() => integralExport(pageInfo)} type="primary">
+            导出
+          </Button>
+        </div>
         <Tabs onConfirmChange={onConfirmChange} />
         {orderList.length ? (
           <>
