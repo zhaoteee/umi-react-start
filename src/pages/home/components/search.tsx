@@ -16,10 +16,10 @@ export type SearchListType = {
 };
 const selectedList: SearchListType[] = [];
 const Search: React.FC<SearchProps> = (props) => {
-  selectedList.splice(0);
   const [serachList, setSearchList] = useState<SearchListType[]>([]);
   useEffect(() => {
-    getProductAgg().then((res) => {
+    selectedList.splice(0);
+    getProductAgg().then((res: { data: { aggSupplier: OptionsItemType[]; aggBrand: OptionsItemType[]; aggCategory: OptionsItemType[] } }) => {
       const { aggSupplier = [], aggBrand = [], aggCategory = [] } = res.data || {};
       const list = [
         { name: '品牌方', value: 'supplierIds', options: aggSupplier },
