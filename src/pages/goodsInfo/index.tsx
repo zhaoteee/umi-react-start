@@ -17,6 +17,7 @@ const GoodsInfo: React.FC = () => {
   const [InfoData, setData] = useState<InfoItem>({
     brandId: '',
     brandName: '',
+    subTitle: '',
     id: '',
     invoicePrice: '',
     stock: 0,
@@ -54,11 +55,13 @@ const GoodsInfo: React.FC = () => {
   const getDetailData = () => {
     setLoading(true);
     getDetail(id).then((res) => {
-      const { brandId, brandName, stock, invoicePrice, title, productInfoExtDTO, productAttributeDTOs, primaryNum, orderNum } = res.data;
+      console.log(res.data.subTitle);
+      const { brandId, brandName, subTitle, stock, invoicePrice, title, productInfoExtDTO, productAttributeDTOs, primaryNum, orderNum } = res.data;
       const data = {
         ...res.data,
         brandId,
         brandName,
+        subTitle,
         stock,
         invoicePrice,
         title,
@@ -129,6 +132,7 @@ const GoodsInfo: React.FC = () => {
           </div>
           <div className={styles.top_right}>
             <h1 className={styles.right_title}>{InfoData.title}</h1>
+            <p>{InfoData.subTitle}</p>
             <p className={styles.right_brandName}>
               品牌 <span className={styles.right_common}>{InfoData.brandName}</span>
             </p>

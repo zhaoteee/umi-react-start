@@ -13,6 +13,7 @@ export type productAttributeDTOs = [
 export type InfoItem = {
   brandId: string;
   brandName: string;
+  subTitle: string;
   id: string;
   invoicePrice: string;
   stock: number;
