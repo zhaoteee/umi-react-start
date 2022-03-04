@@ -3,43 +3,15 @@ import { extend } from 'umi-request';
 import { notification } from 'antd';
 import qs from 'qs';
 
-type errorType = Response & { code: number; message: string };
+type errorType = Response & { code: number; msg: string };
 
-const codeMessage: Record<number, string> = {
-  200: '服务器成功返回请求的数据。',
-  201: '新建或修改数据成功。',
-  202: '一个请求已经进入后台排队（异步任务）。',
-  204: '删除数据成功。',
-  400: '发出的请求有错误，服务器没有进行新建或修改数据的操作。',
-  401: '用户没有权限（令牌、用户名、密码错误）。',
-  403: '用户得到授权，但是访问是被禁止的。',
-  404: '发出的请求针对的是不存在的记录，服务器没有进行操作。',
-  406: '请求的格式不可得。',
-  410: '请求的资源被永久删除，且不会再得到的。',
-  422: '当创建一个对象时，发生一个验证错误。',
-  500: '服务器发生错误，请检查服务器。',
-  502: '网关错误。',
-  503: '服务不可用，服务器暂时过载或维护。',
-  504: '网关超时。',
-};
-
-export const tokenValidCodeList = [100009, 520001, 520005, 520006, 520009, 100001];
 /** 异常处理程序 */
 export const errorHandler = (error: { response: errorType }): errorType => {
   const { response } = error;
-  if (response && response.status) {
-    const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
-
+  if (response && response.msg !== 'success') {
     notification.error({
-      message: `请求错误 ${status}: ${url}`,
-      description: errorText,
-    });
-  } else if (response && response.code) {
-    const errorText = codeMessage[response.code] || response.message;
-
-    notification.warn({
-      message: errorText,
+      message: `请求错误`,
+      description: response.msg,
     });
   } else if (!response) {
     notification.error({
@@ -56,16 +28,13 @@ const request = extend({
     return qs.stringify(params, { arrayFormat: 'repeat' });
   },
   getResponse: true,
-  prefix: '/api/integral-mall',
   // errorHandler, // 默认错误处理
-  credentials: 'include', // 默认请求是否带上cookie
+  // credentials: 'include', // 默认请求是否带上cookie
 });
 request.interceptors.request.use((url, options) => {
   options.headers = {
     ...options.headers,
-    Authorization:
-      localStorage.getItem('token') ||
-      'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxMzA0ODg3Mjg1MSIsInRpbWUiOjE2MzIyNzUyMjkxNzEsImlzcyI6InNlY3VyaXR5IiwiaWF0IjoxNjMyMjc1MjI5LCJleHAiOjE2MzIzOTUyMjl9.fXGblU2urbSKMQGfqDqR3AxBtH10gM9TsB0JXOj69tOYAXKxpgxbFRljHm_c6wmt-vHxrcSaluYjxEmjpqefQw',
+    token: localStorage.getItem('token') || '',
   };
   return {
     url,
@@ -76,7 +45,6 @@ request.interceptors.response.use(async (response, options) => {
   if (options.responseType === 'blob') {
     return new Promise((resolve, reject) => {
       try {
-        console.log(response.clone());
         resolve(response);
       } catch (error) {
         reject(error);
@@ -86,19 +54,11 @@ request.interceptors.response.use(async (response, options) => {
   // eslint-disable-next-line no-async-promise-executor
   return new Promise(async (resolve, reject) => {
     const res = await response.clone().json();
-    if (tokenValidCodeList.find((c) => c === res.code)) {
-      // 身份认证失败需重新登录
-      reject({ response: res });
-      errorHandler({ response: res });
-      window.location.href = '/login';
-    } else if (res.code >= -200020 && res.code <= -200000) {
-      window.location.href = '/login';
-      errorHandler({ response: res });
-    } else if (res.code !== 200) {
+    if (res.code !== 0) {
       errorHandler({ response: res });
       reject({ response: res });
     }
-    resolve(res);
+    resolve(response);
   });
 });
 export default request;

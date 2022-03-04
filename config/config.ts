@@ -4,13 +4,13 @@ import proxy from './proxy';
 const { REACT_APP_ENV } = process.env;
 
 export default defineConfig({
-  base: '/integral/',
-  publicPath: '/integral/',
-  hash: true,
+  base: '/',
+  publicPath: '/',
+  hash: false,
   antd: {},
   // publicPath: process.env.NODE_ENV === 'production' ? '/1.0.0/' : '/',
   history: {
-    type: 'browser',
+    type: 'hash',
   },
   locale: {
     // default zh-CN
@@ -20,10 +20,10 @@ export default defineConfig({
     baseNavigator: true,
   },
   dynamicImport: {
-    loading: '@/components/PageLoading/index',
+    loading: '@/components/pageLoading',
   },
   theme: {
-    'primary-color': '#FF0036',
+    'primary-color': '#1DA57A',
   },
   targets: {
     ie: 11,
@@ -32,65 +32,22 @@ export default defineConfig({
   routes: [
     {
       path: '/',
-      component: '../layouts/BasicLayout',
+      component: './app',
       routes: [
         {
           path: '/',
-          redirect: '/mall',
+          redirect: '/index',
         },
         {
-          path: '/mall',
-          name: 'mall',
+          path: '/index',
+          name: 'index',
           component: './home',
-          title: '采购商城',
         },
         {
-          path: '/mall/cart',
-          name: 'mallCart',
-          component: './cart',
-          title: '购物车',
-        },
-        {
-          path: '/mall/cart/confirm',
-          name: 'confirmOrder',
-          component: './cart/ConfirmOrder',
-          title: '确认订单',
-        },
-        {
-          path: '/mall/cart/paying',
-          name: 'payOrder',
-          component: './cart/PayingOrder',
-          title: '订单支付',
-        },
-        {
-          path: '/mall/cart/payed',
-          name: 'payOrder',
-          component: './cart/PayedOrder',
-          title: '订单支付',
-        },
-        {
-          path: '/mall/order',
-          name: 'mallOrder',
-          component: './order',
-          title: '订单',
-        },
-        {
-          path: '/mall/order/detail',
-          name: 'mallOrderDetail',
-          component: './order/detail',
-          title: '订单详情',
-        },
-        {
-          path: '/mall/address',
-          name: 'mallAddress',
-          component: './address',
-          title: '收货地址管理',
-        },
-        {
-          path: '/mall/goodsInfo',
-          name: 'mallGoodsInfo',
-          component: './goodsInfo',
-          title: '商品详情页',
+          path: '/detail',
+          name: 'detail',
+          component: './detail',
+          title: '模板详情',
         },
         {
           component: '404',
@@ -101,7 +58,7 @@ export default defineConfig({
       component: '404',
     },
   ],
-  title: '采购商城',
+  title: '模板下载',
   ignoreMomentLocale: true,
   proxy: proxy[REACT_APP_ENV || 'dev'],
   tailwindcss: {

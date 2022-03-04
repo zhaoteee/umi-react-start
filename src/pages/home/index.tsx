@@ -1,145 +1,111 @@
-// import styles from './index.less';
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'umi';
-import { useDispatch } from '@@/plugin-dva/exports';
-import { Pagination, Spin, Result, message } from 'antd';
-import Search from './components/search';
-import GoodsItem from './components/goodsItem';
-import { FileSearchOutlined } from '@ant-design/icons';
+// import type { GetStaticProps } from 'next'
+import { Link } from 'umi';
+import Layout from '@/components/layout';
+import React, { useState, useEffect, useContext } from 'react';
+import request from '@/utils/request';
+import styles from './home.less';
+import { Input } from 'antd';
+import Category from '@/components/category';
+import PageLoading from '@/components/pageLoading';
+import type { StoreContextType } from '@/pages/app';
+import { StoreContext } from '@/pages/app';
 
-import type { Location } from 'umi';
-import type { SearchListType } from './components/search';
-import type { Dispatch } from '@@/plugin-dva/connect';
-import { getProductList } from '@/services/home';
+const { Search } = Input;
 
-// import goodsList from './testList';
-import styles from './index.less';
-
-export type productInfoExtType = {
-  id: string;
-  createDate: string;
-  productId: string;
-  productImageDTOList: { resource: string; sort: number }[];
+export type infoType = { distributorName: string };
+export type FenleiType = { id: number; name: string; isHot?: boolean }[];
+export type BaseType = { code: string; id: number; name: string; value: string; type: string };
+export type BaseResType = {
+  code: number;
+  msg: string;
+  classification: FenleiType;
+  color: FenleiType;
+  tag: FenleiType;
+  base: BaseType[];
 };
-
-export type GoodsItemType = {
-  brandId: string;
-  brandName: string;
-  categoryId: string;
-  centerProductId: string;
-  code: string;
-  createDate: string;
-  id: string;
-  invoicePrice: string;
-  marketPrice: number;
-  salePrice: number;
-  salesNum: number;
-  stock: number;
-  subTitle: string;
-  supplierId: string;
-  supplierShopName: string;
-  title: string;
-  unit: string;
-  productInfoExtDTO: productInfoExtType;
-  orderNum: number;
-  primaryNum: number;
+export type TmplItemType = { id: number; img: string; name: string };
+export type PageResType = {
+  code: number;
+  msg: string;
+  data: { current: number; size: number; total: number; records: TmplItemType[] };
 };
-export type HomeQueryType = Location['query'] & { userToken?: string; origin?: string; keyword?: string };
+export type PageQueryType = { location: { pathname: string; query: { type: number; name: string; id: number } } };
+const Home: React.FC<PageQueryType> = (props) => {
+  const { state } = useContext<StoreContextType>(StoreContext);
+  const [pageLoading, setPageLoading] = useState(false);
+  const [list, setList] = useState<TmplItemType[]>([]);
+  const [classification, setClassification] = useState<FenleiType>([]);
+  const [color, setColor] = useState<FenleiType>([]);
+  const [tag, setTag] = useState<FenleiType>([]);
+  const [hot, setHot] = useState<FenleiType>([]);
+  useEffect(() => {
+    async function init() {
+      await request<BaseResType>('/api/static/base', { method: 'get' })
+        .then((r) => {
+          const res = r.data;
+          if (res.code === 0 && res.msg === 'success') {
+            const hotList = res.classification.filter((i) => i.isHot);
+            setClassification(res.classification);
+            setColor(res.color);
+            setTag(res.tag);
+            setHot(hotList);
+            localStorage.setItem('hotList', JSON.stringify(hotList));
+            localStorage.setItem('base', JSON.stringify(res.base));
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
+    init();
+  }, []);
 
-type ParamsPropsType = {
-  current?: number;
-  size?: number;
-  title?: string;
-};
-type SearchParamsType = {
-  brandIds?: string[];
-  categoryIds?: string[];
-  supplierIds?: string[];
-};
-
-const IndexPage: React.FC = () => {
-  const dispatch: Dispatch = useDispatch();
-  const [pageInfo, setPageInfo] = useState({
-    current: 1,
-    size: 20,
-    total: 0,
-  });
-  const [goodsList, setGoodsList] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchParams, setSearchParams] = useState<SearchParamsType>({});
-  const location: Location = useLocation();
-  const getData = (p: ParamsPropsType & SearchParamsType) => {
-    setIsLoading(true);
-    const { keyword = '' } = location.query as HomeQueryType;
-    const query = keyword ? { title: keyword } : {};
-    const params = {
-      current: pageInfo.current,
-      size: pageInfo.size,
-      ...query,
-      ...p,
-    };
-    getProductList(params).then((res) => {
-      const data = res.data || { records: [], current: 1, size: 20, total: 0 };
-      setGoodsList(data.records);
-      setIsLoading(false);
-      setPageInfo({
-        current: Number(data.current),
-        size: Number(data.size),
-        total: Number(data.total),
+  const getData = async (params: any) => {
+    setPageLoading(true);
+    await request<PageResType>('/api/static/page', {
+      method: 'post',
+      data: { current: 1, size: 20, classificationId: props.location.query.id, ...params },
+    })
+      .then(({ data }) => {
+        if (data.code === 0 && data.msg === 'success') {
+          setList(data.data.records);
+        }
+      })
+      .catch((e) => {
+        console.log(e);
       });
-    });
+    setPageLoading(false);
   };
-  const addGoodsToCart = async (p: GoodsItemType) => {
-    // const hide = message.loading('正在加入购物车');
-    const res = await dispatch({
-      type: 'cart/addGoodsToCart',
-      payload: { productId: p.id, quantity: p.orderNum || 1 },
-    });
-    if (res) message.success('添加成功,请前往购物车查看');
-  };
-  const onConfirmSelect = (p: SearchListType[]) => {
-    const obj = p.reduce((a, c) => {
-      a[c.value] = c.options.map((op) => op.keyId);
-      return a;
-    }, {});
-    setSearchParams(obj);
-    getData(obj);
+  const onSearchHandle = async (v: string) => {
+    await getData({ name: v || '' });
   };
   useEffect(() => {
-    getData(searchParams);
-    dispatch({
-      type: 'cart/getCartTotalCount',
-    });
+    getData({});
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.query]);
+  }, [props.location.query]);
   return (
-    <Spin spinning={isLoading} tip="加载中...">
-      <div className={styles.goodsListPage}>
-        <Search onConfirmSelect={onConfirmSelect} />
-        {goodsList.length ? (
-          <>
-            <div className={styles.goodsList}>
-              {goodsList.map((item: GoodsItemType) => {
-                return <GoodsItem key={item.id} item={item} addToCart={addGoodsToCart} />;
-              })}
-            </div>
-            <div style={{ textAlign: 'right' }}>
-              <Pagination
-                current={pageInfo.current}
-                pageSize={pageInfo.size}
-                total={pageInfo.total}
-                onChange={(page: number, pageSize?: number) => {
-                  getData({ current: page, size: pageSize, ...searchParams });
-                }}
-              />
-            </div>
-          </>
-        ) : (
-          <Result icon={<FileSearchOutlined className="text-gray-200" />} subTitle="暂无数据" />
-        )}
+    <Layout hot={hot} isShowSearchMore={true}>
+      <div>
+        <div className={styles.searchArea}>
+          <Search placeholder="搜索词: 支付 模板 商城 帝国cms" enterButton="搜索" size="large" onSearch={onSearchHandle} />
+        </div>
+        <Category classification={classification} color={color} tag={tag} show={state.showSearch} />
+        <div className={styles['site-layout-content']}>
+          {list.map((item) => {
+            return (
+              <div className={styles.item} key={item.id}>
+                <img width={200} height={400} src={item.img} alt={item.name} />
+                <p className={styles.name}>
+                  <Link to={`/detail?id=${item.id}`}>{item.name}</Link>
+                </p>
+              </div>
+            );
+          })}
+        </div>
       </div>
-    </Spin>
+      <PageLoading loading={pageLoading}></PageLoading>
+    </Layout>
   );
 };
 
-export default IndexPage;
+export default Home;

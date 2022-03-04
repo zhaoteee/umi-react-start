@@ -1,0 +1,57 @@
+.site-layout-content {
+  height: 500px;
+  padding: 24px;
+  background: #fff;
+}
+.layoutHeader {
+  display: flex;
+  .logo {
+    width: 120px;
+    height: 31px;
+    margin-left: 20px;
+  }
+  .navArea {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    width: 100%;
+    .more {
+      flex: 0 0 50px;
+      color: #fff;
+      font-weight: 600;
+      font-size: 20px;
+      cursor: pointer;
+    }
+  }
+  .loginArea {
+    button {
+      color: #fff;
+      background-color: transparent;
+      &:first-child {
+        margin-right: 10px;
+      }
+    }
+  }
+}
+
+.ant-row-rtl .logo {
+  float: right;
+  margin: 16px 0 16px 24px;
+}
+.myMenu {
+  position: relative;
+  height: 64px;
+}
+.pageLayoutContent {
+  position: relative;
+}
+.layoutHeaderWrap {
+  width: 80%;
+  margin: 0 auto;
+}
+.pageContent {
+  // padding: 0 50px;
+  width: 80%;
+  min-height: calc(100vh - 64px - 70px);
+  margin: 0 auto;
+}

@@ -10,7 +10,6 @@ body,
   filter: invert(80%);
 }
 
-
 canvas {
   display: block;
 }
@@ -25,7 +24,6 @@ ul,
 ol {
   list-style: none;
 }
-
 
 // 兼容IE11
 @media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
@@ -54,4 +52,17 @@ ol {
 
 ::-webkit-scrollbar-thumb:window-inactive {
   background: rgba(0, 0, 0, 0.3);
+}
+
+.pageLoading {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  text-align: center;
+  background: rgba(255, 255, 255, 0.5);
+}
+.pageLoading .ant-spin {
+  padding-top: 40%;
 }

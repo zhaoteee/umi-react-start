@@ -41,4 +41,3 @@ export const getBase64 = (file: RcFile): Promise<string | ArrayBuffer | null> =>
 };
 
 export const preFixPath = window.SYSTEM_CONFIG?.staticPath || 'https://dev-peppa.hzzcckj.cn';
-export const uploadImageUrl = '/api/integral-mall/common/upload/IMAGE';

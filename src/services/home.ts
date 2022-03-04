@@ -1,14 +1,15 @@
 import request from '@/utils/request';
 
-export const getProductList = (params: any) => {
-  return request('/integral/product/page', {
-    method: 'POST',
-    data: params,
-  });
+export type infoType = { distributorName: string };
+export type FenleiType = { id: number; name: string }[];
+export type BaseResType = {
+  code: number;
+  msg: string;
+  classification: FenleiType;
+  color: FenleiType;
+  tag: FenleiType;
 };
 
-export const getProductAgg = () => {
-  return request('/integral/product/agg', {
-    method: 'get',
-  });
-};
+export async function queryPhaseStatus(): Promise<any> {
+  return request('/common/decoration/phase_status');
+}
