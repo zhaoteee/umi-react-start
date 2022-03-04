@@ -1,5 +1,5 @@
-import type { StoreContextType } from '@/pages/app';
-import { StoreContext } from '@/pages/app';
+import type { StoreContextType } from '@/components/layout';
+import { StoreContext } from '@/components/layout';
 import { useContext } from 'react';
 import request from '@/utils/request';
 import { Modal, Form, Input } from 'antd';

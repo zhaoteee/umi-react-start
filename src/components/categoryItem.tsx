@@ -1,12 +1,15 @@
 import React from 'react';
+import { useLocation, history } from 'umi';
 import { useState, useRef, useEffect } from 'react';
 import styles from '@/pages/home/home.less';
 
 export type FenleiType = { id: number; name: string }[];
 
-type pageType = { list: FenleiType; name: string };
+type pageType = { list: FenleiType; name: string; type: string };
+const typeMap = { 1: 'f', 2: 'y', 3: 't' }; // 分类 颜色 tag
 
-const CategoryItem: React.FC<pageType> = ({ list, name }) => {
+const CategoryItem: React.FC<pageType> = ({ list, name, type }) => {
+  const location = useLocation();
   const [isMore, setIsMore] = useState(false);
   const [showCmore, setShowCmore] = useState(false);
   const [isRowOne, setisRowOne] = useState(false);
@@ -30,6 +33,20 @@ const CategoryItem: React.FC<pageType> = ({ list, name }) => {
       }
     }
   };
+  const getClass = (i: any): string => {
+    const key = typeMap[type];
+    const val = location.query[key];
+    if (val) {
+      const id = Number(val.split(',')[0]) || 0;
+      const isNav = val.split(',')[2] === 'n';
+      if (id && id !== 0 && i.id === id && !isNav) return 'currentItem';
+    }
+    return '';
+  };
+  const onClickItem = (i: any) => {
+    const key = typeMap[type];
+    history.push({ pathname: '/index', query: { ...location.query, [key]: `${i.id},${i.name}` } });
+  };
   useEffect(() => {
     setHeigh();
     window.addEventListener('resize', setHeigh);
@@ -40,7 +57,9 @@ const CategoryItem: React.FC<pageType> = ({ list, name }) => {
       <div ref={wrapRef} className={`${styles.ks} ${showCmore || isRowOne ? styles.moreks : ''}`}>
         <div ref={contentRef}>
           {list.map((i) => (
-            <span key={i.id}>{i.name}</span>
+            <span className={getClass(i)} onClick={() => onClickItem(i)} key={i.id}>
+              {i.name}
+            </span>
           ))}
         </div>
         {isMore ? (

@@ -25,9 +25,9 @@ const Category: React.FC<pageType> = ({ classification, color, tag, show }) => {
   }, [classification, color, tag]);
   return (
     <Card className={`${styles.cate} myCategoryCard`} style={showStyle} loading={loading}>
-      <CategoryItem name="分类" list={classification} />
-      <CategoryItem name="颜色" list={color} />
-      <CategoryItem name="Tag" list={tag} />
+      <CategoryItem name="分类" type="1" list={classification} />
+      <CategoryItem name="颜色" type="2" list={color} />
+      <CategoryItem name="Tag" type="3" list={tag} />
     </Card>
   );
 };

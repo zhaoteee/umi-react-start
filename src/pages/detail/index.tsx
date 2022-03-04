@@ -1,13 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { Link } from 'umi';
-import Layout from '@/components/layout';
 import styles from './detail.less';
 import request from '@/utils/request';
 import { Card, Descriptions, Button, Modal } from 'antd';
-import type { StoreContextType } from '@/pages/app';
+import type { StoreContextType } from '@/components/layout';
 import type { BaseType, FenleiType } from '@/pages/home/index';
 import PageLoading from '@/components/pageLoading';
-import { StoreContext } from '@/pages/app';
+import { StoreContext } from '@/components/layout';
 
 export type ResourceType = {
   id: number;
@@ -92,47 +91,45 @@ const Detail: React.FC<BasicProps> = (props) => {
     getData(location.query.id);
   }, [location.query.id]);
   return (
-    <Layout>
-      <div>
-        <Card className={styles.info}>
-          <Descriptions labelStyle={{ width: '200px' }} title={info.resource.name} bordered>
-            <Descriptions.Item span={3} label="下载热度">
-              <span style={{ fontWeight: 600 }}>{info.resource.hot}</span>
-            </Descriptions.Item>
-            <Descriptions.Item span={3} label="模板分类">
-              {info.classification.map((i) => `${i.name} `)}
-            </Descriptions.Item>
-            <Descriptions.Item span={3} label="模板颜色">
-              {info.color.map((i) => `${i.name} `)}
-            </Descriptions.Item>
-            <Descriptions.Item span={3} label="模板标签">
-              {info.tag.map((i) => `${i.name} `)}
-            </Descriptions.Item>
-            <Descriptions.Item span={3} label="免责声明">
-              本站不以盈利为目的，所有资源均来自互联网，如有侵权请联系站长删除
-            </Descriptions.Item>
-          </Descriptions>
-          <div className={styles.btns}>
-            <Link to={info.resource.viewUrl} target="_blank">
-              <Button type="primary">在线预览</Button>
-            </Link>
-            <Button type="primary" loading={btnLoading} onClick={download}>
-              免费下载
-            </Button>
-            <Button type="primary">
-              <a href={qqurl}>运维支持</a>
-            </Button>
-          </div>
-        </Card>
-        <Card className={styles.preview}>
-          <h4>效果预览</h4>
-          <div>
-            <img style={{ width: '100%' }} src={info.resource.img} alt={info.resource.name} />
-          </div>
-        </Card>
-      </div>
+    <div>
+      <Card className={styles.info}>
+        <Descriptions labelStyle={{ width: '200px' }} title={info.resource.name} bordered>
+          <Descriptions.Item span={3} label="下载热度">
+            <span style={{ fontWeight: 600 }}>{info.resource.hot}</span>
+          </Descriptions.Item>
+          <Descriptions.Item span={3} label="模板分类">
+            {info.classification.map((i) => `${i.name} `)}
+          </Descriptions.Item>
+          <Descriptions.Item span={3} label="模板颜色">
+            {info.color.map((i) => `${i.name} `)}
+          </Descriptions.Item>
+          <Descriptions.Item span={3} label="模板标签">
+            {info.tag.map((i) => `${i.name} `)}
+          </Descriptions.Item>
+          <Descriptions.Item span={3} label="免责声明">
+            本站不以盈利为目的，所有资源均来自互联网，如有侵权请联系站长删除
+          </Descriptions.Item>
+        </Descriptions>
+        <div className={styles.btns}>
+          <Link to={info.resource.viewUrl} target="_blank">
+            <Button type="primary">在线预览</Button>
+          </Link>
+          <Button type="primary" loading={btnLoading} onClick={download}>
+            免费下载
+          </Button>
+          <Button type="primary">
+            <a href={qqurl}>运维支持</a>
+          </Button>
+        </div>
+      </Card>
+      <Card className={styles.preview}>
+        <h4>效果预览</h4>
+        <div>
+          <img style={{ width: '100%' }} src={info.resource.img} alt={info.resource.name} />
+        </div>
+      </Card>
       <PageLoading loading={pageLoading}></PageLoading>
-    </Layout>
+    </div>
   );
 };
 

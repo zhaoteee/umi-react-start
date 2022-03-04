@@ -32,7 +32,7 @@ export default defineConfig({
   routes: [
     {
       path: '/',
-      component: './app',
+      component: '@/components/layout',
       routes: [
         {
           path: '/',

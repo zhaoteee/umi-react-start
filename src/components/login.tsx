@@ -1,6 +1,6 @@
 import React from 'react';
-import type { StoreContextType } from '@/pages/app';
-import { StoreContext } from '@/pages/app';
+import type { StoreContextType } from '@/components/layout';
+import { StoreContext } from '@/components/layout';
 import { useContext } from 'react';
 import { Modal, Form, Input } from 'antd';
 import request from '@/utils/request';
